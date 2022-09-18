@@ -1,28 +1,21 @@
-\documentclass[a4paper,11pt]{report}
-
-\usepackage{alltt, fancyvrb, url}
-\usepackage{graphicx}
-\usepackage{subfig}
+\documentclass[
+	a4paper, 		% a4 page format
+	12pt,			% font size: note 12 pt -> \footnotesize is set at 10pt
+	openright,		% (openany|openright) starts a chapter on the next available page or always on a right page
+	titlepage,		% (titlepage|notitlepage)
+]{book}				% see https://tex.stackexchange.com/questions/36988/regarding-the-book-report-and-article-document-classes-what-are-the-mai
+%
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{float}
-\usepackage{hyperref}
-\usepackage{import}
-% Questo commentalo se vuoi scrivere in inglese.
 \usepackage[italian]{babel}
-\usepackage[italian]{cleveref}
-
-\title{
-    Documento di prova
-}
-
-\author{
-	\textbf{Luca Tassinari}
-}
-
+\usepackage{newlfont}
+%
+\oddsidemargin=0pt
+\textwidth=450pt
+%
 \begin{document}
-
-\maketitle
-
-\tableofcontents
-
+    % title page-------------------------------------------
+    \input{./chapters/frontmatter/frontispiece.tex}
+    \addcontentsline{toc}{chapter}{Title Page}
+    % ----------------------------------------------------
 \end{document}
