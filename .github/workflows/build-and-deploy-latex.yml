@@ -6,7 +6,6 @@ on:
       - 'autodelivery**'
       - 'bump-**'
       - 'renovate-**'
-      - 'ongoing-**'
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
