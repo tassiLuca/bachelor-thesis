@@ -6,25 +6,18 @@
 	openright,		% (openany|openright) starts a chapter on the next available page or always on a right page
 	twoside,		% front and back print
 	titlepage,		% (titlepage|notitlepage)
-]{report}			% see https://tex.stackexchange.com/questions/36988/regarding-the-book-report-and-article-document-classes-what-are-the-mai
+]{book}				% see https://tex.stackexchange.com/questions/36988/regarding-the-book-report-and-article-document-classes-what-are-the-mai
 %
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[italian]{babel}
-\usepackage{newlfont}
-\usepackage{geometry}
-%\usepackage{fancyhdr}
-%\pagestyle{fancy}
-%
-\geometry{
-	textwidth=450pt
-}
+\usepackage{thesis-style}
 %
 \begin{document}
+	\frontmatter
+
 	\input{./chapters/frontmatter/frontispiece.tex}
 	\input{./chapters/frontmatter/abstract.tex}
 	\input{./chapters/frontmatter/dedication.tex}
 
 	\tableofcontents
-		
+
+	\mainmatter
 \end{document}

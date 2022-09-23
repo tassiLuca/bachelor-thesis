@@ -1,0 +1,11 @@
+% ! TeX root = thesis.tex
+% Useful packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{newlfont}
+\usepackage{geometry}
+
+% Environments
+\newenvironment{abstract}{\chapter*{\centering\abstractname}\addcontentsline{toc}{chapter}{\abstractname}}{} 
+\newenvironment{dedication}{\chapter*{}\begin{flushright}\null\vspace{\stretch{1}}\itshape}{\normalfont\vspace{\stretch{2}}\null\end{flushright}}
