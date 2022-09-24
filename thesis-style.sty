@@ -5,7 +5,30 @@
 \usepackage[italian]{babel}
 \usepackage{newlfont}
 \usepackage{geometry}
+\usepackage{hyperref}
+% \usepackage[disable]{todonotes} % to uncomment before final version
+\usepackage{todonotes}            % to comment before final version
 
-% Environments
-\newenvironment{abstract}{\chapter*{\centering\abstractname}\addcontentsline{toc}{chapter}{\abstractname}}{} 
-\newenvironment{dedication}{\chapter*{}\begin{flushright}\null\vspace{\stretch{1}}\itshape}{\normalfont\vspace{\stretch{2}}\null\end{flushright}}
+% -----------------------------------------------------------------------
+% ENVIRONMENTS
+% -----------------------------------------------------------------------
+% Right after the \newenvironment, in between braces, you must write the 
+% name of the environment.
+% Below that are two pairs of braces. Inside the first pair of braces 
+% is set what your new environment 
+% will do before the text within, then inside the second pair of braces 
+% declare what your new environment will do after the text.
+\newenvironment{abstract}{
+    \chapter*{\centering\abstractname}
+    \addcontentsline{toc}{chapter}{\abstractname}
+}{} 
+\newenvironment{dedication}{
+    \chapter*{}
+    \begin{flushright}
+        \null\vspace{\stretch{1}}
+        \itshape
+}{
+        \normalfont
+        \vspace{\stretch{2}}\null
+    \end{flushright}
+}

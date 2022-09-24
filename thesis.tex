@@ -11,13 +11,24 @@
 \usepackage{thesis-style}
 %
 \begin{document}
+	% --------------------------------------------------------------------
+	% Frontmatter makes the pages numbered in lowecase roman and make 
+	% chapters not numbered, although each chapter's title appears in the
+	% table of contents.
+	% --------------------------------------------------------------------
 	\frontmatter
-
 	\input{./chapters/frontmatter/frontispiece.tex}
 	\input{./chapters/frontmatter/abstract.tex}
 	\input{./chapters/frontmatter/dedication.tex}
-
 	\tableofcontents
-
+	% --------------------------------------------------------------------
+	% Mainmatter command changes the behavior back to the expected version, 
+	% and resets the page number.
+	% --------------------------------------------------------------------
 	\mainmatter
+	% --------------------------------------------------------------------
+	% Backmatter command leaves the page numbering alone but switches the 
+	% chapters back to being not numbered.
+	% --------------------------------------------------------------------
+	\backmatter
 \end{document}
