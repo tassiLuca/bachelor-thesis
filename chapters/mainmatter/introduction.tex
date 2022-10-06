@@ -4,15 +4,37 @@ Negli ultimi decenni, con la rapida crescita di dati e informazioni facilmente a
 %
 Tuttavia, l'uso improprio di tali risorse, senza attribuire i necessari crediti agli autori, costituisce, oltre che una pratica scorretta che contravviene a qualsiasi ordine deontologico, un illecito. \todo{specificare meglio: punibile a norma di legge...}
 
-In generale, l'atto di appropriarsi degli scritti di altre persone, in violazione della legge sul \textit{copyright} è definito un \textbf{plagio} \cite{britannica}.
+In generale, viene definito \textbf{plagio} l'atto di appropriarsi degli scritti di altre persone, in violazione della legge sul \textit{copyright} \cite{britannica}.
 
-Anche nel mondo dell'informatica il problema del plagio è un fenomeno in crescita\todo{fonte?}, incoraggiato per lo più dalla sempre maggiore quantità di progetti \textit{software} \textit{open source}, che induce gli sviluppatori a copia incollare frammenti di codice, a volte neppure conoscendo le relative condizioni e termini di licenza.
+Anche nel mondo dell'informatica il problema del plagio è un fenomeno in crescita\todo{fonte?}, incoraggiato per lo più dalla sempre maggiore quantità di progetti \textit{software} \textit{open source}, che induce gli sviluppatori a copia incollare frammenti di codice, talvolta neppure conoscendo le relative condizioni e termini di licenza.
 %
-Questo porta spesso a un uso improprio del codice altrui che comporta sanzioni e danni per lo sviluppatore.
+Questo induce spesso a un uso improprio del codice altrui comportando sanzioni e danni per lo sviluppatore.
 
-Nel corso degli anni si sono progettati...
+Per questi motivi, già a partire dagli anni settanta del novecento, sono stati proposti algoritmi e tecniche per l'analisi del codice, nonché l'identificazione e localizzazione di plagi.
 
-Prima di addentrarci, tuttavia, nella trattazione dei metodi e delle tecniche per rilevare tali illeciti\todo{nome non bellissimo}, è bene sottolineare la differenza tra il rilevamento di \textit{cloni} e di plagi: sebbene entrambi abbiano l'obiettivo di trovare codice copiato, nei \textit{cloni} spesso lo sviluppatore copia codice terzo senza applicare sostanziali modifiche, mentre in un plagio, spesso il codice viene rifattorizzato per nascondere le sezioni copiate. 
+In questo contesto è da porre in evidenza la differenza tra l'individuazione di cloni e quella di plagi.
 %
-Va da sé, quindi, che il rilevamento di \textit{cloni} mira ad individuare frammenti di codice allo scopo di evitare codice duplicato e migliorare la manutenibilità del sistema, mentre nel rilevamento di plagi lo scopo è individuare codice copiato per ...
+Quando ci si riferisce a un clone, infatti, lo si fa con riferimento a un frammento di codice che è stata copiato e marginalmente modificato. 
+%
+Quando invece ci si riferisce ad un plagio si intende una sezione che è stata copiata e la cui opera di copiatura si è cercato di dissimulare, mediante opportune azioni di rifattorizzazione del codice.  
+%
+Va da sé, quindi, che il rilevamento di \textit{cloni} mira ad individuare frammenti di codice allo scopo di evitare codice duplicato e migliorare la manutenibilità del sistema, mentre nel rilevamento di plagi lo scopo primario è identificare possibili illeciti, complicando...
+%
+Questo è, insieme alle prestazioni, la sfida principale da affrontare durante la progettazione di un sistema anti-plagio.
+
+\section{Problema 1: Cambiamento di codice}
+Come già anticipato nell'introduzione, la capacità del software anti-plagio di riuscire ad identificare possibili parti di codice plagiate, passa anche e soprattutto dalla capacità del sviluppatore di saper rifattorizzare il codice.
+
+In generale, non è possibile classificare tutti i possibili metodi con cui un programma può essere trasformato in un altro, mantenendo inalterate le sue funzionalità.
+%
+Tuttavia, è possibile distinguere due macro categorie di modifiche: \textbf{lessicali} e \textbf{strutturali} \cite{joy-99}.
+
+Le modifiche lessicali sono quelle che, in linea di principio, possono essere eseguite da un \textit{text editor} e non richiedono la conoscenza del linguaggio di programmazione. Alcuni esempi sono:
+\begin{itemize}
+    \item la riformulazione di commenti, la loro aggiunta o rimozione;
+    \item la riformattazione del testo: introdurre spazi vuoti, cambiare l'ordine dei parametri nella definizione delle funzioni;
+    \item cambiare gli identificatori, il nome delle funzioni o i tipi di dato...;
+\end{itemize}
+
+Le modifiche strutturali, invece, richiede un maggior sforzo in termini di capire il codice ed è fortemente dipendente dal linguaggio...
 
