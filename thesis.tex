@@ -10,6 +10,8 @@
 %
 \usepackage{thesis-style}
 %
+\addbibresource{bibliography.bib}	% Imports bibliography file
+%
 \begin{document}
 	% --------------------------------------------------------------------
 	% Frontmatter makes the pages numbered in lowecase roman and make 
@@ -26,9 +28,17 @@
 	% and resets the page number.
 	% --------------------------------------------------------------------
 	\mainmatter
+	\input{./chapters/mainmatter/introduction.tex}
+	\input{./chapters/mainmatter/stateOfArt.tex}
 	% --------------------------------------------------------------------
 	% Backmatter command leaves the page numbering alone but switches the 
 	% chapters back to being not numbered.
 	% --------------------------------------------------------------------
 	\backmatter
+	% --------------------------------------------------------------------
+	% Bibliography
+	% To find out more about bibliography styles see 
+	% https://it.overleaf.com/learn/latex/Biblatex_bibliography_styles
+	% --------------------------------------------------------------------
+	\printbibliography
 \end{document}
