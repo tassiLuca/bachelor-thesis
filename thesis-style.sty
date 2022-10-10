@@ -8,13 +8,18 @@
 \usepackage{newlfont}
 \usepackage{geometry}
 \usepackage{hyperref}
+\usepackage[italian]{cleveref}  % to reference in latex @see https://texblog.org/2013/05/06/cleveref-a-clever-way-to-reference-in-latex/
 % \usepackage[disable]{todonotes} % to uncomment before final version
-\usepackage{todonotes}            % to comment before final version
-\usepackage[                      % bibliography: @see https://it.overleaf.com/learn/latex/Biblatex_citation_styles
+\usepackage{todonotes}          % to comment before final version
+% bibliography: @see https://it.overleaf.com/learn/latex/Biblatex_citation_styles
+\usepackage[                    
     backend=biber,
-    style=alphabetic,             % for more on styles: @see https://it.overleaf.com/learn/latex/Biblatex_bibliography_styles
+    % for more on styles: @see https://it.overleaf.com/learn/latex/Biblatex_bibliography_styles
+    style=alphabetic,
 ]{biblatex}
 \usepackage{csquotes}
+\usepackage{enumitem}           % to manage items spacing in `itemize`
+\setlist{noitemsep}             % leave space around whole list but no between items
 
 % -----------------------------------------------------------------------
 % ENVIRONMENTS

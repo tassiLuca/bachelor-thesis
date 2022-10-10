@@ -10,7 +10,7 @@ Anche nel mondo dell'informatica il problema del plagio è un fenomeno in cresci
 %
 Questo porta spesso a un uso improprio del codice altrui arrecando sanzioni e danni per lo sviluppatore.
 
-Per questi motivi, già a partire dagli anni settanta del novecento, sono stati proposti algoritmi e tecniche per l'analisi del codice, nonché l'identificazione e localizzazione di plagi.
+Già a partire dagli anni settanta del novecento, sono stati proposti algoritmi e tecniche per l'analisi del codice, nonché l'identificazione e localizzazione di plagi.
 
 In questo contesto è da porre in evidenza la differenza tra l'individuazione di cloni e quella di plagi.
 %
@@ -18,14 +18,14 @@ Quando ci si riferisce a un clone, infatti, lo si fa con riferimento a un framme
 %
 Quando invece ci si riferisce ad un plagio si intende una sezione che è stata copiata e la cui opera di copiatura si è cercato di dissimulare, mediante opportune azioni di rifattorizzazione del codice.  
 %
-%Va da sé, quindi, che il rilevamento di \textit{cloni} mira ad individuare frammenti di codice allo scopo di evitare codice duplicato e migliorare la manutenibilità del sistema, mentre nel rilevamento di plagi lo scopo primario è identificare possibili illeciti.
-%
-Questo è, insieme alle prestazioni, la sfida principale da affrontare durante la progettazione di un sistema anti-plagio.
+Dunque, l'ambito di applicazione delle due ricerche, quella di cloni e quella di plagi, è nettamente diverso: se nel primo l'obiettivo è quello di evidenziare il codice duplicato al fine di migliorare la qualità del codice e migliorare la manutenibilità del sistema, nel secondo lo scopo primario è identificare possibili illeciti.
 
-\section{Le sfide da affrontare}
+Sicuramente, questo aspetto è, insieme alle prestazioni, la sfida principale da affrontare durante la progettazione di un sistema anti-plagio.
+
+\section{Problematiche}
 
 \subsection{La rifattorizzazione del codice}
-Come già anticipato nell'introduzione, la capacità del software anti-plagio di riuscire ad identificare possibili parti di codice plagiate, passa anche e soprattutto dalla capacità dello sviluppatore di saper rifattorizzare il codice.
+Come già anticipato, la capacità di un software anti-plagio nel riuscire ad identificare possibili parti di codice plagiate, passa anche e soprattutto dalla capacità dello sviluppatore di saper rifattorizzare il codice.
 
 In generale, non è possibile classificare tutti i possibili metodi con cui un programma può essere trasformato in un altro mantenendo inalterate le sue funzionalità.
 %
@@ -40,20 +40,21 @@ Alcuni casi esemplificativi sono:
     \item cambiare il nome degli identificatori e delle funzioni o i tipi di dato: ad esempio da \texttt{int} a \texttt{Integer} o da \texttt{float} a \texttt{double}.
 \end{itemize}
 
-Le modifiche strutturali, invece, richiede un maggior sforzo in termini di comprensione della logica del codice. Inoltre sono fortemente dipendenti dal linguaggio di programmazione con cui è stato implementato il codice. 
+Le modifiche strutturali sono invece fortemente dipendenti dal linguaggio di programmazione e richiedono un maggior sforzo in termini di comprensione della logica del codice.
 %
-Di seguito alcuni esempi:
+Di seguito alcuni esempi di rifattorizzazioni che rientrano in questa classe:
 \begin{itemize}
     \item aggiungere istruzioni ridondanti, come dichiarazioni, inizializzazioni, istruzioni di stampa;
     \item sostituire i costrutti di loop con costrutti equivalenti: passare, ad esempio, da \texttt{for} a \texttt{do/while};
     \item sostituire istruzioni \texttt{if} nidificate con dichiarazioni equivalenti, ad esempio \texttt{when} (in Kotlin) o \texttt{switch-case}, e viceversa;
     \item cambiare l'ordine di istruzioni indipendenti;
     \item cambiare l'ordine degli operandi: ad esempio \texttt{x < y} può essere cambiato in \texttt{y >= x};
-    \item sostituire la chiamata a funzione con il corpo della stessa;
+    \item sostituire la chiamata a funzione con il corpo della stessa.
 \end{itemize}
 
 Gli strumenti d'identificazione di plagi devono pertanto cercare di annullare, durante il processo di analisi, gli effetti di queste rifattorizzazioni.
 %
-A questo scopo le tecniche di analisi, che verranno presentate nel successivo capitolo, si compongono di più fasi nelle quali trasformano i sorgenti in rappresentazioni intermedie, che astraggano il più possibile dai dettagli implementativi che possono essere facilmente cambiati, quindi vengono applicate tecniche di \textit{matching} sulla forma intermedia.
+A questo scopo le tecniche di analisi, introdotte nel \Cref{chapter:stateOfArt}, si compongono di più fasi nelle quali trasformano i sorgenti in rappresentazioni intermedie che astraggano il più possibile dai dettagli implementativi che possono essere facilmente cambiati, quindi applicano su di esse tecniche di \textit{matching}.
 
 \subsection{Le prestazioni}
+
