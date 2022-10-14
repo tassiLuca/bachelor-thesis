@@ -1,12 +1,25 @@
 % ! TeX root = thesis.tex
 \chapter{Stato dell'arte}
 \label{chapter:stateOfArt}
-In questo capitolo viene riportata una panoramica delle tecniche storicamente concepite per affrontare il problema dell'individuazione delle parti di codice copiate, evidenziandone, per ciascuno, pregi e difetti.
+In questo capitolo viene riportata una panoramica delle tecniche storicamente concepite per l'analisi del codice sorgente e l'individuazione delle parti copiate, evidenziandone, per ciascuno, pregi e difetti.
 
 \section{Visione d'insieme}
-Come già introdotto in precedenza, la maggior parte dei sistemi automatici di rilevazione di duplicati tipicamente lavora in due fasi: una prima di \textit{tokenizzazione}, seguita da una fase di confronto.
+% preso spunto da "Current trends in source code analysis, plagiarism detection and issues of analysis big datasets" -- si deve citare??
+Il codice sorgente non è nient'altro che un file di testo scritto da sviluppatori, che deve essere compilato o interpretato e che, pertanto, si basa su regole sintattiche e grammaticali proprie del linguaggio di programmazione con cui è scritto che permettono a entrambi gli attori, il programmatore e il calcolatore, di "capirlo" ed elaborarlo.
+
+Per questo motivo, se processare la struttura di un sorgente non presenta grandi difficoltà, processare il significato, ovvero l'idea e la logica sottesa al codice, costituisce una sfida più grande, se non altro perché entra in gioco la competenza dello sviluppatore e la sua esperienza nella scrittura di codice "pulito".
+
+Poiché il problema è complesso, gli attuali metodi di elaborazione non aspirano a risolvere il problema \textit{in toto}, ma applicano il principio di decomposizione del problema e approcciano al codice sorgente da un particolare punto di vista.
 %
-Nella fase di tokenizzazione i sorgenti vengono convertiti in una rappresentazione intermedia, prima di essere confrontati nella successiva fase.
+Alcuni analizzano il codice dal punto di vista del programmatore, cercando di capirne il significato, mentre altri la loro struttura.
+
+Dunque, possiamo classificare le tecniche di analisi in tre famiglie, o livelli \cite{duracik-krsak-hrkut-2017}.
+
+Il primo si basa sull'analisi del codice come mero testo: si presume che siano rispettate le convenzioni e il codice contenga sufficienti informazioni che ne descrivano il significato e cercano di estrarre solo queste significative informazioni aggiuntive.
+
+Il livello successivo è simile al precedente con la differenza che non esplora il significato del testo dal punto di vista del programmatore, bensì dal punto di vista del calcolatore, che "vede" il codice come una sequenza di comandi, ciascuno con il proprio significato nel contesto della grammatica del linguaggio.
+
+L'ultimo e terzo livello riguarda l'analisi del modello del codice sorgente.
 
 \section{Tecniche di \textit{tokenizzazione}}
 
@@ -15,8 +28,15 @@ In questo approccio, ogni istruzione del codice sorgente viene trattata come una
 %
 Questo è l'approccio, fra tutti, più fragile...
 
-\section{}
+\subsection{}
+
+\subsection{}
+
+\subsection{Quale approccio scegliere?}
+In conclusione, scegliere quali di questi approcci scegliere è complesso, perché difficili da confrontare tra loro: la maggior parte di queste tecniche viene valutata utilizzando il proprio \textit{set} di dati, che raramente sono resi pubblicamente accessibili \cite{karnalim-budi-toba-joy-2019}.
 
 In conclusione, bisogna rendersi conto che, a prescindere dal grado di sofisticatezza della tecnica che si utilizza, è sempre possibile che si verifichi un plagio non rilevabile.
 %
-Da bilanciare le risorse investite nell'individuazione del plagio e i rendimenti decrescenti di trovare i pochi, se non nessuno, casi difficili da rilevare \cite{joy-99}
+Da bilanciare le risorse investite nell'individuazione del plagio e i rendimenti decrescenti di trovare i pochi, se non nessuno, casi difficili da rilevare \cite{joy-99}.
+
+
