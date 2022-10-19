@@ -1,7 +1,7 @@
 % ! TeX root = thesis.tex
 \chapter{Stato dell'arte}
 \label{chapter:stateOfArt}
-In questo capitolo viene riportata una panoramica delle tecniche storicamente concepite per l'analisi del codice sorgente e l'individuazione delle parti copiate, evidenziandone, per ciascuno, pregi e difetti.
+In questo capitolo viene riportata una panoramica delle tecniche storicamente introdotte per l'analisi del codice sorgente e l'individuazione delle parti potenzialmente copiate.
 
 \section{Visione d'insieme}
 % preso spunto da "Current trends in source code analysis, plagiarism detection and issues of analysis big datasets" -- si deve citare??
@@ -9,11 +9,9 @@ Il codice sorgente non è nient'altro che un file di testo scritto da sviluppato
 
 Per questo motivo, se processare la struttura di un sorgente non presenta grandi difficoltà, processare il significato, ovvero l'idea e la logica sottesa al codice, costituisce una sfida più grande, se non altro perché entra in gioco la competenza dello sviluppatore e la sua esperienza nella scrittura di codice "pulito".
 
-Poiché il problema è complesso, gli attuali metodi di elaborazione non aspirano a risolvere il problema \textit{in toto}, ma applicano il principio di decomposizione del problema e approcciano al codice sorgente da un particolare punto di vista.
-%
-Alcuni analizzano il codice dal punto di vista del programmatore, cercando di capirne il significato, mentre altri la loro struttura.
+Poiché il problema è complesso, gli attuali metodi di elaborazione non aspirano a risolvere il problema \textit{in toto}, ma applicano il principio di decomposizione del problema e approcciano al codice sorgente da un particolare punto di vista: alcuni analizzano il codice dal punto di vista del programmatore, cercando di comprenderne il significato, altri la loro struttura.
 
-Dunque, possiamo classificare le tecniche di analisi in tre famiglie, o livelli \cite{duracik-krsak-hrkut-2017}.
+Possiamo classificare le tecniche di analisi in tre famiglie, o livelli \cite{duracik-krsak-hrkut-2017}.
 
 Il primo si basa sull'analisi del codice come mero testo: si presume che siano rispettate le convenzioni e il codice contenga sufficienti informazioni che ne descrivano il significato e cercano di estrarre solo queste significative informazioni aggiuntive.
 
@@ -21,16 +19,16 @@ Il livello successivo è simile al precedente con la differenza che non esplora 
 
 L'ultimo e terzo livello riguarda l'analisi del modello del codice sorgente.
 
-\section{Tecniche di \textit{tokenizzazione}}
+\section{Tecniche di analisi}
 
-\subsection{Approccio \textit{Text based}}
+\subsection{Analisi basata sul testo}
 In questo approccio, ogni istruzione del codice sorgente viene trattata come una stringa e il programma è considerato come una mera sequenza di stringhe.
 %
 Questo è l'approccio, fra tutti, più fragile...
 
-\subsection{}
+\subsection{Analisi basata sui \textit{token}}
 
-\subsection{}
+\subsection{Analisi basata su un modello}
 
 \subsection{Quale approccio scegliere?}
 In conclusione, scegliere quali di questi approcci scegliere è complesso, perché difficili da confrontare tra loro: la maggior parte di queste tecniche viene valutata utilizzando il proprio \textit{set} di dati, che raramente sono resi pubblicamente accessibili \cite{karnalim-budi-toba-joy-2019}.
