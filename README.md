@@ -1,5 +1,4 @@
 # Code Plagiarism Detector Bachelor Thesis
----
 
 ## Overview
 This repo contains my Latex bachelor thesis for ISI @ UniBo.
