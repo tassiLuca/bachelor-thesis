@@ -18,7 +18,7 @@ Quando ci si riferisce a un clone, infatti, lo si fa con riferimento a un framme
 %
 Quando invece ci si riferisce ad un plagio si intende una sezione che è stata copiata e la cui opera di copiatura si è cercato di dissimulare, mediante opportune azioni di rifattorizzazione del codice \cite{muddu-et-al-2013}.  
 %
-Dunque, l'ambito di applicazione delle due ricerche è nettamente diverso: se nel primo l'obiettivo è quello di evidenziare il codice duplicato al fine di migliorare la qualità del codice e migliorare la manutenibilità del sistema, nel secondo lo scopo primario è identificare possibili condotte illecite.
+Dunque, l'ambito di applicazione delle due ricerche è nettamente diverso: se nel primo l'obiettivo è quello di evidenziare il codice duplicato al fine di migliorare la qualità del codice e la manutenibilità del sistema, nel secondo lo scopo primario è identificare possibili condotte illecite.
 
 Sicuramente, questo aspetto è, insieme alle prestazioni, la sfida principale da affrontare durante la progettazione di un sistema antiplagio.
 
@@ -45,23 +45,33 @@ Le modifiche strutturali sono invece fortemente dipendenti dal linguaggio di pro
 Di seguito alcuni esempi di rifattorizzazioni che rientrano in questa classe:
 \begin{itemize}
     \item aggiungere istruzioni ridondanti, come dichiarazioni, inizializzazioni, istruzioni di stampa;
-    \item sostituire i costrutti di loop con costrutti equivalenti: passare, ad esempio, da \texttt{for} a \texttt{do/while};
+    \item sostituire i costrutti di loop con costrutti equivalenti: passare, ad esempio, da \texttt{for} a \texttt{do/while}, o da un approccio iterativo a uno funzionale (ad esempio tramite l'uso degli \texttt{Stream} in Java);
     \item sostituire istruzioni \texttt{if} nidificate con dichiarazioni equivalenti, ad esempio \texttt{when} (in Kotlin) o \texttt{switch-case}, e viceversa;
     \item cambiare l'ordine di istruzioni indipendenti;
     \item cambiare l'ordine degli operandi: ad esempio \texttt{x < y} può essere cambiato in \texttt{y >= x};
     \item sostituire la chiamata a funzione con il corpo della stessa.
 \end{itemize}
 
-\begin{figure}
+Gli strumenti d'identificazione di plagi devono pertanto cercare di annullare gli effetti di queste rifattorizzazioni.
+%
+A questo scopo le tecniche di analisi, introdotte nel \Cref{chapter:stateOfArt}, si compongono di più fasi nelle quali trasformano i sorgenti in rappresentazioni intermedie che astraggano il più possibile dai dettagli implementativi che possono essere facilmente cambiati, quindi applicano su di esse tecniche di \textit{matching}.
+
+Si osservi, tuttavia, che esistono rifattorizzazioni il cui contributo è più facile da annullare di altre. 
+%
+Si pensi, ad esempio, all'aggiunta o alla modifica dei commenti: l'effetto di tale rifattorizzazione è facilmente annullabile semplicemente trascurando dall'analisi i commenti in quanto non contribuiscono alla logica del programma. 
+%
+D'altro canto, creare tecniche che siano insensibili al riordino delle istruzioni è un compito più complesso.
+
+In \Cref{img:01-levels-of-plagiarism} viene riportata la tassonomia dei livelli di plagio definita in \cite{faidhi-robinson-1987} che mappa le possibili rifattorizzazioni in sette livelli o categorie, sulla base della loro difficoltà: il più semplice è il livello 0 che corrisponde a una copia letterale; il più impegnativo è il livello 6 che corrisponde a un cambiamento logico e può essere considerato plagio solo se si verifica in concomitanza con altri livelli.
+
+\begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\textwidth]{resources/img/01-levels-of-plagiarism.pdf}
+    \includegraphics[width=0.6\textwidth]{resources/img/01-levels-of-plagiarism.pdf}
     \caption{Tassonomia dei livelli di plagio di Faidhi \& Robinson (1987).}
     \label{img:01-levels-of-plagiarism}
 \end{figure}
 
-Gli strumenti d'identificazione di plagi devono pertanto cercare di annullare, durante il processo di analisi, gli effetti di queste rifattorizzazioni.
-%
-A questo scopo le tecniche di analisi, introdotte nel \Cref{chapter:stateOfArt}, si compongono di più fasi nelle quali trasformano i sorgenti in rappresentazioni intermedie che astraggano il più possibile dai dettagli implementativi che possono essere facilmente cambiati, quindi applicano su di esse tecniche di \textit{matching}.
+Maggiore sarà il livello di rifattorizazzione a cui il sistema antiplagio sarà "immune", migliore sarà l'efficacia e la robustezza del sistema stesso.
 
 \subsection{Le prestazioni}
 L'altro problema emergente nello sviluppo di un programma antiplagio che non si limiti a confrontare la similarità tra una coppia di progetti, bensì effettui un controllo uno a molti, in cui si testano tutte le possibili coppie, sono le prestazioni. 
@@ -70,6 +80,6 @@ Infatti, la maggioranza delle tecniche e degli algoritmi per effettuare i confro
 %
 Questo è in larga parte dovuto al fatto che la misurazione della somiglianza tra una coppia di sorgenti ha una complessità almeno quadratica nel numero delle istanze delle sue rappresentazioni, e che, per ogni valutazione, il numero di confronti da effettuare è tipicamente elevato.
 
-Questo problema è acuito dal fatto che i progetti \textit{software} stanno diventando sempre più complessi e si hanno a disposizione una quantità molto più elevata di dati e informazioni di quanto in passato si potesse immaginare.
+Questo problema è acuito dal fatto che i progetti \textit{software} stanno diventando sempre più complessi e si hanno a disposizione una quantità molto più elevata di dati e informazioni rispetto al passato.
 
 Per questa ragione vengono sfruttate tecniche di parallelizzazione e devono essere adottate strategie di ottimizzazione in grado di ridurre il numero di confronti da effettuare e, quindi, diminuire il tempo di calcolo.
