@@ -1,7 +1,11 @@
 % ! TeX root = ../../thesis.tex
 \chapter{Stato dell'arte}
 \label{chapter:stateOfArt}
-In questo capitolo viene riportata una panoramica delle tecniche storicamente introdotte per l'analisi del codice sorgente e l'individuazione delle parti potenzialmente copiate.
+In questo capitolo si passa in rassegna lo stato dell'arte sulle tecniche per l'analisi del codice sorgente e l'individuazione delle parti potenzialmente plagiate.
+%
+Dopo una breve visione d'insieme sono presentate le principali tre famiglie di tecniche impiegate in questo contesto, ponendo in evidenza vantaggi e svantaggi di ciascuna.
+%
+Infine, un ultimo paragrafo è dedicato al riepilogo e ad alcune considerazioni su quale metodo scegliere.
 
 \section{Visione d'insieme}
 % preso spunto da "Current trends in source code analysis, plagiarism detection and issues of analysis big datasets" -- si deve citare??
@@ -11,22 +15,20 @@ Per questo motivo, se processare la struttura di un sorgente non presenta grandi
 
 Poiché il problema è complesso, gli attuali metodi di elaborazione non aspirano a risolvere il problema \textit{in toto}, ma applicano il principio di decomposizione del problema e approcciano al codice sorgente da un particolare punto di vista: alcuni analizzano il codice dal punto di vista del programmatore, cercando di comprenderne il significato, altri la loro struttura.
 
-Possiamo classificare le tecniche di analisi in tre famiglie, o livelli \cite{duracik-krsak-hrkut-2017}.
+% Possiamo classificare le tecniche di analisi in tre approcci: 
 
-Il primo si basa sull'analisi del codice come mero testo: si presume che siano rispettate le convenzioni e il codice contenga sufficienti informazioni che ne descrivano il significato e cercano di estrarre solo queste significative informazioni aggiuntive.
+% Il primo si basa sull'analisi del codice come mero testo: si presume che siano rispettate le convenzioni e il codice contenga sufficienti informazioni che ne descrivano il significato e cercano di estrarre solo queste significative informazioni aggiuntive.
 
-Il livello successivo è simile al precedente con la differenza che non esplora il significato del testo dal punto di vista del programmatore, bensì dal punto di vista del calcolatore, che "vede" il codice come una sequenza di comandi, ciascuno con il proprio significato nel contesto della grammatica del linguaggio.
+% Il livello successivo è simile al precedente con la differenza che non esplora il significato del testo dal punto di vista del programmatore, bensì dal punto di vista del calcolatore, che "vede" il codice come una sequenza di comandi, ciascuno con il proprio significato nel contesto della grammatica del linguaggio.
 
-L'ultimo e terzo livello riguarda l'analisi del modello del codice sorgente.
+% L'ultimo e terzo livello riguarda l'analisi del modello del codice sorgente.
+
+In generale, come già accennato nel \Cref{chapter:introduction}, la maggior parte dei sistemi automatici d'identificazione di plagi lavorano in due fasi consecutive: prima il codice sorgente viene analizzato e viene generata una rappresentenzazione intermedia, poi si effettua il confronto dei sorgenti sulle rappresentazioni intermedie.
 
 \section{Tecniche di analisi}
 
-\subsection{Analisi basata sul testo}
-In questo approccio, ogni istruzione del codice sorgente viene trattata come una stringa e il programma è considerato come una mera sequenza di stringhe.
-%
-Questo è l'approccio, fra tutti, più fragile...
-
 \subsection{Analisi basata sui \textit{token}}
+Tra tutte, la tecnica più usata consiste nella \textit{tokenizzazione} del codice sorgente, che consiste nell'effettuare il \textit{parsing} del codice...
 
 \subsection{Analisi basata su un modello}
 
