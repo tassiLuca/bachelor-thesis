@@ -1,6 +1,7 @@
 % ! TeX root = ../../thesis.tex
 \chapter{Stato dell'arte}
 \label{chapter:stateOfArt}
+\todo{Da completare}
 In questo capitolo si passa in rassegna lo stato dell'arte sulle tecniche per l'analisi del codice sorgente e l'individuazione delle parti potenzialmente plagiate.
 %
 Dopo una breve visione d'insieme sono presentate le principali tre famiglie di tecniche impiegate in questo contesto, ponendo in evidenza vantaggi e svantaggi di ciascuna.
@@ -32,10 +33,10 @@ Tra tutte, la tecnica più usata consiste nell'analisi lessicale (\textbf{\texti
 %
 Un \textit{token} è una sequenza di caratteri che costituisce un'unità fondamentale nella grammatica del linguaggio ed è strutturato come una coppia comprendente un \textit{nome} e un \textit{valore}.
 %
-Alcuni possibili esempi di nomi e valori di \textit{token} comuni sono:
+Alcuni possibili esempi sono riportati in \Cref{table:token-examples}.
 
 \begin{itemize}
-    \item \textit{identifier}: usato per rappresentare i nomi scelti dai programmatori;
+    \item \textit{identifier}: usato per rappresentare i nomi scelti dai programmatori ();
     \item \textit{keyword}: usato per i nomi dedicati nella sintassi del linguaggio;
     \item \textit{separator}: usato per delimitatori e i caratteri di punteggiatura;
     \item \textit{comment}: usato per un blocco di commenti.
@@ -57,7 +58,10 @@ Alcuni possibili esempi di nomi e valori di \textit{token} comuni sono:
         \hline
     \end{tabular}
     \caption{Esempi di possibili coppie nome-valore di \textit{token} comuni.}
+    \label{table:token-examples}
 \end{table}
+
+L'analisi lessicale rappresenta il primo stadio della struttura di un compilatore
 
 \subsection{Analisi basata su un modello}
 
