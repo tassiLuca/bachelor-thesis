@@ -29,6 +29,7 @@ In generale, come già accennato nel \Cref{chapter:introduction}, la maggior par
 \section{Tecniche di analisi}
 
 Le tecniche di analisi ricadono prevalentemente in tre cataegorie: \textbf{\textit{structure-based}}, \textbf{\textit{attribute-based}}, \textbf{\textit{hybrid detection}}.
+% citazione?
 
 \subsection{Analisi \textit{structure-based}}
 
@@ -65,13 +66,13 @@ Alcuni possibili esempi sono riportati in \Cref{table:token-examples}.
     \label{table:token-examples}
 \end{table}
 
-L'analisi lessicale rappresenta il primo stadio della struttura di un compilatore ed è eseguita da dei programmi denominati \textbf{\textit{lexer}}. 
+L'analisi lessicale rappresenta il primo stadio della struttura di un compilatore ed è eseguita da programmi denominati \textbf{\textit{lexer}}. 
 %
-Questi sono generati in maniera dichiarativa a partire da generatori di \textit{lexer} (\textbf{\textit{lexer generator}}) che, preso in input più automa a stati finiti, espressi per mezzo di espressioni regolari, che definiscono in maniera formale la grammatica del linguaggio, generano il codice che implementa l'algoritmo di analisi lessicale. 
+Questi sono generati in maniera dichiarativa a partire da generatori di \textit{lexer} (\textbf{\textit{lexer generator}}) che, preso in input più automa a stati finiti, espressi per mezzo di espressioni regolari che definiscono in maniera formale la grammatica del linguaggio, generano il codice che implementa l'algoritmo di analisi lessicale. 
 %
 % https://www.antlr.org ??
 %
-Attraverso questo approccio, quindi, ogni programma viene trasformato in una sequenza di \textit{token}, uno per ciascun elemento di base del linguaggio
+Attraverso questo approccio, quindi, ogni programma viene trasformato in una sequenza di \textit{token}, uno per ciascun elemento di base del linguaggio...
 
 \subsubsection{Analisi basata su un modello}
 
