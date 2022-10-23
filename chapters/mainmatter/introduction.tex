@@ -21,12 +21,12 @@ Quando invece ci si riferisce ad un plagio si intende una sezione che è stata c
 %
 Dunque, l'ambito di applicazione delle due ricerche è nettamente diverso: se nel primo l'obiettivo è quello di evidenziare il codice duplicato al fine di migliorare la qualità del codice e la manutenibilità del sistema, nel secondo lo scopo primario è identificare possibili condotte illecite.
 
-Sicuramente, questo aspetto è, insieme alle prestazioni, la sfida principale da affrontare durante la progettazione di un sistema antiplagio.
+Questo aspetto è, insieme alle prestazioni, la sfida principale da affrontare durante la progettazione di un sistema antiplagio.
 
 \section{Problemi aperti}
 
 \subsection{La rifattorizzazione del codice}
-Come già anticipato, la capacità di un software antiplagio nel riuscire ad identificare possibili parti di codice plagiate, passa anche e soprattutto dalla capacità dello sviluppatore di saper rifattorizzare il codice.
+La capacità di un software antiplagio nel riuscire ad identificare possibili parti di codice plagiate, passa anche, e soprattutto, dall'abilità dello sviluppatore di saper rifattorizzare il codice.
 
 In generale, non è possibile classificare tutti i possibili metodi con cui un programma può essere trasformato in un altro mantenendo inalterate le sue funzionalità.
 %
@@ -55,11 +55,11 @@ Di seguito alcuni esempi di rifattorizzazioni che rientrano in questa classe:
 
 Gli strumenti d'identificazione di plagi devono pertanto cercare di annullare gli effetti di queste rifattorizzazioni.
 %
-A questo scopo le tecniche di analisi, introdotte nel \Cref{chapter:stateOfArt}, si compongono di più fasi nelle quali trasformano i sorgenti in rappresentazioni intermedie che astraggano il più possibile dai dettagli implementativi che possono essere facilmente cambiati, quindi applicano su di esse tecniche di confronto. % \textit{matching}.
+A questo scopo le tecniche di analisi, introdotte nel \Cref{chapter:stateOfArt}, si compongono di più fasi nelle quali trasformano i sorgenti in rappresentazioni intermedie che astraggono il più possibile dai dettagli implementativi, che possono essere facilmente cambiati, quindi applicano su di esse tecniche di confronto.
 
 Si osservi, tuttavia, che esistono rifattorizzazioni il cui contributo è più facile da annullare di altre. 
 %
-Si pensi, ad esempio, all'aggiunta o alla modifica dei commenti: l'effetto di tale rifattorizzazione è facilmente annullabile semplicemente trascurando dall'analisi i commenti in quanto non contribuiscono alla logica del programma. 
+Si pensi, ad esempio, all'aggiunta o alla modifica dei commenti: l'effetto di tale rifattorizzazione è facilmente annullabile semplicemente trascurando dall'analisi i commenti, in quanto non contribuiscono in alcun modo alla logica del programma. 
 %
 D'altro canto, creare tecniche che siano insensibili al riordino delle istruzioni è un compito più complesso.
 
@@ -72,15 +72,22 @@ In \Cref{img:01-levels-of-plagiarism} viene riportata la tassonomia dei livelli 
     \label{img:01-levels-of-plagiarism}
 \end{figure}
 
-Maggiore sarà il livello di rifattorizazzione a cui il sistema antiplagio sarà "immune", migliore sarà l'efficacia e la robustezza del sistema stesso.
+Maggiore sarà il livello di rifattorizazzione a cui il sistema antiplagio sarà insensibile, migliore sarà l'efficacia e la robustezza del sistema stesso.
 
 \subsection{Le prestazioni}
-L'altro problema emergente nello sviluppo di un programma antiplagio che non si limiti a confrontare la similarità tra una coppia di progetti, bensì effettui un controllo uno a molti, in cui si testano tutte le possibili coppie, sono le prestazioni. 
+L'altro problema emergente nello sviluppo di un programma antiplagio che non si limiti a confrontare la similarità tra una coppia di progetti, bensì effettui un controllo uno a molti o molti a molti, in cui si testano tutte le possibili coppie, sono le prestazioni. 
 %
 Infatti, la maggioranza delle tecniche e degli algoritmi per effettuare i confronti sono inefficienti in termini di tempo costo. 
 %
-Questo è in larga parte dovuto al fatto che la misurazione della somiglianza tra una coppia di sorgenti ha una complessità almeno quadratica nel numero delle istanze delle sue rappresentazioni, e che, per ogni valutazione, il numero di confronti da effettuare è tipicamente elevato.
+Questo è in larga parte dovuto al fatto che la misurazione della somiglianza tra una coppia di sorgenti, nella gran parte degli algoritmi noti, ha una complessità almeno quadratica nel numero delle istanze delle sue rappresentazioni, e che, per ogni valutazione, il numero di confronti da effettuare è tipicamente elevato: detto $N$ il numero di progetti, volendo confrontare tutte le coppie di progetti tra loro, dovrebbero essere eseguite $\frac{N(N-1)}{2}$ comparazioni.
 
-Questo problema è acuito dal fatto che i progetti \textit{software} stanno diventando sempre più complessi e si hanno a disposizione una quantità molto più elevata di dati e informazioni rispetto al passato.
+Questo problema è acuito dal fatto che i progetti \textit{software} stanno diventando sempre più complessi e si hanno a disposizione una sempre maggior quantità di dati da dover processare.
 
-Per questa ragione vengono sfruttate tecniche di parallelizzazione e devono essere adottate strategie di ottimizzazione in grado di ridurre il numero di confronti da effettuare e, quindi, diminuire il tempo di calcolo.
+Per questa ragione vengono sfruttate tecniche di parallelizzazione e devono essere adottate strategie di ottimizzazione in grado di ridurre il numero di confronti da effettuare e, quindi, diminuire il tempo di esecuzione.
+%
+Per farlo, si utilizzano tecniche euristiche che permettano di determinare il grado di somiglianza dei sorgenti senza dover effettivamente eseguire il confronto.
+
+Il miglioramento delle prestazioni mediante l'uso di tali tecniche, tuttavia, non è a costo zero: queste, infatti, forniscono un'\textit{approssimazione} della somiglianza effettiva di due sorgenti che, in taluni casi, si verifica essere errata, impattando inevitabilmente sulla sensibilità del sistema stesso.
+
+Il bilanciamento tra le prestazioni e l'efficacia del sistema è, dunque, di fondamentale importanza.
+
