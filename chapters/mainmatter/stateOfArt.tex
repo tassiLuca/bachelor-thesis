@@ -13,7 +13,7 @@ Il codice sorgente non è nient'altro che un file di testo scritto da sviluppato
 
 Per questo motivo, se processare la struttura di un sorgente non presenta grandi difficoltà, processare il significato, ovvero l'idea e la logica sottesa al codice, costituisce una sfida più grande, se non altro perché entra in gioco la competenza dello sviluppatore e la sua esperienza nella scrittura di codice "pulito".
 
-Poiché il problema è complesso, gli attuali metodi di elaborazione non aspirano a risolvere il problema \textit{in toto}, ma applicano il principio di decomposizione del problema e approcciano al codice sorgente da un particolare punto di vista: alcuni analizzano il codice dal punto di vista del programmatore, cercando di comprenderne il significato, altri la loro struttura.
+Poiché il problema è complesso, gli attuali metodi di analisi non aspirano a risolvere il problema \textit{in toto}, ma applicano il principio di decomposizione del problema e approcciano al codice sorgente da un particolare punto di vista: alcuni analizzano il codice dal punto di vista del programmatore, cercando di comprenderne il significato, altri la loro struttura.
 
 % Possiamo classificare le tecniche di analisi in tre approcci: 
 
@@ -27,8 +27,37 @@ In generale, come già accennato nel \Cref{chapter:introduction}, la maggior par
 
 \section{Tecniche di analisi}
 
-\subsection{Analisi basata sui \textit{token}}
-Tra tutte, la tecnica più usata consiste nella \textit{tokenizzazione} del codice sorgente, che consiste nell'effettuare il \textit{parsing} del codice...
+\subsection{Analisi lessicale}
+Tra tutte, la tecnica più usata consiste nell'analisi lessicale (\textbf{\textit{lexical analysis}} o \textbf{\textit{tokenization}} in inglese) del codice sorgente, che consiste nel convertire la sequenza di caratteri di cui è composto il programma in una sequenza di \textit{token}.
+%
+Un \textit{token} è una sequenza di caratteri che costituisce un'unità fondamentale nella grammatica del linguaggio ed è strutturato come una coppia comprendente un \textit{nome} e un \textit{valore}.
+%
+Alcuni possibili esempi di nomi e valori di \textit{token} comuni sono:
+
+\begin{itemize}
+    \item \textit{identifier}: usato per rappresentare i nomi scelti dai programmatori;
+    \item \textit{keyword}: usato per i nomi dedicati nella sintassi del linguaggio;
+    \item \textit{separator}: usato per delimitatori e i caratteri di punteggiatura;
+    \item \textit{comment}: usato per un blocco di commenti.
+\end{itemize}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|} 
+        \hline
+        \textbf{Nome} & \textbf{Esempi di valori} \\ [0.5ex] 
+        \hline\hline
+        \textit{identifier} & \texttt{x}, \texttt{name}, \texttt{color} \\ 
+        \hline
+        \textit{keyword} & \texttt{if}, \texttt{for}, \texttt{return} \\
+        \hline
+        \textit{separator} & \texttt{\{}, \texttt{\}}, \texttt{(}, \texttt{;} \\
+        \hline
+        \textit{comment} & \texttt{/* This is a sample comment */} \\
+        \hline
+    \end{tabular}
+    \caption{Esempi di possibili coppie nome-valore di \textit{token} comuni.}
+\end{table}
 
 \subsection{Analisi basata su un modello}
 
