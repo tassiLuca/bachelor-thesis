@@ -28,13 +28,13 @@ In generale, come già accennato nel \Cref{chapter:introduction}, la maggior par
 
 \section{Tecniche di analisi}
 
-Le tecniche di analisi ricadono prevalentemente in tre cataegorie: \textbf{\textit{structure-based}}, \textbf{\textit{attribute-based}}, \textbf{\textit{hybrid detection}}.
+Le tecniche di analisi possono essere classificate in tre cataegorie: \textbf{\textit{structure-based}}, \textbf{\textit{attribute-based}}, \textbf{\textit{hybrid detection}}.
 % citazione?
 
 \subsection{Analisi \textit{structure-based}}
 
 \subsubsection{Analisi lessicale}
-Tra tutte, la tecnica più usata tra quelle \textit{structure-based} consiste nell'analisi lessicale (\textbf{\textit{lexical analysis}} o \textbf{\textit{tokenization}} in inglese) del codice sorgente, che consiste nel convertire la sequenza di caratteri di cui è composto il programma in una sequenza di \textit{token}.
+Tra tutte, la tecnica più usata consiste nell'analisi lessicale (\textbf{\textit{lexical analysis}} o \textbf{\textit{tokenization}} in inglese) del codice sorgente, che consiste nel convertire la sequenza di caratteri di cui è composto il programma in una sequenza di \textit{token}.
 %
 Un \textit{token} è una sequenza di caratteri che costituisce un'unità fondamentale nella grammatica del linguaggio ed è strutturato come una coppia \textit{nome} - \textit{valore}.
 %
@@ -69,10 +69,11 @@ Alcuni possibili esempi sono riportati in \Cref{table:token-examples}.
 L'analisi lessicale rappresenta il primo stadio della struttura di un compilatore ed è eseguita da programmi denominati \textbf{\textit{lexer}}. 
 %
 Questi sono generati in maniera dichiarativa a partire da generatori di \textit{lexer} (\textbf{\textit{lexer generator}}) che, preso in input più automa a stati finiti, espressi per mezzo di espressioni regolari che definiscono in maniera formale la grammatica del linguaggio, generano il codice che implementa l'algoritmo di analisi lessicale. 
-%
 % https://www.antlr.org ??
-%
-Attraverso questo approccio, quindi, ogni programma viene trasformato in una sequenza di \textit{token}, uno per ciascun elemento di base del linguaggio...
+
+Attraverso questo approccio, quindi, ogni programma viene trasformato in una sequenza di \textit{token}, uno per ciascun elemento di base del linguaggio che si vuole valorizzare: i blocchi di commenti o documentazione, gli \texttt{import} e altre sezioni di codice non rilevanti ai fini della comparazione possono essere esclusi, cioè non viene generato alcun token per questi elementi.
+
+\dots
 
 \subsubsection{Analisi basata su un modello}
 
