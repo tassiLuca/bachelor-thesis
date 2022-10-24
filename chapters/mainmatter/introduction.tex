@@ -85,9 +85,11 @@ Questo problema è acuito dal fatto che i progetti \textit{software} stanno dive
 
 Per questa ragione vengono sfruttate tecniche di parallelizzazione e devono essere adottate strategie di ottimizzazione in grado di ridurre il numero di confronti da effettuare e, quindi, diminuire il tempo di esecuzione.
 %
-Per farlo, si utilizzano tecniche euristiche che permettano di determinare il grado di somiglianza dei sorgenti senza dover effettivamente eseguire il confronto.
+Per farlo, si utilizzano tecniche euristiche che permettono di determinare il grado di somiglianza dei sorgenti senza dover effettivamente eseguire il confronto.
 
-Il miglioramento delle prestazioni mediante l'uso di tali tecniche, tuttavia, non è a costo zero: queste, infatti, forniscono un'\textit{approssimazione} della somiglianza effettiva di due sorgenti che, in taluni casi, si verifica essere errata, impattando inevitabilmente sulla sensibilità del sistema stesso.
+Va da sé che l'utilizzo di tali tecniche impatta inevitabilmente la sensibilità del sistema: una stima errata, a monte, della somiglianza di due sorgenti può portare a non effettuare alcun confronto tra di questi e quindi a non individuare possibili plagi. 
+%
+Questo si verifica soprattutto nei casi in cui l'ottimizzazione è molto marcata e si riduce in modo eccessivo l'insieme dei sorgenti su cui effettuare il confronto, rendendo di fatto svantaggioso l'impiego di tali tecniche.
 
 Il bilanciamento tra le prestazioni e l'efficacia del sistema è, dunque, di fondamentale importanza.
 
