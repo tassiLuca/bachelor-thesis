@@ -49,10 +49,16 @@
 
 % -----------------------------------------------------------------------
 % LISTING CONFIGURATIONS
+% See https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
 % -----------------------------------------------------------------------
+\renewcommand{\lstlistingname}{Listato}
+\renewcommand{\lstlistlistingname}{Elenco dei listati}
+\crefname{lstlisting}{\lstlistingname}{listato}
+\Crefname{lstlisting}{\lstlistingname}{Listato}
+
 \lstset{
 	showstringspaces=false,
-	basicstyle=\ttfamily,
+	basicstyle=\footnotesize\ttfamily,
 	commentstyle={\color{olive}},
 	identifierstyle=\color{black},
 	ndkeywordstyle={\color{blue}},

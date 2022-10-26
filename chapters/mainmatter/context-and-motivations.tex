@@ -61,7 +61,7 @@ Di seguito alcuni esempi di rifattorizzazioni che rientrano in questa classe:
 
 Gli strumenti d'identificazione di plagi devono pertanto cercare di annullare gli effetti di queste rifattorizzazioni.
 %
-A questo scopo le tecniche di analisi, introdotte nel \Cref{chapter:stateOfArt}, si compongono di più fasi nelle quali trasformano i sorgenti in rappresentazioni intermedie che astraggono il più possibile dai dettagli implementativi, che possono essere facilmente cambiati, quindi applicano su di esse tecniche di confronto.
+A questo scopo le tecniche di analisi si compongono di più fasi nelle quali trasformano i sorgenti in rappresentazioni intermedie che astraggono il più possibile dai dettagli implementativi, che possono essere facilmente cambiati, quindi applicano su di esse tecniche di confronto.
 
 Si osservi, tuttavia, che esistono rifattorizzazioni il cui contributo è più facile da annullare di altre. 
 %
@@ -160,12 +160,24 @@ L'analisi lessicale rappresenta il primo stadio della struttura di un compilator
 %
 Questi sono generati in maniera dichiarativa a partire da generatori di \textit{lexer} (\textbf{\textit{lexer generator}}) che, presi in input più automa a stati finiti, espressi per mezzo di espressioni regolari che definiscono in maniera formale la grammatica del linguaggio, generano il codice che implementa l'algoritmo di analisi lessicale. 
 % https://www.antlr.org ??
+% esempio di FA ed espressione regolare
 
 Attraverso questo approccio, quindi, ogni programma viene trasformato in una sequenza di \textit{token}, uno per ciascun elemento di base del linguaggio che si vuole valorizzare: i blocchi di commenti o documentazione, gli \texttt{import} e altre sezioni di codice non rilevanti ai fini della comparazione possono essere esclusi, cioè non viene generato alcun \textit{token} per questi elementi.
 %
-Questo li rende insensibili contro le modifiche ma \dots
+Questo li rende insensibili contro le modifiche agli identificatori, ma non al riordino delle istruzioni.
 
-\todo{esempio di tokenizzazione applicata a un sorgente}
+\lstinputlisting[
+	float,
+	language=Java,
+	caption={Una semplice classe per mostrare il processo di \textit{tokenizzazione}},
+	label={lst:testanalysis},
+]{resources/code/TestAnalysis.java}
+
+\lstinputlisting[
+	float,
+	caption={La sequenza di \textit{token} generati a partire dal codice del \Cref{lst:testanalysis}},
+	label={lst:tokensequence},
+]{resources/code/AnalyzedTestAnalysis.txt}
 
 In seguito, la sequenza di \textit{token} generata viene confrontata con algoritmi di \textit{string matching}.
 
