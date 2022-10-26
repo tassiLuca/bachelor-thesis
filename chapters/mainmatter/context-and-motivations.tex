@@ -102,12 +102,14 @@ Il bilanciamento tra le prestazioni e l'efficacia del sistema è, dunque, di fon
 \todo{spiegare cosa esiste e perché serve che sia automatico}
 
 \section{Stato dell'arte}
+
+\todo{Forse da mettere altrove i paragrafi seguenti}
 % preso spunto da "Current trends in source code analysis, plagiarism detection and issues of analysis big datasets" -- si deve citare??
 Il codice sorgente non è nient'altro che un file di testo scritto da sviluppatori, che deve essere compilato o interpretato e che, pertanto, si basa su regole sintattiche e grammaticali proprie del linguaggio di programmazione con cui è scritto che permettono a entrambi gli attori, il programmatore e il calcolatore, di "capirlo" ed elaborarlo.
 
 Per questo motivo, se processare la struttura di un sorgente non presenta grandi difficoltà, processare il significato, ovvero l'idea e la logica sottesa al codice, costituisce una sfida più grande, se non altro perché entra in gioco la competenza dello sviluppatore e la sua esperienza nella scrittura di codice "pulito".
 
-Poiché il problema è complesso, gli attuali metodi di analisi non aspirano a risolvere il problema \textit{in toto}, ma analizzano il codice sorgente utilizzando particolare "punto di vista": alcuni analizzano il codice dal punto di vista del programmatore, cercando di comprenderne il significato, altri la loro struttura.
+Poiché il problema è complesso, gli attuali metodi di analisi non aspirano a risolvere il problema \textit{in toto}, ma analizzano il codice sorgente utilizzando un particolare "punto di vista": alcuni lo analizzano dal punto di vista del programmatore, cercando di comprenderne il significato, altri la loro struttura.
 
 % Possiamo classificare le tecniche di analisi in tre approcci: 
 
@@ -117,11 +119,17 @@ Poiché il problema è complesso, gli attuali metodi di analisi non aspirano a r
 
 % L'ultimo e terzo livello riguarda l'analisi del modello del codice sorgente.
 
-In generale, come già accennato nel \todo{ref?}, la maggior parte dei sistemi automatici d'identificazione di plagi lavorano in due fasi consecutive: prima il codice sorgente viene analizzato e viene generata una rappresentenzazione intermedia, poi si effettua il confronto dei sorgenti sulle rappresentazioni intermedie.
+In generale, come già accennato nel \todo{ref?}, la maggior parte dei sistemi automatici d'identificazione di plagi lavorano in due fasi consecutive: prima il codice sorgente viene analizzato e viene generata una rappresentazione intermedia, poi si effettua il confronto dei sorgenti sulle rappresentazioni intermedie.
 
-Le tecniche di analisi possono essere classificate in tre cataegorie: \textbf{\textit{structure-based}}, \textbf{\textit{attribute-based}}, \textbf{\textit{hybrid detection}}. \todo{citazione?}
+Nei primi anni in cui l'esigenza di trovare un sistema automatico per la rilevazione di plagi ha preso piede, la principale tecnica di rilevamento era basata interamente sul confronto delle stringhe di cui si componeva il sorgente. 
+%
+Questo è un metodo è molto semplice, ma è fortemente sensibile al riordino delle istruzioni, nonché all'aggiunta di nuovo codice.
+
+Con lo sviluppo della tecnologia, molti ricercatori hanno fatto progressi in questo campo e proposto molti algoritmi negli ultimi anni, formando gradualmente tre popolari famiglie di tecniche: \textbf{\textit{structure-based}}, \textbf{\textit{attribute-based}}, \textbf{\textit{hybrid detection}}. \todo{citazione?}
 
 \subsection{Analisi \textit{structure-based}}
+
+Le analisi \textit{structure-based} si basano, come suggerisce il nome, sulla struttura dei codici sorgenti.
 
 \subsubsection{Analisi lessicale}
 Tra tutte, la tecnica più usata consiste nell'analisi lessicale (\textbf{\textit{lexical analysis}} o \textbf{\textit{tokenization}} in inglese) del codice sorgente, che consiste nel convertire la sequenza di caratteri di cui è composto il programma in una sequenza di \textit{token}.
@@ -162,27 +170,64 @@ Questi sono generati in maniera dichiarativa a partire da generatori di \textit{
 % https://www.antlr.org ??
 % esempio di FA ed espressione regolare
 
-Attraverso questo approccio, quindi, ogni programma viene trasformato in una sequenza di \textit{token}, uno per ciascun elemento di base del linguaggio che si vuole valorizzare: i blocchi di commenti o documentazione, gli \texttt{import} e altre sezioni di codice non rilevanti ai fini della comparazione possono essere esclusi, cioè non viene generato alcun \textit{token} per questi elementi.
+Attraverso questo approccio, quindi, ogni programma viene trasformato in una sequenza di \textit{token}, uno per ciascun elemento di base del linguaggio che si vuole valorizzare: le sezioni di codice non rilevanti ai fini della comparazione possono essere escluse, cioè non viene generato alcun \textit{token} per questi elementi.
+
+% \lstinputlisting[
+% 	float,
+% 	language=Java,
+% 	caption={Una semplice classe per mostrare il processo di \textit{tokenizzazione}},
+% 	label={lst:testanalysis},
+% ]{resources/code/TestAnalysis.java}
+
+% \lstinputlisting[
+% 	float,
+% 	caption={La sequenza di \textit{token} generati a partire dal codice del \Cref{lst:testanalysis}},
+% 	label={lst:tokensequence},
+% ]{resources/code/AnalyzedTestAnalysis.txt}
+
+% Nel \Cref{lst:tokensequence} è mostrata la sequenza di \textit{token} generata a partire dalla classe presentata nel \Cref{lst:testanalysis}.
+% %
+% Si noti che le dichiarazioni di \texttt{import} e dei \texttt{package}, così come il blocco di documentazione, non vengono considerati. 
+% %
+% Questo li rende insensibili contro le modifiche agli identificatori, ma non al riordino delle istruzioni.
+
+Il risultato che si ottiene è una versione condensata e semplificata del sorgente, con un vocabolario ristretto.
+
+Questo approccio rende il sistema sufficientemente robusto contro semplici tecniche di \textit{refactoring}, come la modifica degli identificatori, corrispondente al secondo livello della tassonomia di Faidhi \& Robinson (\Cref{img:01-levels-of-plagiarism}).
+
+Tuttavia, bisogna evidenziare come l'efficacia della \textit{tokenizzazione} dipende dall'insieme di \textit{token} che si decide di usare.
 %
-Questo li rende insensibili contro le modifiche agli identificatori, ma non al riordino delle istruzioni.
+Consideriamo, a puro scopo esemplificativo, il caso delle \textit{keyword} dedicate a rappresentare un intero in Java.
+%
+Come sappiamo, un intero è rappresentabile con diversi tipi di dato; a seconda delle esigenze di memoria, infatti, si potrebbe usare, considerando solo i tipi di dato primitivo e tralasciando quelli \textit{boxed}, un \texttt{byte}, piuttosto che uno \texttt{short}, un \texttt{int} o un \texttt{long}. 
+%
+Un insieme "stringente" di \textit{token} potrebbe rappresentare ciascuno di questi tipi con un proprio \textit{token}.
+%
+D'altro canto, un set di \textit{token} "lasco" potrebbe rappresentare tutti e quattro i tipi di dato sopra citati con un unico \textit{token}, riconoscendo che tutti e quattro possono servire, nella grande maggioranza dei casi, allo stesso stesso scopo.
+%
+Pertanto un insieme di \textit{token} "lasco" aiuta il sistema a riconoscere e catalogare come equivalenti tipi di dato diversi e fornire quindi una resilienza alle tecniche di rifattorizzazione.
+% quale tipo? 3?
 
-\lstinputlisting[
-	float,
-	language=Java,
-	caption={Una semplice classe per mostrare il processo di \textit{tokenizzazione}},
-	label={lst:testanalysis},
-]{resources/code/TestAnalysis.java}
+In seguito, la sequenza di \textit{token} generata viene confrontata con algoritmi di \textit{string matching}. 
+%
+Tra i due più conosciuti vi sono \textbf{\textit{Winnowing}} e \textbf{\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)}}, che tende a migliorare la precisione, a discapito dell'efficienza. 
 
-\lstinputlisting[
-	float,
-	caption={La sequenza di \textit{token} generati a partire dal codice del \Cref{lst:testanalysis}},
-	label={lst:tokensequence},
-]{resources/code/AnalyzedTestAnalysis.txt}
+\textit{Winnowing} costituisce un miglioramento del metodo \textit{n-grams} e consiste nel suddividere il documento in una lista di sotto-strighe di lunghezza $n$ e  usare una funzione di \textit{hashing} per selezionare solo un sottoinsieme rappresentativo di tali sottosequenze del documento da usare come impronta digitale dello stesso (i cosiddetti \textit{n-grams fingerprinting}).
 
-In seguito, la sequenza di \textit{token} generata viene confrontata con algoritmi di \textit{string matching}.
+\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)} costituisce l'altra popolare alternativa a \textit{Winnowing}, cercando di aumentare la precisione a discapito dell'efficienza. 
+%
+Esso incorpora, di fatto, due algoritmi.
+%
+\textit{Greedy String Tiling (GST)} è l'algoritmo che trova la massima sottosequenza comune in due stringhe.
+%
+\textit{Running-Karp-Rabin (RKR)} è l'algoritmo per la ricerca rapida di sottosequenze comuni e trova tutte le occorrenze di una stringa $P$ all'interno di una stringa più lunga $T$ effettuando l'\textit{hashing} di tutte le stringhe di lunghezza $|P|$ e confrontandole con gli \textit{hash} di $P$.
+%
+I due algoritmi cooperano in questo modo: \textit{RKR} è eseguito su due programmi.
+%
+Per ogni sottosequenza comune identificata da \textit{RKR}, \textit{GST} è eseguito per estendere il \textit{match} oltre i confini del \textit{hash value}.
 
 \subsubsection{Analisi basata su un modello}
-Invece di utilizzare la mera sequenza di \textit{token} generata dal generatore di \textit{lexer} possono essere generate delle strutture e dei modelli più complessi.
+Invece di utilizzare la mera sequenza di \textit{token} generata dal \textit{lexer} possono essere generate delle strutture e dei modelli più complessi.
 
 Il più diffuso è l'\textbf{albero sintattico} (o \textit{abstract syntax tree} in inglese, abbreviato AST).
 
