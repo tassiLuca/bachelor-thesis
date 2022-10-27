@@ -25,7 +25,7 @@ In questo contesto è da porre in evidenza la differenza tra l'individuazione di
 %
 Quando ci si riferisce a un clone, infatti, lo si fa con riferimento a un frammento di codice che è stata copiato e marginalmente modificato. 
 %
-Quando invece ci si riferisce ad un plagio si intende una sezione che è stata copiata e la cui opera di copiatura si è cercato di dissimulare, mediante opportune azioni di rifattorizzazione del codice \cite{muddu-et-al-2013}.  
+Quando invece ci si riferisce ad un plagio si intende una sezione che è stata copiata e la cui opera di copiatura si è cercato di dissimulare, mediante opportune azioni di rifattorizzazione del codice \cite{cpdp}.
 %
 Dunque, l'ambito di applicazione delle due ricerche è nettamente diverso: se nel primo l'obiettivo è quello di evidenziare il codice duplicato al fine di migliorare la qualità del codice e la manutenibilità del sistema, nel secondo lo scopo primario è identificare possibili condotte illecite.
 
@@ -121,11 +121,35 @@ Poiché il problema è complesso, gli attuali metodi di analisi non aspirano a r
 
 In generale, come già accennato nel \todo{ref?}, la maggior parte dei sistemi automatici d'identificazione di plagi lavorano in due fasi consecutive: prima il codice sorgente viene analizzato e viene generata una rappresentazione intermedia, poi si effettua il confronto dei sorgenti sulle rappresentazioni intermedie.
 
-Nei primi anni in cui l'esigenza di trovare un sistema automatico per la rilevazione di plagi ha preso piede, la principale tecnica di rilevamento era basata interamente sul confronto delle stringhe di cui si componeva il sorgente. 
-%
-Questo è un metodo è molto semplice, ma è fortemente sensibile al riordino delle istruzioni, nonché all'aggiunta di nuovo codice.
+Con lo sviluppo della tecnologia, molti ricercatori hanno fatto progressi in questo campo e proposto diversi algoritmi negli ultimi anni, formando gradualmente tre popolari famiglie di tecniche: \textbf{\textit{attribute-based}}, \textbf{\textit{structure-based}}, \textbf{\textit{hybrid detection}}. \todo{citazione?}
 
-Con lo sviluppo della tecnologia, molti ricercatori hanno fatto progressi in questo campo e proposto molti algoritmi negli ultimi anni, formando gradualmente tre popolari famiglie di tecniche: \textbf{\textit{structure-based}}, \textbf{\textit{attribute-based}}, \textbf{\textit{hybrid detection}}. \todo{citazione?}
+\subsection{Analisi \textit{attribute-based}}
+Il primo sistema automatico di rilevazione di codice copiato che sia stato documentato in letteratura risale al 1976 (\cite{ottenstein}) e utilizzava le seguenti quattro metriche di Healstead per determinare il livello di similarità tra coppie di sorgenti \cite{halstead}:
+
+\begin{itemize}
+    \item $\eta_1$: il numero di operatori univoci;
+    \item $\eta_2$: il numero di operandi univoci;
+    \item $N_1$: il numero di occorrenze di un operatore;
+    \item $N_2$: il numero di occorrenze di un operando.
+\end{itemize}
+
+Coppie di sorgenti con valori identici per ciascuna di queste metriche si presumeva fossero simili e meritevoli di un esame più approfondito.
+
+I successivi sistemi hanno sperimentato queste e altre metriche, come il numero \textit{loop} e il numero di procedure, per trovare misure più accurate di somiglianza e che riflettano le strutture di controllo del flusso.
+
+Collettivamente, questi sistemi sono stati chiamati sistemi \textit{attribute-counting-metric}.
+%
+Alcuni tipi di tali misurazioni sono adattati da altri domini.
+%
+Ad esempio, due principali tecniche di determinazione della similarità in questo ambito sono la \textit{Latent Semantic Analysis} e tecniche di \textit{Clustering}.
+
+\todo{LSA}
+
+\todo{Clustering Approach}
+
+Considerando che le caratteristiche del codice sorgente non sono strettamente correlate alla semantica del programma e che la misurazione della somiglianza può risultare essere imprecisa, l'efficacia di queste tecniche è considerevolmente limitata.
+%
+Inoltre, l'efficacia di tali tecniche è inferiore, in termini di precisione nell'identificazione di plagi, rispetto alle tecniche \textit{structure-based} \cite{es-plag}.
 
 \subsection{Analisi \textit{structure-based}}
 
@@ -270,28 +294,39 @@ Tale albero è definito "astratto" in quanto non rappresenta ogni dettaglio tipi
 %
 Ad esempio, le parentesi di raggruppamento sono rappresentate nativamente nella struttura ad albero, quindi non devono essere rappresentate come nodi separati.
 %
-Allo stesso modo un costrutto sintattico come un'istruzione \texttt{if-then-else} può essere facilmente denotata per mezzo di un singolo nodo con tre rami.
+Allo stesso modo, un costrutto sintattico come un'istruzione \texttt{if-then-else} può essere facilmente denotata per mezzo di un singolo nodo con tre rami.
 
-In 
+In figura ....viene mostrato...
 
 \begin{sidewaysfigure}
     \centering
-    \includegraphics[scale=0.4]{resources/img/01-ast-summarized.pdf}
+    \includegraphics[width=\textwidth]{resources/img/01-ast-summarized.pdf}
     \caption{Rappresentazione dell'AST del \Cref{lst:test-analysis}}
     \label{img:01-ast}
 \end{sidewaysfigure}
 
-Program Dependency Graph
-
-\subsection{Analisi \textit{attribute-based}}
-Nonostante l'efficienza delle tecniche di analisi strutturale descritte precedentemente, il loro punto debole si riscontra nelle prestazioni. 
+Avere a disposizione una struttura ad albero per ciascun sorgente è di fondamentale importanza e agevola la fase di \textit{preprocessing} in cui si va "ripulire" il sorgente di tutte le sezioni non rilevanti.
 %
-Per far fronte a questo problema sono state storicamente introdotte nuove tecniche, dette \textit{attribute-based}, in quanto determinano il grado di similarità tra due sorgenti sulla base delle loro \dots
+Inoltre, il confronto dei sorgenti per mezzo di alberi sintattici fornisce risultati migliori di quelli ottenuti mediante una pura analisi lessicale del codice.
+
+Il principale e non trascurabile svantaggio di utilizzare questo approccio, tuttavia, risiede nelle prestazioni.
+%
+Siccome la maggior parte degli AST sono strutture complesse e voluminose, la comparazione diretta degli alberi sintattici per una grande quantità di sorgenti è impraticabile.
+%
+Per far fronte a questo problema, per ogni albero viene determinato, mediante un'opportuna funzione di \textit{hashing} che tiene conto del tipo di ciascun nodo e del suo sotto-albero, un valore di \textit{hash} e la comparazione è effettuata confrontando tali valori.
+
+GDG
+[https://dl.acm.org/doi/pdf/10.1145/1150402.1150522]
 
 \subsection{\textit{Hybrid detection}}
+Entrambi gli approcci descritti sopra hanno i loro vantaggi e svantaggi. 
+%
+Alcuni lavori di ricerca hanno pertanto cercato di combinare entrambi gli approcci creando, di fatto, tecniche di analisi ibride, regolando l'influenza di un approccio sull'altro sulla base delle proprie esigenze.
 
 \subsection{Quale tecnica scegliere?}
-In conclusione, scegliere quali di questi approcci scegliere è complesso, perché difficili da confrontare tra loro: la maggior parte di queste tecniche viene valutata utilizzando il proprio \textit{set} di dati, che raramente sono resi pubblicamente accessibili \cite{karnalim-budi-toba-joy-2019}.
+Scegliere quali di questi approcci scegliere è complesso, perché difficili da confrontare tra loro: la maggior parte di queste tecniche viene valutata utilizzando il proprio \textit{set} di dati, che raramente sono resi pubblicamente accessibili e che potrebbero non rappresentare veri casi di plagio \cite{karnalim-budi-toba-joy-2019}.
+
+Nonostante ciò, le tecniche più promettenti, sulla base delle considerazioni suffatte, che verranno utilizzate anche dallo strumento sviluppato nell'ambito di questa tesi, sono quelle \textit{structure-based}. 
 
 In conclusione, bisogna rendersi conto che, a prescindere dal grado di sofisticatezza della tecnica che si utilizza, è sempre possibile che si verifichi un plagio non rilevabile.
 %

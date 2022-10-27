@@ -12,7 +12,7 @@
   year    = {September 23, 2022},
 }
 
-@INPROCEEDINGS{muddu-et-al-2013,
+@INPROCEEDINGS{cpdp,
   author={Muddu, Basavaraju and Asadullah, Allahbaksh and Bhat, Vasudev},
   booktitle={2013 7th International Workshop on Software Clones (IWSC)}, 
   title={CPDP: A robust technique for plagiarism detection in source code}, 
@@ -61,6 +61,41 @@
   author = {Michal Ďuračík and Emil Kršák and Patrik Hrkút},
   keywords = {source code analysis, plagiarism, current trends, transport, optimizations},
   abstract = {In this work, we analyze the state of the art in source code analysis area with a focus on plagiarism detection and provide a proposal for a future work in this area. Detection of plagiarism combines the detection of clones and methods for determining similarity. Nowadays, there are several approaches that can be divided into three levels. The first one is text based and uses plain text as an input. The second level is token based. The top level is model based and uses models to represent source code. These advanced algorithms (token and model based) can’t work with large datasets. We believe the future belongs to the algorithms that will be able to handle large amount of source code. These algorithms should use one of model-based representations. They can be used for formation of large-scale anti-plagiarism systems. They can be used also in the area of source code optimization.},
+}
+
+@article{ottenstein,
+  title={An algorithmic approach to the detection and prevention of plagiarism},
+  author={Ottenstein, Karl J},
+  journal={ACM Sigcse Bulletin},
+  volume={8},
+  number={4},
+  pages={30--41},
+  year={1976},
+  publisher={ACM New York, NY, USA}
+}
+
+@book{halstead,
+  author = {Halstead, Maurice H.},
+  title = {Elements of Software Science (Operating and Programming Systems Series)},
+  year = {1977},
+  isbn = {0444002057},
+  publisher = {Elsevier Science Inc.},
+  address = {USA}
+}
+
+@article{es-plag,
+  author = {Sulistiani, Lisan and Karnalim, Oscar},
+  title = {ES-Plag: Efficient and sensitive source code plagiarism detection tool for academic environment},
+  journal = {Computer Applications in Engineering Education},
+  volume = {27},
+  number = {1},
+  pages = {166-182},
+  keywords = {computing education, cosine similarity, programming, running-karp-rabin greedy-string-tiling, source code plagiarism},
+  doi = {https://doi.org/10.1002/cae.22066},
+  url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/cae.22066},
+  eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1002/cae.22066},
+  abstract = {Abstract Source code plagiarism detection using Running-Karp-Rabin Greedy-String-Tiling (RKRGST) is a common practice in academic environment. However, such approach is time-inefficient (due to RKRGST's cubic time complexity) and insensitive (toward token subsequence rearrangement). This paper proposes ES-Plag, a plagiarism detection tool featured with cosine-based filtering and penalty mechanism to handle aforementioned issues. Cosine-based filtering mitigates time-inefficiency by excluding non-potential pairs from RKRGST comparison; while penalty mechanism mitigates insensitivity by reducing the number of matched tokens with the number of matched subsequences prior similarity normalization. In addition to issue-solving features, ES-Plag is also featured with project-based input, colorized adjacency similarity matrix, matched token highlighting, and various similarity algorithms (e.g., Cosine Similarity and Local Alignment). Three findings can be deducted from our evaluation. First, cosine-based filtering boosts up time efficiency with a trade-off in effectiveness. Second, penalty mechanism enhances sensitivity even though its improvement in terms of effectiveness is quite limited. Third, ES-Plag's features are beneficial for examiners.},
+  year = {2019}
 }
 
 @article{karnalim-budi-toba-joy-2019,
