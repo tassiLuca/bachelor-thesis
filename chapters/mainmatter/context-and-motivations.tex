@@ -131,7 +131,7 @@ Con lo sviluppo della tecnologia, molti ricercatori hanno fatto progressi in que
 
 Le analisi \textit{structure-based} si basano, come suggerisce il nome, sulla struttura dei codici sorgenti.
 
-\subsubsection{Analisi lessicale}
+\subsubsection{Analisi lessicale (\textit{tokenizzazione})}
 Tra tutte, la tecnica più usata consiste nell'analisi lessicale (\textbf{\textit{lexical analysis}} o \textbf{\textit{tokenization}} in inglese) del codice sorgente, che consiste nel convertire la sequenza di caratteri di cui è composto il programma in una sequenza di \textit{token}.
 %
 Un \textit{token} è una sequenza di caratteri che costituisce un'unità fondamentale nella grammatica del linguaggio ed è strutturato come una coppia \textit{nome} - \textit{valore}.
@@ -172,26 +172,55 @@ Questi sono generati in maniera dichiarativa a partire da generatori di \textit{
 
 Attraverso questo approccio, quindi, ogni programma viene trasformato in una sequenza di \textit{token}, uno per ciascun elemento di base del linguaggio che si vuole valorizzare: le sezioni di codice non rilevanti ai fini della comparazione possono essere escluse, cioè non viene generato alcun \textit{token} per questi elementi.
 
-% \lstinputlisting[
-% 	float,
-% 	language=Java,
-% 	caption={Una semplice classe per mostrare il processo di \textit{tokenizzazione}},
-% 	label={lst:testanalysis},
-% ]{resources/code/TestAnalysis.java}
+In \Cref{table:token-associations} è mostrata una possibile sequenza di \textit{token} generata a partire dalla classe presentata nel \Cref{lst:test-analysis}.
+%
+Il risultato che si ottiene è una versione condensata e semplificata del sorgente, con un vocabolario ristretto, in cui le dichiarazioni superflue, come quelle di \texttt{import}, \texttt{package} e il blocco di documentazioni, sono ignorati.
 
-% \lstinputlisting[
-% 	float,
-% 	caption={La sequenza di \textit{token} generati a partire dal codice del \Cref{lst:testanalysis}},
-% 	label={lst:tokensequence},
-% ]{resources/code/AnalyzedTestAnalysis.txt}
+\lstinputlisting[
+ 	language=Java,
+ 	caption={Una semplice classe per mostrare il processo di \textit{tokenizzazione}},
+ 	label={lst:test-analysis},
+]{resources/code/01-TestAnalysis.java}
 
-% Nel \Cref{lst:tokensequence} è mostrata la sequenza di \textit{token} generata a partire dalla classe presentata nel \Cref{lst:testanalysis}.
-% %
-% Si noti che le dichiarazioni di \texttt{import} e dei \texttt{package}, così come il blocco di documentazione, non vengono considerati. 
-% %
-% Questo li rende insensibili contro le modifiche agli identificatori, ma non al riordino delle istruzioni.
-
-Il risultato che si ottiene è una versione condensata e semplificata del sorgente, con un vocabolario ristretto.
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|} 
+        \hline
+        \textbf{Linee} & \textbf{Costrutto} & \textbf{\textit{Token}} \\ [0.5ex] 
+        \hline\hline
+        1   & \texttt{package}                    & \texttt{-}                            \\ \hline
+        3   & \texttt{import}                     & \texttt{-}                            \\ \hline
+        5-7 & \texttt{/** This is ... process.*/} & \texttt{-}                            \\ \hline
+        8   & \texttt{public}                     & \texttt{-}                            \\ \hline
+        8   & \texttt{class}                      & \texttt{ClassOrInterfaceDeclaration}  \\ \hline
+        8   & \texttt{Main}                       & \texttt{Identifier}                   \\ \hline
+        8   & \texttt{\{}                         & \texttt{-}                            \\ \hline
+        9   & \texttt{public}                     & \texttt{Modifier}                     \\ \hline
+        9   & \texttt{static}                     & \texttt{Modifier}                     \\ \hline
+        9   & \texttt{void}                       & \texttt{VoidType}                     \\ \hline
+        9   & \texttt{main}                       & \texttt{Identifier}                   \\ \hline
+        9   & \texttt{String[]}                   & \texttt{ArrayType}                    \\ \hline
+        9   & \texttt{args}                       & \texttt{Identifier}                   \\ \hline
+        9   & \texttt{\{}                         & \texttt{-}                            \\ \hline
+        10  & \texttt{if}                         & \texttt{IfStmt}                       \\ \hline
+        10  & \texttt{args.length}                & \texttt{FieldAccessExpr}              \\ \hline
+        10  & \texttt{>}                          & \texttt{Operator}                     \\ \hline
+        10  & \texttt{0}                          & \texttt{IntegerLiteralExpr}           \\ \hline
+        10  & \texttt{\{}                         & \texttt{-}                            \\ \hline
+        11  & \texttt{System.out.println}         & \texttt{MethodCallExpr}               \\ \hline
+        11  & \texttt{"Program arguments"}        & \texttt{StringLiteralExpr}            \\ \hline
+        11  & \texttt{Arrays.toString}            & \texttt{MethodCallExpr}               \\ \hline
+        11  & \texttt{args}                       & \texttt{NameExpr}                     \\ \hline
+        11  & \texttt{\}}                         & \texttt{-}                            \\ \hline
+        12  & \texttt{else}                       & \texttt{elseStmt}                     \\ \hline
+        12  & \texttt{\{}                         & \texttt{-}                            \\ \hline
+        13  & \texttt{System.out.println}         & \texttt{MethodCallExpr}               \\ \hline
+        13  & \texttt{"Hello world ... Java!"}    & \texttt{StringLiteralExpr}            \\ \hline
+        14-16  & \texttt{\}}                         & \texttt{-}                            \\ \hline
+    \end{tabular}
+    \caption{Associazioni costrutti-\textit{token} del \Cref{lst:test-analysis}}
+    \label{table:token-associations}
+\end{table}
 
 Questo approccio rende il sistema sufficientemente robusto contro semplici tecniche di \textit{refactoring}, come la modifica degli identificatori, corrispondente al secondo livello della tassonomia di Faidhi \& Robinson (\Cref{img:01-levels-of-plagiarism}).
 
@@ -227,12 +256,23 @@ I due algoritmi cooperano in questo modo: \textit{RKR} è eseguito su due progra
 Per ogni sottosequenza comune identificata da \textit{RKR}, \textit{GST} è eseguito per estendere il \textit{match} oltre i confini del \textit{hash value}.
 
 \subsubsection{Analisi basata su un modello}
-Invece di utilizzare la sequenza di \textit{token} generata dal \textit{lexer} possono essere generate delle strutture e dei modelli più complessi, che permettano di astrarre ulteriormente.
+Anziché utilizzare la sequenza di \textit{token} generata dal \textit{lexer} possono essere generate delle strutture e dei modelli più complessi, che permettano di astrarre ulteriormente.
 
-% (Continuando il percorso con i compilatori)
-Il più diffuso è l'\textbf{albero sintattico} (o \textit{abstract syntax tree} in inglese, abbreviato AST).
+Una tra le rappresentazioni più note e naturali in questo ambito, derivata dalla stessa analisi lessicale, è l'\textbf{albero sintattico} (o \textit{abstract syntax tree} in inglese, abbreviato AST).
+%
+Questo è generato a partire dalla sequenza di \textit{token} descritta nel paragrafo precedente e rappresenta il risultato ottenuto a seguito dell'applicazione del secondo stadio di un compilatore: il \textbf{\textit{Parser}}.
+%
+% immagine struttura compilatore?
+%
+Esso, infatti, presa in \textit{input} la sequenza di token, la converte in una struttura dati ad albero che rappresenta la struttura logica del codice sorgente.
+%
+Tale albero è definito "astratto" in quanto non rappresenta ogni dettaglio tipico della sintassi del linguaggio, bensì solo i dettagli strutturali e relativi al contenuto.
+%
+Ad esempio, le parentesi di raggruppamento sono rappresentate nativamente nella struttura ad albero, quindi non devono essere rappresentate come nodi separati.
+%
+Allo stesso modo un costrutto sintattico come un'istruzione \texttt{if-then-else} può essere facilmente denotata per mezzo di un singolo nodo con tre rami.
 
-Questo è il secondo \textit{step} di un compilatore...
+
 
 Program Dependency Graph
 
