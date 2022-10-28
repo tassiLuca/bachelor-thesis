@@ -4,41 +4,24 @@
 
 Negli ultimi decenni, con la rapida crescita di dati e informazioni facilmente accessibili sul \textit{web}, è diventato sempre più semplice poter utilizzare, in parte o in tutto, le risorse reperite.
 %
-Tuttavia, l'uso improprio di tali risorse, senza attribuire i necessari crediti agli autori, costituisce, oltre che una pratica scorretta che contravviene a qualsiasi ordine deontologico, un illecito \cite{copyright-law-italia}.
+Tuttavia, l'uso improprio di tali risorse e il loro appropriamento senza attribuire i necessari crediti agli autori, in violazione della legge sul \textit{copyright}, costituisce un \textbf{plagio} \cite{britannica} che, oltre che essere una pratica scorretta che contravviene a qualsiasi ordine deontologico, rappresenta un illecito punito a norma di legge \cite{copyright-law-italia}.
 
-In generale, l'atto di appropriarsi degli scritti di altre persone, in violazione della legge sul \textit{copyright}, viene definito \textbf{plagio} \cite{britannica}.
+% vedi Overwiew and Comparison Of Plagiarism... 1 Paragrafo - Plagiarism can be classified into five ...
+
+Il plagio è considerato una grave violazione etica nel mondo accademico e industriale ed è per questo che negli anni sono stati sviluppati metodi e sistemi sempre più sofisticati per cercare d'identificare eventuali plagi e copiatura.
+
+Questa tesi si muove su questo solco, nel campo dell'informatica e dei progetti \textit{software}.
 
 \section{Il problema del plagio nel software}
 Anche nel mondo dell'informatica il problema del plagio è un fenomeno in crescita, incoraggiato per lo più dalla sempre maggiore quantità di progetti \textit{software} \textit{open source}, che induce gli sviluppatori a copia incollare frammenti di codice, talvolta neppure conoscendo le relative condizioni e termini di licenza.
-%
-Questo porta spesso a un uso improprio del codice altrui arrecando sanzioni e danni per lo sviluppatore.
 
-\todo{definisce il problema, eventuali sottocapitoli che spiegano come è diviso}
-
-\section{Sistemi antiplagio automatici}
-
-\todo{Approccio manuale non fattibile}
-
-Già a partire dagli anni settanta del novecento, sono stati proposti algoritmi e tecniche per l'analisi del codice, nonché l'identificazione e localizzazione di plagi.
-
-In questo contesto è da porre in evidenza la differenza tra l'individuazione di cloni e quella di plagi.
-%
-Quando ci si riferisce a un clone, infatti, lo si fa con riferimento a un frammento di codice che è stata copiato e marginalmente modificato. 
-%
-Quando invece ci si riferisce ad un plagio si intende una sezione che è stata copiata e la cui opera di copiatura si è cercato di dissimulare, mediante opportune azioni di rifattorizzazione del codice \cite{cpdp}.
-%
-Dunque, l'ambito di applicazione delle due ricerche è nettamente diverso: se nel primo l'obiettivo è quello di evidenziare il codice duplicato al fine di migliorare la qualità del codice e la manutenibilità del sistema, nel secondo lo scopo primario è identificare possibili condotte illecite.
-
-Questo aspetto è, insieme alle prestazioni, la sfida principale da affrontare durante la progettazione di un sistema antiplagio.
-
-\subsection{La rifattorizzazione del codice}
-La capacità di un software antiplagio nel riuscire ad identificare possibili parti di codice plagiate, passa anche, e soprattutto, dall'abilità dello sviluppatore di saper rifattorizzare il codice.
+Prima di addentrarci nell'analisi dei metodi e delle tecnologie utilizzate per l'identificazioni di plagi nel contesto dei progetti informatici, è di fondamentale importanza fornire una visione d'insieme sulle strategie che vengono impiegate da parte degli sviluppatori per cercare di offuscare la copiatura quando questa è un atto deliberato.
 
 In generale, non è possibile classificare tutti i possibili metodi con cui un programma può essere trasformato in un altro mantenendo inalterate le sue funzionalità.
 %
 Tuttavia, è possibile distinguere due macro categorie di modifiche: \textbf{lessicali} e \textbf{strutturali} \cite{joy-99}.
 
-Le modifiche lessicali sono quelle che, in linea di principio, possono essere eseguite da un \textit{text editor} e non richiedono la conoscenza del linguaggio di programmazione con cui è stato sviluppato il codice. 
+Le modifiche lessicali sono quelle che, in linea di principio, possono essere eseguite da un \textit{text editor} e non richiedono la conoscenza del linguaggio di programmazione con cui è stato sviluppato il codice.
 %
 Alcuni casi esemplificativi sono:
 \begin{itemize}
@@ -59,17 +42,7 @@ Di seguito alcuni esempi di rifattorizzazioni che rientrano in questa classe:
     \item sostituire la chiamata a funzione con il corpo della stessa.
 \end{itemize}
 
-Gli strumenti d'identificazione di plagi devono pertanto cercare di annullare gli effetti di queste rifattorizzazioni.
-%
-A questo scopo le tecniche di analisi si compongono di più fasi nelle quali trasformano i sorgenti in rappresentazioni intermedie che astraggono il più possibile dai dettagli implementativi, che possono essere facilmente cambiati, quindi applicano su di esse tecniche di confronto.
-
-Si osservi, tuttavia, che esistono rifattorizzazioni il cui contributo è più facile da annullare di altre. 
-%
-Si pensi, ad esempio, all'aggiunta o alla modifica dei commenti: l'effetto di tale rifattorizzazione è facilmente annullabile semplicemente trascurando dall'analisi i commenti, in quanto non contribuiscono in alcun modo alla logica del programma. 
-%
-D'altro canto, creare tecniche che siano insensibili al riordino delle istruzioni è un compito più complesso.
-
-In \Cref{img:01-levels-of-plagiarism} viene riportata la tassonomia dei livelli di plagio di Faidhi \& Robinson definita in \cite{faidhi-robinson-1987} che mappa le possibili rifattorizzazioni in sette livelli o categorie, sulla base della loro difficoltà: il più semplice è il livello 0 che corrisponde a una copia letterale; il più impegnativo è il livello 6 che corrisponde a un cambiamento logico e può essere considerato plagio solo se si verifica in concomitanza con altri livelli.
+In \Cref{img:01-levels-of-plagiarism} viene riportata la tassonomia dei livelli di plagio di Faidhi \& Robinson definita in \cite{faidhi-robinson-1987} che mappa le possibili rifattorizzazioni in sette livelli o categorie, sulla base della loro difficoltà: il più semplice è il livello zero che corrisponde a una copia letterale; il più impegnativo è il sesto livello che corrisponde a un cambiamento logico e può essere considerato plagio solo se si verifica in concomitanza con altri livelli.
 
 \begin{figure}[h]
     \centering
@@ -78,9 +51,37 @@ In \Cref{img:01-levels-of-plagiarism} viene riportata la tassonomia dei livelli 
     \label{img:01-levels-of-plagiarism}
 \end{figure}
 
+\section{Sistemi antiplagio automatici}
+A causa dell'elevato volume di dati e informazioni disponibili che oggigiorno si hanno a disposizione, l'approccio tradizionale al rilevamento di codice copiato attraverso un'ispezione manuale, oltre che essere tedioso, è nei fatti impraticabile e, nel corso degli anni, è stato necessario porsi il problema di sviluppare strumenti di rilevamento automatici di plagio che siano efficienti ed efficaci.
+%
+Ciononostante, un'ispezione manuale a seguito di quella automatica è tuttora ancora necessaria per stabilire con ragionevole certezza se effettivamente le porzioni di codice individuate dal sistema sono effettivamente effetto di copiature o, più ingenuamente, blocchi simili di codice.
+
+Più formalmente, detto $p = \{s_{plg}, d_{plg}, s_{src}, d_{src}\}$ un caso di plagio, $s_{plg}$ un passaggio del documento $d_{plg}$ che è copiato a partire da un passaggio $s_{src}$ in un documento $d_{src}$, il compito di un sistema automatico di rilevamento di plagio consiste nell'individuare $p$.
+
+Già a partire dagli anni settanta del novecento, sono stati proposti algoritmi e tecniche per l'analisi del codice, nonché l'identificazione e localizzazione di plagi.
+
+In questo contesto è da porre in evidenza la differenza tra l'individuazione di cloni e quella di plagi.
+%
+Quando ci si riferisce a un clone, infatti, lo si fa con riferimento a un frammento di codice che è stata copiato e marginalmente modificato. 
+%
+Quando invece ci si riferisce ad un plagio si intende una sezione che è stata copiata e la cui opera di copiatura si è cercato di dissimulare, mediante opportune azioni di rifattorizzazione del codice \cite{cpdp}, descritte nel paragrafo precedente.
+%
+Dunque, l'ambito di applicazione delle due ricerche è nettamente diverso: se nel primo l'obiettivo è quello di evidenziare il codice duplicato al fine di migliorare la qualità del codice e la manutenibilità del sistema, nel secondo lo scopo primario è identificare possibili condotte illecite.
+
+Questo aspetto è, insieme alle prestazioni, la sfida principale da affrontare durante la progettazione di un sistema antiplagio.
+
+Gli strumenti d'identificazione di plagi devono infatti cercare di annullare gli effetti di queste rifattorizzazioni.
+%
+A questo scopo le tecniche di analisi si compongono di più fasi nelle quali trasformano i sorgenti in rappresentazioni intermedie che astraggono il più possibile dai dettagli implementativi, che possono essere facilmente cambiati, quindi applicano su di esse tecniche di confronto.
+
+Si osservi, tuttavia, che esistono rifattorizzazioni il cui contributo è più facile da annullare di altre. 
+%
+Si pensi, ad esempio, all'aggiunta o alla modifica dei commenti: l'effetto di tale rifattorizzazione è facilmente annullabile semplicemente trascurando dall'analisi i commenti, in quanto non contribuiscono in alcun modo alla logica del programma. 
+%
+D'altro canto, creare tecniche che siano insensibili al riordino delle istruzioni è un compito più complesso, fonte di approfonditi studi in ambito di ricerca.
+
 Maggiore sarà il livello di rifattorizazzione a cui il sistema antiplagio sarà insensibile, migliore sarà l'efficacia e la robustezza del sistema stesso.
 
-\subsection{Le prestazioni}
 L'altro problema emergente nello sviluppo di un programma antiplagio che non si limiti a confrontare la similarità tra una coppia di progetti, bensì effettui un controllo uno a molti o molti a molti, in cui si testano tutte le possibili coppie, sono le prestazioni. 
 %
 Infatti, la maggioranza delle tecniche e degli algoritmi per effettuare i confronti sono inefficienti in termini di tempo costo. 
@@ -99,7 +100,7 @@ Questo si verifica soprattutto nei casi in cui l'ottimizzazione è molto marcata
 
 Il bilanciamento tra le prestazioni e l'efficacia del sistema è, dunque, di fondamentale importanza.
 
-\todo{spiegare cosa esiste e perché serve che sia automatico}
+\todo{spiegare cosa esiste?}
 
 \section{Stato dell'arte}
 
