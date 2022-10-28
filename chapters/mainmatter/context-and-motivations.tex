@@ -150,41 +150,40 @@ Possiamo suddividere questa famiglia di tecniche, in sottotecniche....
 \subsubsection{Analisi lessicale (\textit{tokenizzazione})}
 Tra tutte, la tecnica più usata è l'analisi lessicale del codice sorgente (\textbf{\textit{lexical analysis}} o \textbf{\textit{tokenization}} in inglese), che consiste nel convertire la sequenza di caratteri di cui è composto il programma in una sequenza di \textit{token}.
 %
-Un \textit{token} è, a sua volta, una sequenza di caratteri che costituisce un'unità fondamentale nella grammatica del linguaggio ed è strutturato come una coppia \textit{nome} - \textit{valore}.
+Un \textit{token} è, a sua volta, un simbolo astratto che rappresenta uno specifico tipo di unità lessicale nella grammatica del linguaggio. 
 %
-Alcuni possibili esempi sono riportati in \Cref{table:token-examples}:
-
-\begin{itemize}
-    \item \textit{identifier}: una stringa di lettere e numeri che iniziano con una lettera (usato per rappresentare i nomi scelti dai programmatori);
-    \item \textit{keyword}: stringa per rappresentare i nomi dedicati nella sintassi del linguaggio;
-    \item \textit{separator}: caratteri delimitatori e di punteggiatura;
-    \item \textit{comment}: blocco di commenti.
-\end{itemize}
+Esso è associato a un \textbf{lessema}, ovvero ad una sequenza di caratteri del programma che corrisponde al \textit{pattern} di un \textit{token} identificata dall'analizzatore lessicale come una specifica istanza di quel \textit{token}, e a da attributi opzionali derivati dal testo.
+%
+Alcuni possibili esempi di \texttt{token} comuni con i relativi \texttt{pattern} e alcuni lessemi di esempio sono riportati in \Cref{table:token-examples}.
 
 \begin{table}[h]
     \centering
-    \begin{tabular}{|c|c|} 
+    \begin{tabular}{|p{0.15\linewidth}|p{0,45\linewidth}|p{0.3\linewidth}|}
         \hline
-        \textbf{Nome} & \textbf{Esempi di valori} \\ [0.5ex] 
+        \textbf{\textit{Token}} & \textbf{Pattern} & \textbf{Lessemi di esempio} \\ [0.5ex] 
         \hline\hline
-        \textit{identifier} & \texttt{x}, \texttt{name}, \texttt{color} \\ 
+        \textit{identifier} & Stringa di lettere e numeri che iniziano con una lettera & \texttt{x}, \texttt{name}, \texttt{color}, ... \\ 
         \hline
-        \textit{keyword} & \texttt{if}, \texttt{for}, \texttt{return} \\
+        \textit{keyword} & Coincide con la sequenza di caratteri della \textit{keyword} stessa & \texttt{if}, \texttt{for}, \texttt{return}, ... \\
         \hline
-        \textit{separator} & \texttt{\{}, \texttt{\}}, \texttt{(}, \texttt{;} \\
+        \textit{literal} & Ogni stringa racchiusa tra virgolette ("") tranne la stringa nulla '' & \texttt{"Hello World!"}, ... \\
         \hline
-        \textit{comment} & \texttt{/* This is a sample comment */} \\
+        \textit{operator} & "\texttt{<}", "\texttt{>}", "\texttt{<=}", "\texttt{>=}", "\texttt{==}" "\texttt{!=}" & \texttt{<=}, \texttt{!=}, ... \\
         \hline
     \end{tabular}
-    \caption{Esempi di possibili coppie nome-valore di \textit{token} comuni.}
+    \caption{Esempi di possibili \textit{token} comuni.}
     \label{table:token-examples}
 \end{table}
 
 L'analisi lessicale rappresenta il primo stadio della struttura di un compilatore ed è eseguita da programmi denominati \textbf{\textit{lexer}}. 
 %
 Questi sono generati in maniera dichiarativa a partire da generatori di \textit{lexer} (\textbf{\textit{lexer generator}}) che, presi in input più automa a stati finiti, espressi per mezzo di espressioni regolari che definiscono in maniera formale la grammatica del linguaggio, generano il codice che implementa l'algoritmo di analisi lessicale. 
+%
+In \Cref{img:01-id-finite-automa} è mostrato un esempio di automa a stati finiti che riconosce un identificatore.
+%
+L'equivalente espressione regolare che definisce un identificatore è: \texttt{[a-zA->].([a-zA->]|[0-9])*}.
 
-\begin{figure}[h!]
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{resources/img/01-id-finite-automa.pdf}
     \caption{Esempio di automa a stati finiti che riconosce un identificatore.}
@@ -201,6 +200,7 @@ In \Cref{table:token-associations} è mostrata una possibile sequenza di \textit
 Il risultato che si ottiene è una versione condensata e semplificata del sorgente, con un vocabolario ristretto, in cui le dichiarazioni superflue, come quelle di \texttt{import}, \texttt{package} e il blocco di documentazioni, sono ignorati.
 
 \lstinputlisting[
+    float,
  	language=Java,
  	caption={Una semplice classe per mostrare il processo di \textit{tokenizzazione}},
  	label={lst:test-analysis},
@@ -256,14 +256,14 @@ Come sappiamo, un intero è rappresentabile con diversi tipi di dato; a seconda 
 %
 Un insieme "stringente" di \textit{token} potrebbe rappresentare ciascuno di questi tipi con un proprio \textit{token}.
 %
-D'altro canto, un set di \textit{token} "lasco" potrebbe rappresentare tutti e quattro i tipi di dato sopra citati con un unico \textit{token}, riconoscendo che tutti e quattro possono servire, nella grande maggioranza dei casi, allo stesso stesso scopo.
+D'altro canto, un set di \textit{token} "lasco" potrebbe rappresentare tutti e quattro i tipi di dato sopra citati con un unico \textit{token}, riconoscendo che tutti e quattro possono servire, nella grande maggioranza dei casi, allo stesso scopo.
 %
 Pertanto un insieme di \textit{token} "lasco" aiuta il sistema a riconoscere e catalogare come equivalenti tipi di dato diversi e fornire quindi una resilienza alle tecniche di rifattorizzazione.
 % quale tipo? 3?
 
 In seguito, la sequenza di \textit{token} generata viene confrontata con algoritmi di \textit{string matching}. 
 %
-Tra i due più conosciuti vi sono \textbf{\textit{Winnowing}} e \textbf{\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)}}, che tende a migliorare la precisione, a discapito dell'efficienza. 
+Tra i due più conosciuti vi sono \textbf{\textit{Winnowing}} e \textbf{\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)}}.
 
 \textit{Winnowing} costituisce un miglioramento del metodo \textit{n-grams} e consiste nel suddividere il documento in una lista di sotto-strighe di lunghezza $n$ e  usare una funzione di \textit{hashing} per selezionare solo un sottoinsieme rappresentativo di tali sottosequenze del documento da usare come impronta digitale dello stesso (i cosiddetti \textit{n-grams fingerprinting}).
 
@@ -284,13 +284,18 @@ Anziché utilizzare la sequenza di \textit{token} generata dal \textit{lexer} po
 
 Una tra le rappresentazioni più note e naturali in questo ambito, derivata dalla stessa analisi lessicale, è l'\textbf{albero sintattico} (o \textit{abstract syntax tree} in inglese, abbreviato AST).
 %
-Questo è generato a partire dalla sequenza di \textit{token} descritta nel paragrafo precedente e rappresenta il risultato ottenuto a seguito dell'applicazione del secondo stadio di un compilatore: il \textbf{\textit{Parser}}.
-%
-% immagine struttura compilatore?
+Questo è generato a partire dalla sequenza di \textit{token} descritta nel paragrafo precedente e rappresenta il risultato ottenuto a seguito dell'applicazione del secondo stadio di un compilatore: il \textbf{\textit{Parser}} (\Cref{img:01-compiler-arch}).
 %
 Esso, infatti, presa in \textit{input} la sequenza di token, la converte in una struttura dati ad albero che rappresenta la struttura logica del codice sorgente.
-%
-Tale albero è definito "astratto" in quanto non rappresenta ogni dettaglio tipico della sintassi del linguaggio, bensì solo i dettagli strutturali e relativi al contenuto.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.2\textheight]{resources/img/01-compiler-arch.pdf}
+    \caption{Struttura sommaria di un compilatore.}
+    \label{img:01-compiler-arch}
+\end{figure}
+
+L'albero risultante dall'applicazione del \textit{parser} è definito "astratto" in quanto non rappresenta ogni dettaglio tipico della sintassi del linguaggio, bensì solo i dettagli strutturali e relativi al contenuto.
 %
 Ad esempio, le parentesi di raggruppamento sono rappresentate nativamente nella struttura ad albero, quindi non devono essere rappresentate come nodi separati.
 %
