@@ -1,0 +1,38 @@
+classDiagram
+direction TB
+    class Report {
+        <<interface>>
+        + getScoreOfSimilarity(): Int
+    } 
+    class Repository {
+        <<interface>>
+        +sources: Set~File~
+    }
+    Repository "1" --* Report: submittedProject
+    Repository "1" --* Report: comparedProject
+
+    class AntiPlagiarismSession {
+        <<interface>>
+        +invoke()
+    }
+    AntiPlagiarismSession "1" -- "*" Report: generates
+
+    class PlagiarismDetector {
+        <<interface>>
+    }
+    class ComparisonResult {
+        <<interface>>
+    }
+    class Analyzer {
+        <<interface>>
+    }
+    class SourceRepresentation {
+        <<interface>>
+    }
+    ComparisonResult *-- "2" SourceRepresentation: refers to
+    PlagiarismDetector "*" -- "2" SourceRepresentation: input
+    ComparisonResult "*" -- "1" PlagiarismDetector: output
+    Report *-- "*" ComparisonResult
+    AntiPlagiarismSession *-- Analyzer
+    AntiPlagiarismSession *-- "1" PlagiarismDetector
+    Analyzer "1" -- "1" SourceRepresentation: creates
