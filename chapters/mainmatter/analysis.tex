@@ -1,9 +1,22 @@
 % ! TeX root = ../../thesis.tex
 \chapter{Analisi e Progettazione}
 \label{chapter:analysis}
-In questo capitolo viene presentata l'analisi dei requisiti e il \textit{design} del sistema.
+In questo secondo capitolo viene presentata l'analisi dei requisiti e il \textit{design} del sistema.
 
 \section{Requisiti}
+Come già anticipato, lo scopo della tesi è realizzare un sistema antiplagio automatico in grado d'individuare eventuali porzioni di codice copiato nei progetti \textit{software} del corso di Programmazione ad Oggetti dell'Università di Bologna.
+
+Di seguito vengono descritti, per punti, i requisiti del sistema, suddivisi tra requisiti \textit{funzionali} e \textit{non funzionali}.
+
+\subsection*{Requisiti funzionali}
+\begin{itemize}
+    \item Il sistema riceve in \textit{input} un insieme di progetti di cui si vuole verificare l'autenticità, detto \textbf{\textit{Submission}}, e un insieme di progetti cui con cui confrontarli, detto \textbf{\textit{Corpus}};
+
+    \item I progetti sono sviluppati in linguaggio Java e mantenuti in \textit{repository} pubbliche su \textit{GitHub} e \textit{Bitbucket}\footnote{
+        \href{https://github.com}{\textit{GitHub}} e \href{https://bitbucket.org}{\textit{Bitbucket}} sono due tra i più conosciuti servizi di \textit{hosting} per progetti \textit{software} che utilizzano sistemi di controllo di versione distribuito, come \href{https://git-scm.com}{Git}.
+    }.
+    Dal momento in cui i progetti vengono corretti, le rispettive \textit{repository} sono archiviate e si assume che siano tempo-inviarianti.
+\end{itemize}
 
 \section{Analisi e modello del dominio}
 
