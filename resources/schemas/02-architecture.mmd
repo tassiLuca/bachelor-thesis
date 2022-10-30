@@ -1,0 +1,37 @@
+classDiagram
+direction TB
+    class AntiPlagiarismSession {
+        <<interface>>
+        +invoke()
+    }
+
+    class RepositoryProvider {
+        <<interface>>
+    }
+    AntiPlagiarismSession *--> RepositoryProvider
+
+    class PlagiarismDetector {
+        <<interface>>
+    }
+    AntiPlagiarismSession *--> PlagiarismDetector
+
+    class Analyzer {
+        <<interface>>
+    }
+    AntiPlagiarismSession *--> Analyzer
+
+    class KnoledgeBaseRepository {
+        <<interface>>
+        + save()
+        + load()
+    }
+    Analyzer *--> KnoledgeBaseRepository
+
+    class Output {
+        <<interface>>
+    }
+    AntiPlagiarismSession *--> Output
+    class CLIOutput 
+    class FileExporter
+    Output <|.. FileExporter
+    Output <|.. CLIOutput

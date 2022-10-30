@@ -2,6 +2,10 @@
 \chapter{Analisi e Progettazione}
 \label{chapter:analysis}
 In questo secondo capitolo viene presentata l'analisi dei requisiti e il \textit{design} del sistema.
+%
+Nei primi due paragrafi vengono elencati i requisiti del sistema ed è descritto il dominio applicativo.
+%
+Il terzo paragrafo è dedicato al \textit{design} dell'applicativo: si parte da una visione architetturale e a seguire si dettagliano le parti di \textit{design} più rilevanti al fine di chiarificare la logica con cui è stato implementato il sistema.
 
 \section{Requisiti}
 Come già anticipato, lo scopo della tesi è realizzare un sistema antiplagio automatico in grado d'individuare eventuali porzioni di codice copiato nei progetti \textit{software} del corso di Programmazione ad Oggetti dell'Università di Bologna.
@@ -49,4 +53,49 @@ Inoltre, il requisito non funzionale sulle \textit{performance} richiederà un'a
     \label{img:02-domain}
 \end{figure}
 
-\section{Design}
+\section{\textit{Design}}
+
+\subsection{Architettura}
+% manca la trattazione degli input...
+L'architettura del sistema è così organizzata: \textbf{\textit{AntiPlagiarismSession}} è l'interfaccia responsabile della logica dell'applicazione e rappresenta una specifica sessione, dove per sessione si intende l'entità che, una volta opportunamente configurata con gli opportuni analizzatori, \textit{provider} di progetti e \textit{output}, esegue la logica dell'applicazione.
+
+Gli \textbf{\textit{Output}} rappresentano le risorse su cui andare a rappresentare i risultati ottenuti, mentre il \textbf{\textit{RepositoryProvider}} rappresenta la strategia con cui recuperare i progetti su cui effettuare l'analisi.
+
+Il confronto e l'analisi dei sorgenti vengono effettuati, rispettivamente, dal \textbf{\textit{PlagiarismDetector}} e dall'\textbf{\textit{Analyzer}}, che incapsula la specifica strategia utilizzata e demanda a \textbf{\textit{KnoledgeBaseRepository}} il salvataggio e il recupero delle rappresentazioni dei sorgenti già precedentemente analizzati e, perciò, salvati.
+
+Questa architettura permetterebbe facilmente l'aggiunta di un nuovo \textbf{\textit{Output}} e di poter cambiare sia la strategia per recuperare i progetti, sia la logica con cui questi vengono processati.
+
+In \Cref{img:02-architecture} è esemplificato il diagramma UML architetturale.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{resources/img/02-achitecture.pdf}
+    \caption{Schema UML architetturale del sistema.}
+    \label{img:02-architecture}
+\end{figure}
+
+\subsection{\textit{Design} dettagliato}
+In questa sezione si presenta in modo dettagliato le singole componenti del sistema.
+
+\subsubsection*{\textit{Provider} dei progetti}
+Per quanto concerne i \textit{provider} di \textit{repository}, ovvero i componenti che devono recuperare i sorgenti dei progetti da \textit{repository} pubbliche da \textit{GitHub} e/o da \textit{Bitbucket}, si è scelto un \textit{design} che permettesse il massimo riuso degli elementi comuni, aderendo a uno schema interfaccia - classe astratta - classe concreta.
+
+Dopo una prima analisi delle \textit{API} pubbliche dei due servizi di \textit{hosting} si è convenuto di permettere di recuperare i progetti mediante due metodi: un \textit{link} diretto alla \textit{repository}, oppure mediante un criterio di ricerca, che verrà descritto nel dettaglio più avanti.
+
+Inoltre, viste le limitazioni in termini di richieste che i due servizi espongono e la conseguente necessità di autenticarsi mediante degli opportuni \textit{token} per effettuare le richieste REST, si è optato di demandare la logica di recupero dei suddetti \textit{token} di autenticazione all'interfaccia \textit{TokenSupplierStrategy} che fa da \textit{Strategy}. 
+%
+L'implementazione di default ricerca tra variabili d'ambiente, ma questo approccio permette al sistema di essere estensibile.
+% devo descrivere cosa fa strategy? magari una nota a piè di pagina...
+%
+La creazione dei provider avviene per mezzo di due \textit{static factory}, incapsulate all'interno dei due \textit{provider}, in modo da permettere di ottenere un oggetto \textit{provider} anche senza autenticazione.
+%
+Nonostante questo sia in genere sconsigliato, può essere utile in fase di \textit{testing} e per permettere di testare il sistema anche con la CI attiva.
+% consider static factory effective kotlin
+% riferimento alla CI
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{resources/img/02-provider.pdf}
+    \caption{Schema UML dei provider.}
+    \label{img:02-provider}
+\end{figure}
