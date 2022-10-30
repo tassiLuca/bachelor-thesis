@@ -81,6 +81,7 @@
 	frameround=fttt,
 }
 
+% defining style for not yet supported languages:
 \lstdefinelanguage{Kotlin}{
 	comment=[l]{//},
 	emph={delegate, filter, first, firstOrNull, forEach, lazy, map, mapNotNull, println, return@},
@@ -90,4 +91,14 @@
 	morestring=[s]{"""*}{*"""},
 	ndkeywords={@Deprecated, @JvmField, @JvmName, @JvmOverloads, @JvmStatic, @JvmSynthetic, Array, Byte, Double, Float, Int, Integer, Iterable, Long, Runnable, Short, String, Unit, it},
 	sensitive=true
+}
+
+\lstdefinelanguage{pseudocode}{
+	sensitive=false,
+	keywords={while, do, endwhile, if, then, else, endif, repeat, until, for, endfor, from, to, each, step, function, procedure, begin, end, return, input, output, data, result, type, record, object, class, array, integer, boolean, true, false, real, string}, 
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	string=[b]{"},
+	mathescape=true,
+	literate={:=}{{$\gets$ }}1 {<-}{{$\gets$ }}1 {<=}{{$\leq$ }}1 {>=}{{$\geq$ }}1 {<>}{{$\neq$ }}1 {!=}{{$\neq$ }}1
 }
