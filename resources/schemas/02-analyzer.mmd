@@ -1,0 +1,36 @@
+classDiagram
+direction BT
+    class Analyzer~out S: SourceRepresentation<T>~ {
+        <<interface>>
+        +invoke(input: File) S
+    }
+
+    class TokenizationAnalyzer~TokenizedSource, Sequence<Token>~ {
+        <<abstract>>
+        -pipeline: StepHandler~File, List<Token>~
+        +invoke(input: File) TokenizedSource
+    }
+    TokenizationAnalyzer ..|> Analyzer
+
+    class StepHandler~I, O~ {
+        <<interface>>
+        +invoke(input: I) O
+    }
+
+    class JavaParser~File, CU~ {
+        +invoke(input: File) CU
+    }
+    JavaParser ..|> StepHandler
+
+    class JavaPreprocessor~CU, CU~ {
+        +invoke(input: CU) CU
+    }
+    JavaPreprocessor ..|> StepHandler
+
+    class JavaTokenizer~CU, Sequence<Token>~ {
+        +invoke(input: CU) Sequence~Token~
+    }
+    JavaTokenizer ..|> StepHandler
+
+    JavaTokenizationAnalyzer --|> TokenizationAnalyzer
+    StepHandler <--* JavaTokenizationAnalyzer

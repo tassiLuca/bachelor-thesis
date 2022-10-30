@@ -22,6 +22,11 @@
 \setlist{noitemsep}             % leave space around whole list but no between items
 \usepackage{listings}           % for code listings - see the listing configs section below
 \usepackage{rotating}			% for images in landscape - use \begin{sidewaysfigure}...\end{sidewaysfigure}
+% TeX break lines at spaces (and a few other positions in a word, called "discretionary break"). 
+% Discretionary break is not allowed in typewriter typesetting. 
+% If there is no space in \texttt{}, it cannot break.
+% To avoid this problem is necessary to enable hythenation of TT text:
+\usepackage[htt]{hyphenat}
 
 % -----------------------------------------------------------------------
 % ENVIRONMENTS

@@ -129,5 +129,49 @@ Presumibilmente, infatti, questi sono i componenti che varieranno più spesso ne
 
 L'analizzatore è il componente che si occupa di trasformare i file sorgenti in rappresentazioni confrontabili.
 %
-Indipendentemente dalla tipologia di analisi che si voglia applicare, la trasformazione non avviene tramite un semplice passaggio, bensì una sequenza di operazioni che sono eseguite sequenzialmente.
+Indipendentemente dalla tipologia di analisi che si voglia applicare, la trasformazione non avviene tramite un semplice passaggio, bensì una sequenza di operazioni che sono eseguite sequenzialmente in cascata.
 %
+Calato nella specifica strategia utilizzata per l'implementazione dello strumento, queste sono: il \textit{parsing} del file, una fase di \textit{preprocessing} ed infine la \textit{tokenizzazione} del sorgente.
+%
+Questa sequenza di azioni è naturalmente modellata attraverso il pattern \textit{Pipeline}: ogni singolo stadio della \textit{pipeline} è modellato attraverso l'interfaccia \texttt{StepHandler}; la sequenza di \textit{handler} viene poi costruita all'interno del concreto \texttt{Analyzer}, nel nostro caso \texttt{JavaTokenizationAnalyzer}.
+%
+% manca tokenTypeSupplier
+% ref pipeline pattern?
+%
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{resources/img/02-analyzer.pdf}
+    \caption{Schema UML dell'analizzatore.}
+    \label{img:02-analyzer}
+\end{figure}
+
+La rappresentazione intermedia prodotta dall'analizzatore è modellata dall'interfaccia \texttt{SourceRepresentation}. 
+%
+Tra tutte, quella implementata nell'attuale sistema è composta da sequenza di \textit{token} e perciò denominata \texttt{TokenizedSource}.
+
+L'elenco dei possibili tipi di \textit{token} dipende chiaramente dal linguaggio utilizzato.
+%
+La strategia di recupero di questi ultimi è affidata, al solito tramite \textit{Strategy}, a \texttt{TokenTypesSupplier}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{resources/img/02-representations.pdf}
+    \caption{Schema UML delle rappresentazioni intermedie.}
+    \label{img:02-representations}
+\end{figure}
+
+\texttt{PlagiarismDetector} rappresenta invece il componente che individua le similarità tra una coppia di \texttt{SourceRepresentation} e si occupa di calcolare la similarità tra due sorgenti.
+%
+\texttt{ComparisonStrategy} incapsula lo specifico algoritmo utilizzato per il confronto e \texttt{SimilarityEstimationStrategy} la particolare strategia usata per determinare la similarità.
+
+\texttt{Match} è la generica interfaccia che modella due sezioni di \texttt{SourceRepresentation} che sono simili, reificata in \texttt{TokenMatch} nel caso di \texttt{TokenizedSource}.
+%
+\texttt{ComparisonResult} rappresenta invece il risultato del confronto tra due sorgenti.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{resources/img/02-detector.pdf}
+    \caption{Schema UML del \textit{detector}.}
+    \label{img:02-detector}
+\end{figure}
