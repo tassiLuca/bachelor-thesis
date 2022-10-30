@@ -6,12 +6,12 @@ Starting at the first unmarked token of $P$ for each unmarked token after next t
     else
         create the KR hash-value for substrng $P_p$ to $P_{p+s-1}$
         check hashtable for hash of KR hash-value
-        for each hash-table entry with equal hashed KR hash-value do
+        for each hash-table entry with equal hashed KR hash-value
             if for all $j$ from $0$ to $s-1$, $P_{p+j} = T_{t+j}$ then
                 /* i.e. match is not hash artifact */ 
                 $k := s$
-                while $P_{p+k} = T_{t+k}$ $\land$ unmarked($P_{p+k}$) $\land$ unmarked($T_{t+k}$) do
+                while $P_{p+k} = T_{t+k}$ $\land$ unmarked($P_{p+k}$) $\land$ unmarked($T_{t+k}$)
                     $k := k+1$
                 if $k > 2 \cdot s$ then return($k$)
                 else record new maximal-match
-return(length of longest maximal-match)               
+return(length of longest maximal-match)
