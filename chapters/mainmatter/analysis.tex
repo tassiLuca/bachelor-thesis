@@ -80,18 +80,7 @@ In questa sezione si presenta in modo dettagliato le singole componenti del sist
 \subsubsection*{\textit{Provider} dei progetti}
 Per quanto concerne i \textit{provider} di \textit{repository}, ovvero i componenti che devono recuperare i sorgenti dei progetti da \textit{repository} pubbliche da \textit{GitHub} e/o da \textit{Bitbucket}, si è scelto un \textit{design} che permettesse il massimo riuso degli elementi comuni, aderendo a uno schema interfaccia - classe astratta - classe concreta.
 
-Dopo una prima analisi delle \textit{API} pubbliche dei due servizi di \textit{hosting} si è convenuto di permettere di recuperare i progetti mediante due metodi: un \textit{link} diretto alla \textit{repository}, oppure mediante un criterio di ricerca, che verrà descritto nel dettaglio più avanti.
-
-Inoltre, viste le limitazioni in termini di richieste che i due servizi espongono e la conseguente necessità di autenticarsi mediante degli opportuni \textit{token} per effettuare le richieste REST, si è optato di demandare la logica di recupero dei suddetti \textit{token} di autenticazione all'interfaccia \textit{TokenSupplierStrategy} che fa da \textit{Strategy}. 
-%
-L'implementazione di default ricerca tra variabili d'ambiente, ma questo approccio permette al sistema di essere estensibile.
-% devo descrivere cosa fa strategy? magari una nota a piè di pagina...
-%
-La creazione dei provider avviene per mezzo di due \textit{static factory}, incapsulate all'interno dei due \textit{provider}, in modo da permettere di ottenere un oggetto \textit{provider} anche senza autenticazione.
-%
-Nonostante questo sia in genere sconsigliato, può essere utile in fase di \textit{testing} e per permettere di testare il sistema anche con la CI attiva.
-% consider static factory effective kotlin
-% riferimento alla CI
+In \Cref{img:02-provider} è riportato lo schema UML delle classi dei \textit{provider}.
 
 \begin{figure}[h!]
     \centering
@@ -99,3 +88,46 @@ Nonostante questo sia in genere sconsigliato, può essere utile in fase di \text
     \caption{Schema UML dei provider.}
     \label{img:02-provider}
 \end{figure}
+
+Viste le limitazioni in termini di richieste che i due servizi espongono e la conseguente necessità di autenticarsi mediante degli opportuni \textit{token} per effettuare le richieste \textit{REST}, si è optato di demandare la logica di recupero dei suddetti \textit{token} di autenticazione all'interfaccia \textit{TokenSupplierStrategy} che fa da \textit{Strategy}.
+%
+% quali limiti? nota a piè di pagina :)
+%
+L'implementazione di default ricerca tra variabili d'ambiente, ma questo approccio può essere facilmente esteso.
+%
+% devo descrivere cosa fa strategy? magari una nota a piè di pagina...
+%
+La creazione dei provider avviene per mezzo di due \textit{static factory}, incapsulate all'interno dei due \textit{provider}, in modo da permettere di ottenere un oggetto \textit{provider} anche senza autenticazione.
+%
+Nonostante questo sia in genere sconsigliato per via delle limitazioni sopra citate, può essere utile in fase di \textit{testing} e per permettere di testare il sistema anche con la CI attiva, in contesti in cui non sia possibile usare i veri \textit{token} di autenticazione.
+% consider static factory effective kotlin
+% riferimento alla CI
+
+Dopo una prima analisi delle \textit{API} dei due servizi di \textit{hosting} si è convenuto di permettere di recuperare i progetti mediante due metodi: un \textit{link} diretto alla \textit{repository}, oppure mediante un criterio di ricerca, rappresentato dall'interfaccia \textit{SearchCriteria}.
+%
+Per permettere che questi siano componibili è stato qui utilizzato il pattern \textit{Decorator}.
+%
+In questo modo possono essere creati dinamicamente criteri compositi in base alle esigenze e in futuro potrebbero essere aggiunti nuovi criteri di ricerca, come il fatto di essere archiviate o il numero di stelle che ha ricevuto un determinato progetto.
+%
+Il \textit{design} è presentato in \Cref{img:02-search-criteria}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{resources/img/02-search-criteria.pdf}
+    \caption{Schema UML dei criteri di ricerca delle \textit{repository}.}
+    \label{img:02-search-criteria}
+\end{figure}
+
+% inserire repository
+
+\subsubsection*{Analizzatore e \textit{detector}}
+L'analizzatore e il \textit{detector} sono il cuore dell'intero sistema.
+%
+Il loro \textit{design} è stato pensato in modo tale che permettesse il massimo grado di configurabilità e di estendibilità.
+%
+Presumibilmente, infatti, questi sono i componenti che varieranno più spesso nell'arco del ciclo di vita di questo \textit{software} e il cui grado di configurabilità influirà certamentente in modo preponderante sia sulle prestazioni, sia sull'efficacia del sistema.
+
+L'analizzatore è il componente che si occupa di trasformare i file sorgenti in rappresentazioni confrontabili.
+%
+Indipendentemente dalla tipologia di analisi che si voglia applicare, la trasformazione non avviene tramite un semplice passaggio, bensì una sequenza di operazioni che sono eseguite sequenzialmente.
+%

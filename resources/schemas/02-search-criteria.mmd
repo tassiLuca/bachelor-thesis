@@ -1,0 +1,52 @@
+classDiagram
+    direction BT
+    class SearchCriteria~in I, out O~ {
+        <<interface>>
+        +apply(subject: I) O
+    }
+
+    class GitHubSearchCriteria~GitHub, GHRepositorySearchBuilder~ {
+        <<interface>>
+        +apply(subject: GitHub) GHRepositorySearchBuilder
+    }
+    GitHubSearchCriteria --|> SearchCriteria
+    class ByGitHubUser {
+        +ByGitHubUser(\nㅤㅤusername: String\n)
+    }
+    ByGitHubUser ..|> GitHubSearchCriteria
+    class GitHubCompoundCriteria {
+        <<abstract>>
+        +GitHubCompoundCriteria(\nㅤㅤcriteria: GitHubSearchCriteria\n)
+    }
+    GitHubCompoundCriteria ..|> GitHubSearchCriteria
+    class ByGitHubName {
+        +ByGitHubName(\nㅤㅤrepoName: String, \nㅤㅤcriteria: GitHubSearchCriteria\n)
+    }
+    ByGitHubName --|> GitHubCompoundCriteria
+    class ByGitHubLanguage {
+        +ByGitHubName(\nㅤㅤlanguage: String, \nㅤㅤcriteria: GitHubSearchCriteria\n)
+    }
+    ByGitHubLanguage --|> GitHubCompoundCriteria
+
+    class BitbucketSearchCriteria~String, String~ {
+        <<interface>>
+        +apply(subject: String) String
+    }
+    BitbucketSearchCriteria --|> SearchCriteria
+    class ByBitbucketUser {
+        +ByBitbucketUser(\nㅤㅤusername: String\n)
+    }
+    ByBitbucketUser ..|> BitbucketSearchCriteria
+    class BitbucketCompoundCriteria {
+        <<abstract>>
+        +BitbucketCompoundCriteria(\nㅤㅤcriteria: BitbucketSearchCriteria\n)
+    }
+    BitbucketCompoundCriteria ..|> BitbucketSearchCriteria
+    class ByBitbucketName {
+        +ByBitbucketName(\nㅤㅤrepoName: String, \nㅤㅤcriteria: BitbucketCompoundCriteria\n)
+    }
+    ByBitbucketName --|> BitbucketCompoundCriteria
+    class ByBitbucketLanguage {
+        +ByBitbucketLanguage(\nㅤㅤlanguage: String, \nㅤㅤcriteria: ByBitbucketLanguage\n)
+    }
+    ByBitbucketLanguage --|> BitbucketCompoundCriteria
