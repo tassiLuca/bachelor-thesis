@@ -291,7 +291,7 @@ Ad esempio, le parentesi di raggruppamento sono rappresentate nativamente nella 
 %
 Allo stesso modo, un costrutto sintattico come un'istruzione \texttt{if-then-else} può essere facilmente denotata per mezzo di un singolo nodo con tre rami.
 
-In figura ....viene mostrato...
+In figura \Cref{img:01-ast} viene mostrata la struttura parziale dell'\textit{AST} del metodo \texttt{main()} del \Cref{lst:test-analysis}.
 
 \begin{sidewaysfigure}
     \centering
@@ -303,7 +303,7 @@ In figura ....viene mostrato...
 Avere a disposizione una struttura ad albero per ciascun sorgente è di fondamentale importanza e agevola la fase di \textit{preprocessing} in cui si va "ripulire" il sorgente di tutte le sezioni non rilevanti.
 %
 Inoltre, il confronto dei sorgenti per mezzo di alberi sintattici fornisce risultati migliori di quelli ottenuti mediante una pura analisi lessicale del codice.
-
+%
 Il principale e non trascurabile svantaggio di utilizzare questo approccio, tuttavia, risiede nelle prestazioni.
 %
 Siccome la maggior parte degli AST sono strutture complesse e voluminose, la comparazione diretta degli alberi sintattici per una grande quantità di sorgenti è impraticabile.
