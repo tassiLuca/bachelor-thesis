@@ -4,13 +4,9 @@
 
 Negli ultimi decenni, con la rapida crescita di dati e informazioni facilmente accessibili sul \textit{web}, è diventato sempre più semplice poter utilizzare, in parte o in tutto, le risorse reperite.
 %
-Tuttavia, l'uso improprio di tali risorse e il loro appropriamento senza attribuire i necessari crediti agli autori, in violazione della legge sul \textit{copyright}, costituisce un \textbf{plagio} \cite{britannica} che, oltre che essere una pratica scorretta che contravviene a qualsiasi ordine deontologico, rappresenta un illecito punito a norma di legge \cite{copyright-law-italia}.
+Tuttavia, l'uso improprio di tali risorse e il loro appropriamento senza attribuire i necessari crediti agli autori, in violazione della legge sul \textit{copyright}, costituisce un \textbf{plagio} \cite{britannica} che, oltre ad essere una pratica scorretta che contravviene a qualsiasi ordine deontologico, rappresenta un illecito punito a norma di legge \cite{copyright-law-italia}.
 
-% vedi Overwiew and Comparison Of Plagiarism... 1 Paragrafo - Plagiarism can be classified into five ...
-
-Il plagio è considerato una grave violazione etica nel mondo accademico e industriale ed è per questo che negli anni sono stati sviluppati metodi e sistemi sempre più sofisticati per cercare d'identificare eventuali plagi e copiatura.
-
-Questa tesi si muove su questo solco, nel campo dell'informatica e dei progetti \textit{software}.
+Tra tutte, le due tipologie di plagio più comuni sono i plagi testuali, ovvero quelli commessi in documenti scritti in linguaggio naturale, e quelli del codice sorgente, che riguardano progetti \textit{software}, su cui verte la trattazione di questa tesi.
 
 \section{Il problema del plagio nel software}
 Anche nel mondo dell'informatica il problema del plagio è un fenomeno in crescita, incoraggiato per lo più dalla sempre maggiore quantità di progetti \textit{software} \textit{open source}, che induce gli sviluppatori a copia incollare frammenti di codice, talvolta neppure conoscendo le relative condizioni e termini di licenza.
@@ -35,8 +31,8 @@ Le modifiche strutturali sono invece fortemente dipendenti dal linguaggio di pro
 Di seguito alcuni esempi di rifattorizzazioni che rientrano in questa classe:
 \begin{itemize}
     \item aggiungere istruzioni ridondanti, come dichiarazioni, inizializzazioni, istruzioni di stampa;
-    \item sostituire i costrutti di loop con costrutti equivalenti: passare, ad esempio, da \texttt{for} a \texttt{do/while}, o da un approccio iterativo a uno funzionale (ad esempio tramite l'uso degli \texttt{Stream} in Java);
-    \item sostituire istruzioni \texttt{if} nidificate con dichiarazioni equivalenti, ad esempio \texttt{when} (in Kotlin) o \texttt{switch-case}, e viceversa;
+    \item sostituire i costrutti di loop con costrutti equivalenti: passare da \texttt{for} a \texttt{do/while}, o da un approccio iterativo a uno funzionale, ad esempio tramite l'uso degli \texttt{Stream} in Java;
+    \item sostituire istruzioni \texttt{if} nidificate con dichiarazioni equivalenti, ad esempio \texttt{switch-case} o \texttt{when} (in Kotlin), e viceversa;
     \item cambiare l'ordine di istruzioni indipendenti;
     \item cambiare l'ordine degli operandi: ad esempio \texttt{x < y} può essere cambiato in \texttt{y >= x};
     \item sostituire la chiamata a funzione con il corpo della stessa.
@@ -51,12 +47,14 @@ In \Cref{img:01-levels-of-plagiarism} viene riportata la tassonomia dei livelli 
     \label{img:01-levels-of-plagiarism}
 \end{figure}
 
+Un qualunque sistema di rilevamento di plagi, perché possa essere considerato robusto ed efficace, dovrà tener conto di queste possibili rifattorizzazioni in fase di esecuzione.
+
 \section{Sistemi antiplagio automatici}
 A causa dell'elevato volume di dati e informazioni disponibili che oggigiorno si hanno a disposizione, l'approccio tradizionale al rilevamento di codice copiato attraverso un'ispezione manuale, oltre che essere tedioso, è nei fatti impraticabile e, nel corso degli anni, è stato necessario porsi il problema di sviluppare strumenti di rilevamento automatici di plagio che siano efficienti ed efficaci.
 %
-Ciononostante, un'ispezione manuale a seguito di quella automatica è tuttora ancora necessaria per stabilire con ragionevole certezza se effettivamente le porzioni di codice individuate dal sistema sono effettivamente effetto di copiature o, più ingenuamente, blocchi simili di codice.
+Ciononostante, un'ispezione manuale a seguito di quella automatica è tuttora ancora necessaria per stabilire con ragionevole certezza se effettivamente le porzioni di codice individuate dal sistema sono effettivamente copiature o, più ingenuamente, blocchi simili di codice.
 
-Più formalmente, detto $p = \{s_{plg}, d_{plg}, s_{src}, d_{src}\}$ un caso di plagio, $s_{plg}$ un passaggio del documento $d_{plg}$ che è copiato a partire da un passaggio $s_{src}$ in un documento $d_{src}$, il compito di un sistema automatico di rilevamento di plagio consiste nell'individuare $p$.
+Più formalmente, detto $p = \{s_{plg}, d_{plg}, s_{src}, d_{src}\}$ un caso di plagio, $s_{plg}$ un passaggio del documento $d_{plg}$ che è copiato a partire da un passaggio $s_{src}$ in un documento $d_{src}$, il compito di un sistema automatico di rilevamento di plagi consiste nell'individuare $p$ \cite{yalcin-et-al-2022}.
 
 Già a partire dagli anni settanta del novecento, sono stati proposti algoritmi e tecniche per l'analisi del codice, nonché l'identificazione e localizzazione di plagi.
 
@@ -72,23 +70,23 @@ Questo aspetto è, insieme alle prestazioni, la sfida principale da affrontare d
 
 Gli strumenti d'identificazione di plagi devono infatti cercare di annullare gli effetti di queste rifattorizzazioni.
 %
+Maggiore sarà il livello di rifattorizazzione a cui il sistema sarà insensibile, migliore sarà l'efficacia e la robustezza del sistema stesso.
+%
 A questo scopo le tecniche di analisi si compongono di più fasi nelle quali trasformano i sorgenti in rappresentazioni intermedie che astraggono il più possibile dai dettagli implementativi, che possono essere facilmente cambiati, quindi applicano su di esse tecniche di confronto.
 
 Si osservi, tuttavia, che esistono rifattorizzazioni il cui contributo è più facile da annullare di altre. 
 %
 Si pensi, ad esempio, all'aggiunta o alla modifica dei commenti: l'effetto di tale rifattorizzazione è facilmente annullabile semplicemente trascurando dall'analisi i commenti, in quanto non contribuiscono in alcun modo alla logica del programma. 
 %
-D'altro canto, creare tecniche che siano insensibili al riordino delle istruzioni è un compito più complesso, fonte di approfonditi studi in ambito di ricerca.
-
-Maggiore sarà il livello di rifattorizazzione a cui il sistema antiplagio sarà insensibile, migliore sarà l'efficacia e la robustezza del sistema stesso.
+D'altro canto, creare tecniche che siano insensibili al riordino delle istruzioni è un compito più complesso, fonte di approfonditi studi e ambito di ricerca.
 
 L'altro problema emergente nello sviluppo di un programma antiplagio che non si limiti a confrontare la similarità tra una coppia di progetti, bensì effettui un controllo uno a molti o molti a molti, in cui si testano tutte le possibili coppie, sono le prestazioni. 
 %
 Infatti, la maggioranza delle tecniche e degli algoritmi per effettuare i confronti sono inefficienti in termini di tempo costo. 
 %
 Questo è in larga parte dovuto al fatto che la misurazione della somiglianza tra una coppia di sorgenti, nella gran parte degli algoritmi noti, ha una complessità almeno quadratica nel numero delle istanze delle sue rappresentazioni, e che, per ogni valutazione, il numero di confronti da effettuare è tipicamente elevato: detto $N$ il numero di progetti, volendo confrontare tutte le coppie di progetti tra loro, dovrebbero essere eseguite $\frac{N(N-1)}{2}$ comparazioni.
-
-Questo problema è acuito dal fatto che i progetti \textit{software} stanno diventando sempre più complessi e si hanno a disposizione una sempre maggior quantità di dati da dover processare.
+%
+Questo problema è acuito inoltre dal fatto che i progetti \textit{software} stanno diventando sempre più complessi e si hanno a disposizione una sempre maggior quantità di dati da dover processare.
 
 Per questa ragione vengono sfruttate tecniche di parallelizzazione e devono essere adottate strategie di ottimizzazione in grado di ridurre il numero di confronti da effettuare e, quindi, diminuire il tempo di esecuzione.
 %
@@ -112,15 +110,7 @@ Per questo motivo, se processare la struttura di un sorgente non presenta grandi
 
 Poiché il problema è complesso, gli attuali metodi di analisi non aspirano a risolvere il problema \textit{in toto}, ma analizzano il codice sorgente utilizzando un particolare "punto di vista": alcuni lo analizzano dal punto di vista del programmatore, cercando di comprenderne il significato, altri la loro struttura.
 
-% Possiamo classificare le tecniche di analisi in tre approcci: 
-
-% Il primo si basa sull'analisi del codice come mero testo: si presume che siano rispettate le convenzioni e il codice contenga sufficienti informazioni che ne descrivano il significato e cercano di estrarre solo queste significative informazioni aggiuntive.
-
-% Il livello successivo è simile al precedente con la differenza che non esplora il significato del testo dal punto di vista del programmatore, bensì dal punto di vista del calcolatore, che "vede" il codice come una sequenza di comandi, ciascuno con il proprio significato nel contesto della grammatica del linguaggio.
-
-% L'ultimo e terzo livello riguarda l'analisi del modello del codice sorgente.
-
-Con lo sviluppo della tecnologia, molti ricercatori hanno fatto progressi in questo campo e proposto diversi, formando gradualmente tre popolari famiglie di tecniche: \textbf{\textit{attribute-based}}, \textbf{\textit{structure-based}} e \textbf{\textit{hybrid detection}} \cite{es-plag}.
+Con lo sviluppo della tecnologia, molti ricercatori hanno fatto progressi in questo campo e proposto diversi algoritmi, formando gradualmente tre popolari famiglie di tecniche: \textbf{\textit{attribute-based}}, \textbf{\textit{structure-based}} e \textbf{\textit{hybrid detection}} \cite{es-plag}.
 
 \subsection{Analisi \textit{attribute-based}}
 Il primo sistema automatico di rilevazione di codice copiato che sia stato documentato in letteratura risale al 1976 \cite{ottenstein} ed era basato sulle seguenti quattro metriche di Healstead per determinare il livello di similarità tra coppie di sorgenti \cite{halstead}:
@@ -134,7 +124,7 @@ Il primo sistema automatico di rilevazione di codice copiato che sia stato docum
 
 Coppie di sorgenti con valori identici per ciascuna di queste metriche si presumeva fossero simili e meritevoli di un esame più approfondito.
 
-Nel corso degli anni, sono state proposte altre metriche per ottenere stime sempre più accurate di somiglianza e per riflettere sempre più la struttura del controllo di flusso del programma, come il numero d'istruzioni di \textit{loop} e di espressioni condizionali, il numero di procedure, il numero d'istruzioni di \textit{input}, il numero medio di caratteri per linea e altre ancora \cite{pdectet}.
+Nel corso degli anni, sono state proposte altre metriche per ottenere stime sempre più accurate di somiglianza e per riflettere sempre più la struttura del flusso di controllo del programma, come il numero d'istruzioni di \textit{loop} e di espressioni condizionali, il numero di procedure, il numero d'istruzioni di \textit{input}, il numero medio di caratteri per linea e altre ancora \cite{pdectet}.
 
 Collettivamente, questi sistemi sono stati definiti \textit{attribute counting metric systems} in quanto fondano il confronto sull'analisi di metriche basate su attributi intrinseci del codice sorgente.
 
@@ -145,14 +135,14 @@ Le tecniche di analisi \textit{structure-based}, a differenze di quelle \textit{
 
 Nella maggioranza dei casi, i sistemi che implementano questo di tipo di tecnica lavorano in due fasi consecutive: prima il codice sorgente viene analizzato e viene generata una rappresentazione intermedia, poi si effettua il confronto dei sorgenti sulle rappresentazioni intermedie.
 
-Possiamo suddividere questa famiglia di tecniche, in sottotecniche....
+All'interno di questo tipo di analisi possiamo annoverare principalmente due diversi metodi: l'analisi lessicale e quella basata su un modello astratto dei sorgenti.
 
 \subsubsection{Analisi lessicale (\textit{tokenizzazione})}
 Tra tutte, la tecnica più usata è l'analisi lessicale del codice sorgente (\textbf{\textit{lexical analysis}} o \textbf{\textit{tokenization}} in inglese), che consiste nel convertire la sequenza di caratteri di cui è composto il programma in una sequenza di \textit{token}.
 %
 Un \textit{token} è, a sua volta, un simbolo astratto che rappresenta uno specifico tipo di unità lessicale nella grammatica del linguaggio. 
 %
-Esso è associato a un \textbf{lessema}, ovvero ad una sequenza di caratteri del programma che corrisponde al \textit{pattern} di un \textit{token} identificata dall'analizzatore lessicale come una specifica istanza di quel \textit{token}, e a da attributi opzionali derivati dal testo.
+Esso è associato a un \textbf{lessema}, ovvero ad una sequenza di caratteri del programma che corrisponde al \textit{pattern} di un \textit{token} identificato dall'analizzatore lessicale come una specifica istanza di quel \textit{token}, e da attributi opzionali derivati dal testo.
 %
 Alcuni possibili esempi di \texttt{token} comuni con i relativi \texttt{pattern} e alcuni lessemi di esempio sono riportati in \Cref{table:token-examples}.
 
@@ -181,7 +171,7 @@ Questi sono generati in maniera dichiarativa a partire da generatori di \textit{
 %
 In \Cref{img:01-id-finite-automa} è mostrato un esempio di automa a stati finiti che riconosce un identificatore.
 %
-L'equivalente espressione regolare che definisce un identificatore è: \texttt{[a-zA->].([a-zA->]|[0-9])*}.
+L'equivalente espressione regolare è la seguente: \texttt{[a-zA->].([a-zA->]|[0-9])*}.
 
 \begin{figure}[h]
     \centering
@@ -258,31 +248,31 @@ Un insieme "stringente" di \textit{token} potrebbe rappresentare ciascuno di que
 %
 D'altro canto, un set di \textit{token} "lasco" potrebbe rappresentare tutti e quattro i tipi di dato sopra citati con un unico \textit{token}, riconoscendo che tutti e quattro possono servire, nella grande maggioranza dei casi, allo stesso scopo.
 %
-Pertanto un insieme di \textit{token} "lasco" aiuta il sistema a riconoscere e catalogare come equivalenti tipi di dato diversi e fornire quindi una resilienza alle tecniche di rifattorizzazione.
+Pertanto un insieme di \textit{token} "lasco" aiuta il sistema a riconoscere e catalogare come equivalenti tipi di dato diversi e fornire quindi una maggiore resilienza alle tecniche di rifattorizzazione.
 % quale tipo? 3?
 
 In seguito, la sequenza di \textit{token} generata viene confrontata con algoritmi di \textit{string matching}. 
 %
 Tra i due più conosciuti vi sono \textbf{\textit{Winnowing}} e \textbf{\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)}}.
 
-\textit{Winnowing} costituisce un miglioramento del metodo \textit{n-grams} e consiste nel suddividere il documento in una lista di sotto-strighe di lunghezza $n$ e  usare una funzione di \textit{hashing} per selezionare solo un sottoinsieme rappresentativo di tali sottosequenze del documento da usare come impronta digitale dello stesso (i cosiddetti \textit{n-grams fingerprinting}).
+\textit{Winnowing} costituisce un miglioramento del metodo \textit{n-grams} e consiste nel suddividere il documento in una lista di sottostrighe di lunghezza $n$ e  usare una funzione di \textit{hashing} per selezionare solo un loro sottoinsieme rappresentativo da usare come impronta digitale dello stesso (i cosiddetti \textit{n-grams fingerprinting}).
 
-\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)} costituisce l'altra popolare alternativa a \textit{Winnowing}, cercando di aumentare la precisione a discapito dell'efficienza. 
+\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)} costituisce l'altra popolare alternativa a \textit{Winnowing}, che tenta di aumentare la sua precisione a discapito dell'efficienza. 
 %
 Esso incorpora, di fatto, due algoritmi.
 %
 \textit{Greedy String Tiling (GST)} è l'algoritmo che trova la massima sottosequenza comune in due stringhe.
 %
-\textit{Running-Karp-Rabin (RKR)} è l'algoritmo per la ricerca rapida di sottosequenze comuni e trova tutte le occorrenze di una stringa $P$ all'interno di una stringa più lunga $T$ effettuando l'\textit{hashing} di tutte le stringhe di lunghezza $|P|$ e confrontandole con gli \textit{hash} di $P$.
+\textit{Running-Karp-Rabin (RKR)} è l'algoritmo per la ricerca rapida di sottosequenze comuni e trova tutte le occorrenze di una stringa $P$ all'interno di una stringa più lunga $T$ effettuando l'\textit{hashing} di tutte le sottostringhe di lunghezza $|P|$ e confrontandole con gli \textit{hash} di $P$.
 %
 I due algoritmi cooperano in questo modo: \textit{RKR} è eseguito su due programmi.
 %
-Per ogni sottosequenza comune identificata da \textit{RKR}, \textit{GST} è eseguito per estendere il \textit{match} oltre i confini del \textit{hash value}.
+Per ogni sottosequenza comune identificata da \textit{RKR}, \textit{GST} è eseguito per estendere il \textit{match} rintracciato mediante l'uso della funzione di \textit{hashing}.
 
 \subsubsection{Analisi basata su un modello}
-Anziché utilizzare la sequenza di \textit{token} generata dal \textit{lexer} possono essere generate delle strutture e dei modelli più complessi, che permettano di astrarre ulteriormente.
+Anziché utilizzare la sequenza di \textit{token} generata dal \textit{lexer} possono essere generate delle strutture e dei modelli più complessi, che permettano di astrarre ulteriormente dalla sintassi del linguaggio.
 
-Una tra le rappresentazioni più note e naturali in questo ambito, derivata dalla stessa analisi lessicale, è l'\textbf{albero sintattico} (o \textit{abstract syntax tree} in inglese, abbreviato AST).
+Una tra le rappresentazioni più note e naturali in questo ambito, derivata dalla stessa analisi lessicale, è l'\textbf{albero sintattico} (o \textit{abstract syntax tree} in inglese, abbreviato \textit{AST}).
 %
 Questo è generato a partire dalla sequenza di \textit{token} descritta nel paragrafo precedente e rappresenta il risultato ottenuto a seguito dell'applicazione del secondo stadio di un compilatore: il \textbf{\textit{Parser}} (\Cref{img:01-compiler-arch}).
 %
