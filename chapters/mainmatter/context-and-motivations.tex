@@ -113,6 +113,7 @@ Poiché il problema è complesso, gli attuali metodi di analisi non aspirano a r
 Con lo sviluppo della tecnologia, molti ricercatori hanno fatto progressi in questo campo e proposto diversi algoritmi, formando gradualmente tre popolari famiglie di tecniche: \textbf{\textit{attribute-based}}, \textbf{\textit{structure-based}} e \textbf{\textit{hybrid detection}} \cite{es-plag}.
 
 \subsection{Analisi \textit{attribute-based}}
+\todo{filter...}
 Il primo sistema automatico di rilevazione di codice copiato che sia stato documentato in letteratura risale al 1976 \cite{ottenstein} ed era basato sulle seguenti quattro metriche di Healstead per determinare il livello di similarità tra coppie di sorgenti \cite{halstead}:
 
 \begin{itemize}
@@ -180,9 +181,6 @@ L'equivalente espressione regolare è la seguente: \texttt{[a-zA->].([a-zA->]|[0
     \label{img:01-id-finite-automa}
 \end{figure}
 
-% https://www.antlr.org ??
-% esempio di FA ed espressione regolare
-
 Attraverso questo approccio, quindi, ogni programma viene trasformato in una sequenza di \textit{token}, uno per ciascun elemento di base del linguaggio che si vuole valorizzare: le sezioni di codice non rilevanti ai fini della comparazione possono essere escluse, cioè non viene generato alcun \textit{token} per questi elementi.
 
 In \Cref{table:token-associations} è mostrata una possibile sequenza di \textit{token} generata a partire dalla classe presentata nel \Cref{lst:test-analysis}.
@@ -249,7 +247,6 @@ Un insieme "stringente" di \textit{token} potrebbe rappresentare ciascuno di que
 D'altro canto, un set di \textit{token} "lasco" potrebbe rappresentare tutti e quattro i tipi di dato sopra citati con un unico \textit{token}, riconoscendo che tutti e quattro possono servire, nella grande maggioranza dei casi, allo stesso scopo.
 %
 Pertanto un insieme di \textit{token} "lasco" aiuta il sistema a riconoscere e catalogare come equivalenti tipi di dato diversi e fornire quindi una maggiore resilienza alle tecniche di rifattorizzazione.
-% quale tipo? 3?
 
 In seguito, la sequenza di \textit{token} generata viene confrontata con algoritmi di \textit{string matching}. 
 %

@@ -75,7 +75,6 @@ In \Cref{img:02-architecture} è esemplificato il diagramma UML architetturale.
 \end{figure}
 
 \subsection{\textit{Design} dettagliato}
-In questa sezione si presenta in modo dettagliato le singole componenti del sistema.
 
 \subsubsection*{\textit{Provider} dei progetti}
 Per quanto concerne i \textit{provider} di \textit{repository}, ovvero i componenti che devono recuperare i sorgenti dei progetti da \textit{repository} pubbliche da \textit{GitHub} e/o da \textit{Bitbucket}, si è scelto un \textit{design} che permettesse il massimo riuso degli elementi comuni, aderendo a uno schema interfaccia - classe astratta - classe concreta.
@@ -89,11 +88,9 @@ In \Cref{img:02-provider} è riportato lo schema UML delle classi dei \textit{pr
     \label{img:02-provider}
 \end{figure}
 
-Viste le limitazioni in termini di richieste che i due servizi espongono e la conseguente necessità di autenticarsi mediante degli opportuni \textit{token} per effettuare le richieste \textit{REST}, si è optato di demandare la logica di recupero dei suddetti \textit{token} di autenticazione all'interfaccia \texttt{TokenSupplierStrategy} che fa da \textit{Strategy}.
+Viste le limitazioni in termini di numero di richieste che i due servizi impongono \footnote{Sia \textit{GitHub} che \textit{Bitbuckt} hanno un limite massimo di richieste che possono essere effettuate in un certo intervallo di tempo che varia in base la richiesta sia autenticata o meno. Questi vincoli sono imposti per garantire la protezione da attacchi \textit{Denial of Service}, consentire la scalabilità e garantire buone prestazioni.} e la conseguente necessità di autenticarsi mediante degli opportuni \textit{token} per effettuare le richieste \textit{REST}, si è optato di demandare la logica di recupero dei suddetti \textit{token} di autenticazione all'interfaccia \texttt{TokenSupplierStrategy} che fa da \textit{Strategy} \cite{gof}.
 %
-% quali limiti? nota a piè di pagina :)
-%
-L'implementazione di default ricerca tra variabili d'ambiente, ma questo approccio può essere facilmente esteso.
+L'implementazione di \textit{default} ricerca tra variabili d'ambiente, ma questo approccio può essere facilmente esteso.
 %
 % devo descrivere cosa fa strategy? magari una nota a piè di pagina...
 %
@@ -103,9 +100,9 @@ Nonostante questo sia in genere sconsigliato per via delle limitazioni sopra cit
 % consider static factory effective kotlin
 % riferimento alla CI
 
-Dopo una prima analisi delle \textit{API} dei due servizi di \textit{hosting} si è convenuto di permettere di recuperare i progetti mediante due metodi: un \textit{link} diretto alla \textit{repository}, oppure mediante un criterio di ricerca, rappresentato dall'interfaccia \textit{SearchCriteria}.
+Dopo una prima analisi delle \textit{API} dei due servizi di \textit{hosting} si è convenuto di permettere di recuperare i progetti mediante due metodi: un \textit{link} diretto alla \textit{repository}, oppure mediante un criterio di ricerca, rappresentato dall'interfaccia \texttt{SearchCriteria}.
 %
-Per permettere che questi siano componibili è stato qui utilizzato il pattern \textit{Decorator}.
+Per permettere che questi siano componibili è stato qui utilizzato il pattern \textit{Decorator} \cite{gof}.
 %
 In questo modo possono essere creati dinamicamente criteri compositi in base alle esigenze e in futuro potrebbero essere aggiunti nuovi criteri di ricerca, come il fatto di essere archiviate o il numero di stelle che ha ricevuto un determinato progetto.
 %
@@ -123,7 +120,7 @@ Il \textit{design} è presentato in \Cref{img:02-search-criteria}.
 \subsubsection*{Analizzatore e \textit{detector}}
 L'analizzatore e il \textit{detector} sono il cuore dell'intero sistema.
 %
-Il loro \textit{design} è stato pensato in modo tale che permettesse il massimo grado di configurabilità e di estendibilità.
+Il loro \textit{design} è stato pensato in modo tale da permettere il massimo grado di configurabilità e di estendibilità.
 %
 Presumibilmente, infatti, questi sono i componenti che varieranno più spesso nell'arco del ciclo di vita di questo \textit{software} e il cui grado di configurabilità influirà certamentente in modo preponderante sia sulle prestazioni, sia sull'efficacia del sistema.
 
@@ -133,10 +130,9 @@ Indipendentemente dalla tipologia di analisi che si voglia applicare, la trasfor
 %
 Calato nella specifica strategia utilizzata per l'implementazione dello strumento, queste sono: il \textit{parsing} del file, una fase di \textit{preprocessing} ed infine la \textit{tokenizzazione} del sorgente.
 %
-Questa sequenza di azioni è naturalmente modellata attraverso il pattern \textit{Pipeline}: ogni singolo stadio della \textit{pipeline} è modellato attraverso l'interfaccia \texttt{StepHandler}; la sequenza di \textit{handler} viene poi costruita all'interno del concreto \texttt{Analyzer}, nel nostro caso \texttt{JavaTokenizationAnalyzer}.
+Questa sequenza di azioni è naturalmente modellata attraverso il pattern \textit{Pipeline}: ogni singolo stadio della \textit{pipeline} \cite{pipeline-pattern} è modellato attraverso l'interfaccia \texttt{StepHandler}; la sequenza di \textit{handler} viene poi costruita all'interno del concreto \texttt{Analyzer}, nel nostro caso \texttt{JavaTokenizationAnalyzer}.
 %
 % manca tokenTypeSupplier
-% ref pipeline pattern?
 %
 
 \begin{figure}[h!]
@@ -148,11 +144,11 @@ Questa sequenza di azioni è naturalmente modellata attraverso il pattern \texti
 
 La rappresentazione intermedia prodotta dall'analizzatore è modellata dall'interfaccia \texttt{SourceRepresentation}. 
 %
-Tra tutte, quella implementata nell'attuale sistema è composta da sequenza di \textit{token} e perciò denominata \texttt{TokenizedSource}.
+Tra tutte, quella implementata nell'attuale sistema è composta da una sequenza di \textit{token} e perciò denominata \texttt{TokenizedSource}.
 
 L'elenco dei possibili tipi di \textit{token} dipende chiaramente dal linguaggio utilizzato.
 %
-La strategia di recupero di questi ultimi è affidata, al solito tramite \textit{Strategy}, a \texttt{TokenTypesSupplier}.
+La strategia di recupero di questi ultimi è affidata, al solito tramite \textit{Strategy}, all'interfaccia \texttt{TokenTypesSupplier}, la cui implementazione di \textit{default} effettua la de-serializzazione di un file di configurazione in cui sono salvati tutti le tipologie di \textit{token}.
 
 \begin{figure}[h!]
     \centering
@@ -169,11 +165,24 @@ La strategia di recupero di questi ultimi è affidata, al solito tramite \textit
 %
 \texttt{ComparisonResult} rappresenta invece il risultato del confronto tra due sorgenti.
 
-\begin{figure}[h!]
+\begin{sidewaysfigure}
     \centering
     \includegraphics[width=\textwidth]{resources/img/02-detector.pdf}
     \caption{Schema UML del \textit{detector}.}
     \label{img:02-detector}
-\end{figure}
+\end{sidewaysfigure}
 
+Entrambi i componenti, \texttt{Analyzer} e \texttt{PlagiarismDetector}, sono incapsulati all'interno di un concreto \texttt{TechniqueFacade} \cite{gof}.
+%
+Si è deciso di adottare questo approccio principalmente per due motivi:
+\begin{itemize}
+    \item la specifiche strategie di analisi e di confronto devono essere istanziate e opportunamente configurate a \textit{runtime} a seconda del tipo di tecnica e delle opzioni scelte dall'utente. Inoltre, devono essere coerenti tra loro: non dovrebbe essere possibile, ad esempio, poter istanziare un analizzatore per effettuare la \textit{tokenizzazione} e un rilevatore che non operi sulla sequenza di \textit{token}.
+    \item Il processo di analisi e confronto può essere complesso. Pertanto si fornisce ai \textit{client} un'interfaccia semplificata che assolve al compito di eseguire una generica tecnica, rendendo di fatto trasparente al chiamante la complessità del sottosistema che, dal suo punto di vista, è di fatto una \textit{black box}.
+\end{itemize}
 
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=\textheight]{resources/img/02-session.pdf}
+    \caption{Schema UML della sessione}
+    \label{img:02-session}
+\end{sidewaysfigure}
