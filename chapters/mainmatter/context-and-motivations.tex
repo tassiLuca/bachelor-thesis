@@ -333,16 +333,16 @@ Entrambi gli approcci descritti sopra hanno i loro vantaggi e svantaggi.
 %
 Alcuni lavori di ricerca hanno pertanto cercato di combinare entrambi gli approcci creando, di fatto, tecniche di analisi ibride, alcune delle quali adattate da altri domini, regolando l'influenza di un approccio sull'altro sulla base delle proprie esigenze.
 %
-Tra queste, spiccano per importanza la \textit{Latent Semantic Analysis} e le tecniche di \textit{Clustering}.
+Tra queste, spiccano per importanza la \textit{Latent Semantic Analysis} \cite{lsa} e le tecniche di \textit{Clustering} \cite{pdectet}.
 
 La prima è un metodo di elaborazione del linguaggio naturale che analizza le relazioni tra un insieme di documenti e i termini in esso contenuti: dapprima sono applicati modelli statistici che riflettono l'importanza che ciascun termine (nel caso dei sorgenti, i \textit{token}) assume in un insieme di documenti e, successivamente, attraverso l'utilizzo di una tecnica algebrica di fattorizzazione di una matrice basata sull'uso di autovalori e autovettori detta \textit{Singular Value Decomposition}, vengono trovate relazioni nascoste (latenti, da qui il nome \textit{Latent Semantic Analysis}) tra i termini e concetti.
 
 La seconda utilizza una rappresentazione a grafo in cui i vertici rappresentano gli identificatori e gli archi (pesati) la misura di similarità tra i programmi, trasformando il problema di trovare sezioni di codice duplicati nel problema di \textit{clustering} di un grafo pesato.
 
-Altri metodi, qui non approfonditi, sono in via di sviluppo e impiegano algoritmi di \textit{machine learning} come \textit{Random Forest} e \textit{Gradient Boosting} applicati agli alberi di regressione.
+Altri metodi, qui non approfonditi, sono in via di sviluppo e impiegano algoritmi di \textit{machine learning} come \textit{Random Forest} e \textit{Gradient Boosting} applicati agli alberi di regressione .
 
 \subsection{Quale tecnica scegliere?}
-Scegliere quali di questi approcci scegliere è complesso, perché difficili da confrontare tra loro: la maggior parte di queste tecniche viene valutata utilizzando il proprio \textit{set} di dati, che raramente sono resi pubblicamente accessibili e che potrebbero non rappresentare veri casi di plagio \cite{karnalim-budi-toba-joy-2019}.
+Stabilire quali di questi approcci scegliere è complesso, perché difficili da confrontare tra loro: la maggior parte di queste tecniche viene valutata utilizzando il proprio \textit{set} di dati, che raramente sono resi pubblicamente accessibili e che potrebbero non rappresentare veri casi di plagio \cite{karnalim-budi-toba-joy-2019}.
 
 Nonostante ciò, le tecniche più promettenti, sulla base delle considerazioni suffatte, che verranno utilizzate anche dallo strumento sviluppato nell'ambito di questa tesi, sono quelle \textit{structure-based}. 
 
