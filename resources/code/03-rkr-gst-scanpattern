@@ -12,6 +12,8 @@ Starting at the first unmarked token of $P$ for each unmarked token after next t
                 $k := s$
                 while $P_{p+k} = T_{t+k}$ $\land$ unmarked($P_{p+k}$) $\land$ unmarked($T_{t+k}$)
                     $k := k+1$
-                if $k > 2 \cdot s$ then return($k$)
+                if $k > 2 \cdot s$ then 
+                    /* restart scanpattern with s = k */
+                    return($k$)
                 else record new maximal-match
 return(length of longest maximal-match)

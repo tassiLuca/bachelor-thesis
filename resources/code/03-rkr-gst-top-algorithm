@@ -1,0 +1,15 @@
+Search-length s $:=$ initial-search-length
+stop $:=$ false
+Repeat
+    /* Lmax is the size of the largest maximal-matches found in this iteration */
+    $L_{max} :=$ scanpattern(s)
+    if $L_{max} > 2 \cdot s$ then 
+        /* Very long string: don't mark tiles but try again with larger s */
+        s $:= L_{max}$
+    else
+        /* Create tiles from matches takes from list of queues */
+        markarrays(s)
+        if s $> 2 \cdot$ min_match_length then s $:=$ / 2
+        else if s $>$ min_match_length the s $:=$ min_match_length
+        else stop $:=$ true
+until stop

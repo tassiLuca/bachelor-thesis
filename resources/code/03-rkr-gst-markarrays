@@ -1,0 +1,13 @@
+Starting with the top queue, while there is a non-empty queue do
+    if the current queue is empty then drop to next queue /* corresponding to smaller maximal-matches */
+    else
+        /* Assume the length of maximal-matches in the current queue is L */
+        remove match(p, t, L)
+        if match is not occluded then
+            for $j := 0$ to $L-1$ do
+                mark_token($P_{p+j}$)
+                mark_token($T_{t+j}$)
+            length_of_tokens_tiles $:=$ length_of_tokens_tiled + $L$
+        else if $L - L_{occluded} \ge s$ then
+            /* i.e. the unmarked part remaining of the maximal-match */
+            record unmarked portion on list of queues
