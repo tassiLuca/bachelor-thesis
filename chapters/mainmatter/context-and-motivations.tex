@@ -102,14 +102,13 @@ Il bilanciamento tra le prestazioni e l'efficacia del sistema è, dunque, di fon
 
 \section{Stato dell'arte}
 
-\todo{Forse da mettere altrove i paragrafi seguenti}
 % preso spunto da "Current trends in source code analysis, plagiarism detection and issues of analysis big datasets" -- si deve citare??
 Il codice sorgente non è nient'altro che un file di testo scritto da sviluppatori, che deve essere compilato o interpretato e che, pertanto, si basa su regole sintattiche e grammaticali proprie del linguaggio di programmazione con cui è scritto che permettono a entrambi gli attori, il programmatore e il calcolatore, di "capirlo" ed elaborarlo.
-
+%
 Per questo motivo, se processare la struttura di un sorgente non presenta grandi difficoltà, processare il significato, ovvero l'idea e la logica sottesa al codice, costituisce una sfida più grande, se non altro perché entra in gioco la competenza dello sviluppatore e la sua esperienza nella scrittura di codice "pulito".
 
-Poiché il problema è complesso, gli attuali metodi di analisi non aspirano a risolvere il problema \textit{in toto}, ma analizzano il codice sorgente utilizzando un particolare "punto di vista": alcuni lo analizzano dal punto di vista del programmatore, cercando di comprenderne il significato, altri la loro struttura.
-
+Poiché il problema è complesso, gli attuali metodi analizzano il codice sorgente utilizzando un particolare "punto di vista", alcuni cercando di comprenderne il significato, altri la loro struttura.
+%
 Con lo sviluppo della tecnologia, molti ricercatori hanno fatto progressi in questo campo e proposto diversi algoritmi, formando gradualmente tre popolari famiglie di tecniche: \textbf{\textit{attribute-based}}, \textbf{\textit{structure-based}} e \textbf{\textit{hybrid detection}} \cite{es-plag}.
 
 \subsection{Analisi \textit{attribute-based}}
@@ -132,20 +131,20 @@ Collettivamente, questi sistemi sono stati definiti \textit{attribute counting m
 Tuttavia, considerando che le caratteristiche del codice sorgente non sono strettamente correlate alla semantica del programma e che la misurazione della somiglianza può risultare essere imprecisa, l'efficacia di queste tecniche è considerevolmente limitata in termini di accuratezza nell'identificazione di plagi se confrontata con quella di tecniche \textit{structure-based} \cite{es-plag}.
 
 \subsection{Analisi \textit{structure-based}}
-Le tecniche di analisi \textit{structure-based}, a differenze di quelle \textit{attribute-based}, si basano, come suggerisce il nome stesso, sulla struttura dei codici sorgenti per determinare il grado di similarità tra gli stessi.
+Le tecniche di analisi \textit{structure-based}, a differenza di quelle \textit{attribute-based}, si basano, come suggerisce il nome stesso, sulla struttura dei codici sorgenti per determinare il grado di similarità tra gli stessi.
 
 Nella maggioranza dei casi, i sistemi che implementano questo di tipo di tecnica lavorano in due fasi consecutive: prima il codice sorgente viene analizzato e viene generata una rappresentazione intermedia, poi si effettua il confronto dei sorgenti sulle rappresentazioni intermedie.
 
-All'interno di questo tipo di analisi possiamo annoverare principalmente due diversi metodi: l'analisi lessicale e quella basata su un modello astratto dei sorgenti.
+All'interno di questo tipo di analisi possiamo annoverare principalmente due diversi metodi: l'analisi lessicale e quella basata su un modello astratto e derivato dai sorgenti.
 
 \subsubsection{Analisi lessicale (\textit{tokenizzazione})}
 Tra tutte, la tecnica più usata è l'analisi lessicale del codice sorgente (\textbf{\textit{lexical analysis}} o \textbf{\textit{tokenization}} in inglese), che consiste nel convertire la sequenza di caratteri di cui è composto il programma in una sequenza di \textit{token}.
 %
-Un \textit{token} è, a sua volta, un simbolo astratto che rappresenta uno specifico tipo di unità lessicale nella grammatica del linguaggio. 
+Un \textit{token} è, a sua volta, un simbolo astratto che rappresenta un tipo di unità lessicale nella grammatica del linguaggio. 
 %
 Esso è associato a un \textbf{lessema}, ovvero ad una sequenza di caratteri del programma che corrisponde al \textit{pattern} di un \textit{token} identificato dall'analizzatore lessicale come una specifica istanza di quel \textit{token}, e da attributi opzionali derivati dal testo.
 %
-Alcuni possibili esempi di \texttt{token} comuni con i relativi \texttt{pattern} e alcuni lessemi di esempio sono riportati in \Cref{table:token-examples}.
+Alcuni possibili esempi di \textit{token} comuni con i relativi \textit{pattern} e alcuni lessemi di esempio sono riportati in \Cref{table:token-examples}.
 
 \begin{table}[h]
     \centering
@@ -172,7 +171,7 @@ Questi sono generati in maniera dichiarativa a partire da generatori di \textit{
 %
 In \Cref{img:01-id-finite-automa} è mostrato un esempio di automa a stati finiti che riconosce un identificatore.
 %
-L'equivalente espressione regolare è la seguente: \texttt{[a-zA->].([a-zA->]|[0-9])*}.
+L'equivalente espressione regolare è la seguente: \texttt{[a-zA-Z].([a-zA-Z]|[0-9])*}.
 
 \begin{figure}[h]
     \centering
@@ -248,8 +247,18 @@ D'altro canto, un set di \textit{token} "lasco" potrebbe rappresentare tutti e q
 %
 Pertanto un insieme di \textit{token} "lasco" aiuta il sistema a riconoscere e catalogare come equivalenti tipi di dato diversi e fornire quindi una maggiore resilienza alle tecniche di rifattorizzazione.
 
-In seguito, la sequenza di \textit{token} generata viene confrontata con algoritmi di \textit{string matching}. 
+In seguito, la sequenza di \textit{token} generata viene eventualmente filtrata e successivamente confrontata con algoritmi di \textit{string matching}. 
+
+La fase di filtraggio consiste nel ridurre il numero di rappresentazioni da dover confrontare e, quindi, il numero stesso dei confronti, portando a una riduzione dei tempi di esecuzione.
 %
+Questo stadio è preceduto da una fase d'indicizzazione, in cui vengono generati alcuni indici a partire dalla sequenza di \textit{token}.
+%
+Una tra gli indici più comuni è costituito da coppie chiave $-$ valore in cui nelle chiavi sono memorizzati i tipi di \textit{token} e nei valori la loro frequenza.
+%
+Tali indici sono successivamente impiegati nella vera e propria fase di filtraggio, in cui viene applicata una particolare metrica, ad esempio la similarità coseno, e viene utilizzato un valore di soglia per escludere coppie di sorgenti che hanno bassa similarità in accordo con la metrica scelta.
+
+\todo{more on filtering}
+
 Tra i due più conosciuti vi sono \textbf{\textit{Winnowing}} e \textbf{\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)}}.
 
 \textit{Winnowing} costituisce un miglioramento del metodo \textit{n-grams} e consiste nel suddividere il documento in una lista di sottostrighe di lunghezza $n$ e  usare una funzione di \textit{hashing} per selezionare solo un loro sottoinsieme rappresentativo da usare come impronta digitale dello stesso (i cosiddetti \textit{n-grams fingerprinting}).
@@ -342,10 +351,10 @@ La seconda utilizza una rappresentazione a grafo in cui i vertici rappresentano 
 Altri metodi, qui non approfonditi, sono in via di sviluppo e impiegano algoritmi di \textit{machine learning} come \textit{Random Forest} e \textit{Gradient Boosting} applicati agli alberi di regressione .
 
 \subsection{Quale tecnica scegliere?}
-Stabilire quali di questi approcci scegliere è complesso, perché difficili da confrontare tra loro: la maggior parte di queste tecniche viene valutata utilizzando il proprio \textit{set} di dati, che raramente sono resi pubblicamente accessibili e che potrebbero non rappresentare veri casi di plagio \cite{karnalim-budi-toba-joy-2019}.
-
-Nonostante ciò, le tecniche più promettenti, sulla base delle considerazioni suffatte, che verranno utilizzate anche dallo strumento sviluppato nell'ambito di questa tesi, sono quelle \textit{structure-based}. 
-
 In conclusione, bisogna rendersi conto che, a prescindere dal grado di sofisticatezza della tecnica che si utilizza, è sempre possibile che si verifichi un plagio non rilevabile \cite{joy-99}.
 %
-Il bilancimento tra le risorse investite nell'individuazione dei plagi e i rendimenti decrescenti di trovare i pochi, se non nessuno, casi difficili da rilevare è un fattore critico che necessita un'analisi approfondita, tenuto conto delle proprie esigenze.
+Il bilancimento tra le risorse investite nell'individuazione dei plagi e i rendimenti decrescenti di trovare i pochi, se non nessuno, casi difficili da rilevare è un fattore critico che necessita un'analisi approfondita, tenuto conto delle specifiche esigenze del dominio applicativo.
+
+Stabilire quale tecnica scegliere è complesso, perché difficili da confrontare tra loro: la maggior parte di queste viene valutata utilizzando il proprio \textit{set} di dati, che raramente sono resi pubblicamente accessibili e che potrebbero non rappresentare veri casi di plagio \cite{karnalim-budi-toba-joy-2019}.
+
+Ciononostante, le tecniche più utilizzate in questo ambito e più efficaci sulla base delle considerazioni suffatte, sono quelle \textit{structure-based}, che verranno impiegate anche nello strumento sviluppato nell'ambito di questa tesi. 
