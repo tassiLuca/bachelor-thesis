@@ -190,7 +190,7 @@ Il risultato che si ottiene è una versione condensata e semplificata del sorgen
 \lstinputlisting[
     float,
  	language=Java,
- 	caption={Una semplice classe per mostrare il processo di \textit{tokenizzazione}},
+ 	caption={Una semplice classe che stampa su \textit{console} gli argomenti passati in \textit{input}, se presenti, o un saluto, per mostrare il processo di \textit{tokenizzazione}},
  	label={lst:test-analysis},
 ]{resources/code/01-TestAnalysis.java}
 
@@ -291,9 +291,10 @@ Allo stesso modo, un costrutto sintattico come un'istruzione \texttt{if-then-els
 In figura \Cref{img:01-ast} viene mostrata la struttura parziale dell'\textit{AST} del metodo \texttt{main()} del \Cref{lst:test-analysis}.
 
 \begin{sidewaysfigure}
-    \centering
-    \includegraphics[width=1.1\textwidth]{resources/img/01-ast-summarized.pdf}
-    \caption{Rappresentazione dell'AST del \Cref{lst:test-analysis}}
+    \makebox[\textwidth][c]{
+        \includegraphics[width=1.1\textwidth]{resources/img/01-ast-summarized.pdf}
+    }
+    \caption{Rappresentazione di una porzione dell'\textit{AST} del metodo \texttt{main} del \Cref{lst:test-analysis}}
     \label{img:01-ast}
 \end{sidewaysfigure}
 
@@ -303,33 +304,48 @@ Inoltre, il confronto dei sorgenti per mezzo di alberi sintattici fornisce risul
 %
 Il principale e non trascurabile svantaggio di utilizzare questo approccio, tuttavia, risiede nelle prestazioni.
 %
-Siccome la maggior parte degli AST sono strutture complesse e voluminose, la comparazione diretta degli alberi sintattici per una grande quantità di sorgenti è impraticabile.
+Siccome la maggior parte degli AST sono strutture complesse e voluminose, la comparazione diretta degli alberi sintattici per una grande quantità di sorgenti è proibitiva.
 %
 Per far fronte a questo problema, per ogni albero viene determinato, mediante un'opportuna funzione di \textit{hashing} che tiene conto del tipo di ciascun nodo e del suo sotto-albero, un valore di \textit{hash} e la comparazione è effettuata confrontando tali valori.
 
-GDG
-[https://dl.acm.org/doi/pdf/10.1145/1150402.1150522]
+Altri approcci sono presenti in letteratura, tra cui l'utilizzo di grafi delle dipendenze del programma (\textit{Program Dependency Graph}, abbreviato \textit{PDG}) \cite{gplag}.
+%
+\textit{PDG} è una rappresentazione di una procedura del sorgente a grafo in cui le istruzioni rappresentano l'insieme dei vertici e le dipendenze di dati e di controllo tra le istruzioni rappresentano gli archi.
+%
+In \Cref{img:01-pdg} è mostrato un esempio, tratto da \cite{gplag}, di \textit{PDG} per le due funzioni presentate nel \Cref{lst:pdg}.
+
+\lstinputlisting[
+    language=c,
+    caption={Somma di un array, in C},
+    label={lst:pdg}
+]{resources/code/01-pdg.c}
+
+\begin{figure}[h!]
+    \makebox[\textwidth][c]{
+        \includegraphics[width=1.1\linewidth]{resources/img/01-pdg.pdf}
+    }
+    \caption{Esempio di \textit{PDG} della funzione \texttt{sum} del \Cref{lst:pdg}.}
+    \label{img:01-pdg}
+\end{figure}
 
 \subsection{\textit{Hybrid detection}}
 Entrambi gli approcci descritti sopra hanno i loro vantaggi e svantaggi. 
 %
-Alcuni lavori di ricerca hanno pertanto cercato di combinare entrambi gli approcci creando, di fatto, tecniche di analisi ibride, regolando l'influenza di un approccio sull'altro sulla base delle proprie esigenze.
-
-, alcune delle quali sono state adattate da altri domini.
+Alcuni lavori di ricerca hanno pertanto cercato di combinare entrambi gli approcci creando, di fatto, tecniche di analisi ibride, alcune delle quali adattate da altri domini, regolando l'influenza di un approccio sull'altro sulla base delle proprie esigenze.
 %
 Tra queste, spiccano per importanza la \textit{Latent Semantic Analysis} e le tecniche di \textit{Clustering}.
-%
-La prima è un metodo di elaborazione del linguaggio naturale che analizza le relazioni tra un insieme di documenti e i termini in esso contenuti.
-%
-Attraverso l'utilizzo di una tecnica algebrica di fattorizzazione di una matrice basata sull'uso di autovalori e autovettori detta \textit{Singular Value Decomposition} 
+
+La prima è un metodo di elaborazione del linguaggio naturale che analizza le relazioni tra un insieme di documenti e i termini in esso contenuti: dapprima sono applicati modelli statistici che riflettono l'importanza che ciascun termine (nel caso dei sorgenti, i \textit{token}) assume in un insieme di documenti e, successivamente, attraverso l'utilizzo di una tecnica algebrica di fattorizzazione di una matrice basata sull'uso di autovalori e autovettori detta \textit{Singular Value Decomposition}, vengono trovate relazioni nascoste (latenti, da qui il nome \textit{Latent Semantic Analysis}) tra i termini e concetti.
+
+La seconda utilizza una rappresentazione a grafo in cui i vertici rappresentano gli identificatori e gli archi (pesati) la misura di similarità tra i programmi, trasformando il problema di trovare sezioni di codice duplicati nel problema di \textit{clustering} di un grafo pesato.
+
+Altri metodi, qui non approfonditi, sono in via di sviluppo e impiegano algoritmi di \textit{machine learning} come \textit{Random Forest} e \textit{Gradient Boosting} applicati agli alberi di regressione.
 
 \subsection{Quale tecnica scegliere?}
 Scegliere quali di questi approcci scegliere è complesso, perché difficili da confrontare tra loro: la maggior parte di queste tecniche viene valutata utilizzando il proprio \textit{set} di dati, che raramente sono resi pubblicamente accessibili e che potrebbero non rappresentare veri casi di plagio \cite{karnalim-budi-toba-joy-2019}.
 
 Nonostante ciò, le tecniche più promettenti, sulla base delle considerazioni suffatte, che verranno utilizzate anche dallo strumento sviluppato nell'ambito di questa tesi, sono quelle \textit{structure-based}. 
 
-In conclusione, bisogna rendersi conto che, a prescindere dal grado di sofisticatezza della tecnica che si utilizza, è sempre possibile che si verifichi un plagio non rilevabile.
+In conclusione, bisogna rendersi conto che, a prescindere dal grado di sofisticatezza della tecnica che si utilizza, è sempre possibile che si verifichi un plagio non rilevabile \cite{joy-99}.
 %
-Da bilanciare le risorse investite nell'individuazione del plagio e i rendimenti decrescenti di trovare i pochi, se non nessuno, casi difficili da rilevare \cite{joy-99}.
-
-
+Il bilancimento tra le risorse investite nell'individuazione dei plagi e i rendimenti decrescenti di trovare i pochi, se non nessuno, casi difficili da rilevare è un fattore critico che necessita un'analisi approfondita, tenuto conto delle proprie esigenze.
