@@ -1,3 +1,4 @@
+// This is a Graphviz diagram - AST summarized
 digraph {
 // n0 [label="root (CompilationUnit)"];
 // n1 [label="packageDeclaration (PackageDeclaration)"];
