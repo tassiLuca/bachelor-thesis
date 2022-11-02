@@ -82,9 +82,7 @@ In \Cref{img:02-architecture} è esemplificato il diagramma UML architetturale.
 \subsection{\textit{Design} dettagliato}
 
 \subsubsection*{\textit{Provider} dei progetti}
-Per quanto concerne i \textit{provider} di \textit{repository}, ovvero i componenti che devono recuperare i sorgenti dei progetti da \textit{repository} pubbliche da \textit{GitHub} e/o da \textit{Bitbucket}, si è scelto un \textit{design} che permettesse il massimo riuso degli elementi comuni, aderendo a uno schema interfaccia $-$ classe astratta $-$ classe concreta.
-
-In \Cref{img:02-provider} è riportato lo schema UML delle classi dei \textit{provider}.
+Per quanto concerne i \textit{provider} di \textit{repository}, ovvero i componenti che devono recuperare i sorgenti dei progetti da \textit{repository} pubbliche da \textit{GitHub} e/o da \textit{Bitbucket}, si è scelto un \textit{design} che permettesse il massimo riuso degli elementi comuni, aderendo a uno schema interfaccia $-$ classe astratta $-$ classe concreta (\Cref{img:02-provider}).
 
 \begin{figure}[h!]
     \centering
@@ -95,9 +93,9 @@ In \Cref{img:02-provider} è riportato lo schema UML delle classi dei \textit{pr
 
 Viste le limitazioni in termini di numero di richieste che i due servizi impongono \footnote{Sia \textit{GitHub} che \textit{Bitbuckt} hanno un limite massimo di richieste che possono essere effettuate in un certo intervallo di tempo che varia in base la richiesta sia autenticata o meno. Questi vincoli sono imposti per garantire la protezione da attacchi di tipo \textit{Denial of Service}, consentire la scalabilità e garantire buone prestazioni in termini di tempo di risposta.} e la conseguente necessità di autenticarsi mediante degli opportuni \textit{token} per effettuare le richieste \textit{REST}, si è optato di demandare la logica di recupero dei suddetti \textit{token} di autenticazione all'interfaccia \texttt{TokenSupplierStrategy} che reifica il \textit{pattern} \textit{Strategy} \cite{gof}.
 %
-L'implementazione di \textit{default} ricerca tra variabili d'ambiente, ma questo approccio può essere facilmente esteso.
+L'implementazione di \textit{default} ricerca tra variabili d'ambiente, ma altri approcci possono essere introdotti in modo del tutto trasparente ai \textit{provider}.
 
-La creazione dei provider avviene per mezzo di due \textit{static factory} \cite{effective-java}, incapsulate all'interno dei due \textit{provider}, in modo da permettere di ottenere un oggetto \textit{provider} anche senza autenticazione.
+La creazione dei \textit{provider} avviene per mezzo di due \textit{static factory} \cite{effective-java}, incapsulate all'interno dei due \textit{provider}, in modo da permettere di ottenere un oggetto \textit{provider} anche senza autenticazione.
 %
 Nonostante questo sia in genere sconsigliato per via delle limitazioni sopra citate, può essere utile in fase di \textit{testing} per permettere di testare il sistema anche in contesti in cui non sia possibile usare \textit{token} di autenticazione validi, ad esempio nel contesto delle \textit{GitHub Actions} nei \textit{workflow} scatenati da eventi di tipo \textit{Pull Request} (vedi...\todo{ref al capitolo implementazione, paragrafo CI})
 
@@ -107,7 +105,7 @@ Per permettere che questi siano componibili è stato qui utilizzato il pattern \
 %
 La classe astratta che funge da decoratore è \texttt{(GitHub|BitBucket)CompoundCriteria} e le sue concrete implementazioni permettono di specificare il nome della \textit{repository} o il linguaggio.
 %
-In questo modo possono essere creati dinamicamente criteri compositi in base alle esigenze del \textit{client} e in futuro potrebbero essere aggiunti nuovi criteri di ricerca, come il numero di stelle ricevute, il \textit{topic} piuttosto che la data di creazione.
+In questo modo possono essere creati dinamicamente criteri compositi in base alle esigenze del \textit{client} e in futuro potrebbero essere aggiunti nuovi criteri di ricerca, come il numero di stelle ricevute, il \textit{topic} piuttosto che la data di creazione, aderendo all'\textit{Open Closed Principle} secondo cui le entità di un sistema devono essere aperte all'estensione, ma chiuse alla modifica.
 %
 Il \textit{design} è presentato in \Cref{img:02-search-criteria}.
 
@@ -118,9 +116,13 @@ Il \textit{design} è presentato in \Cref{img:02-search-criteria}.
     \label{img:02-search-criteria}
 \end{sidewaysfigure}
 
-Le \textit{repository} sono modellate attraverso l'omonima interfaccia, le cui concrete implementazioni rappresentano degli \textit{Adapter} \cite{gof} alle interfacce di librerie utilizzate\dots
-
-\todo{ref a schema repository + strategy}
+Le \textit{repository} sono modellate attraverso l'omonima interfaccia, le cui concrete implementazioni rappresentano degli \textit{Adapter} \cite{gof} alle interfacce di libreria utilizzate.
+%
+Questo permette di essere indipendenti dalla specifica libreria utilizzata, che rimane un dettaglio implementativo, e avere un livello di astrazione adeguato al contesto applicativo.
+%
+Per quanto attiene la logica del recupero dei sorgenti, in pieno accordo con il \textit{Single Responsability Principle}, è demandata a \texttt{RepoContentSupplierStrategy}.
+%
+La strategia attualmente in uso consiste nell'effettuare il \textit{clone} della repository in una cartella in locale.
 
 \begin{figure}[h!]
     \makebox[\textwidth][c]{
@@ -130,24 +132,24 @@ Le \textit{repository} sono modellate attraverso l'omonima interfaccia, le cui c
     \label{img:02-repos}
 \end{figure}
 
-
 \subsubsection*{Analizzatore e \textit{detector}}
-L'analizzatore e il \textit{detector} sono il cuore dell'intero sistema.
+L'analizzatore, il \textit{filter} e il \textit{detector} sono il cuore dell'intero sistema.
 %
 Il loro \textit{design} è stato pensato in modo tale da permettere il massimo grado di configurabilità e di estendibilità.
 %
 Presumibilmente, infatti, questi sono i componenti che varieranno più spesso nell'arco del ciclo di vita di questo \textit{software} e il cui grado di configurabilità influirà certamentente in modo preponderante sia sulle prestazioni, sia sull'efficacia del sistema.
 
+Tutti e tre i componenti sono stati progettati, in stile funzionale, come delle funzioni che, preso i \textit{input} uno più argomenti, ritornano in \textit{output} l'\textit{input} del componente successivo:.
+%
+L'esecuzione di una tecnica è, infatti, una catena di funzioni applicate in sequenza.
+
 L'analizzatore è il componente che si occupa di trasformare i file sorgenti in rappresentazioni confrontabili.
 %
 Indipendentemente dalla tipologia di analisi che si voglia applicare, la trasformazione non avviene tramite un semplice passaggio, bensì una sequenza di operazioni che sono eseguite sequenzialmente in cascata.
 %
-Calato nella specifica strategia utilizzata per l'implementazione dello strumento, queste sono: il \textit{parsing} del file, una fase di \textit{preprocessing} ed infine la \textit{tokenizzazione} del sorgente.
+Nel caso in esame, queste sono: il \textit{parsing} del file, una fase di \textit{preprocessing} ed infine la \textit{tokenizzazione} del sorgente.
 %
-Questa sequenza di azioni è naturalmente modellata attraverso il pattern \textit{Pipeline}: ogni singolo stadio della \textit{pipeline} \cite{pipeline-pattern} è modellato attraverso l'interfaccia \texttt{StepHandler}; la sequenza di \textit{handler} viene poi costruita all'interno del concreto \texttt{Analyzer}, nel nostro caso \texttt{JavaTokenizationAnalyzer}.
-%
-% manca tokenTypeSupplier
-%
+Questa sequenza di azioni è naturalmente modellata attraverso il pattern \textit{Pipeline} \cite{pipeline-pattern}: ogni singolo stadio è modellato attraverso l'interfaccia \texttt{StepHandler} e la \textit{pipeline} viene costruita all'interno del concreto \texttt{Analyzer}, nel nostro caso \texttt{JavaTokenizationAnalyzer}.
 
 \begin{figure}[h!]
     \centering
@@ -156,11 +158,11 @@ Questa sequenza di azioni è naturalmente modellata attraverso il pattern \texti
     \label{img:02-analyzer}
 \end{figure}
 
-La rappresentazione intermedia prodotta dall'analizzatore è modellata dall'interfaccia \texttt{SourceRepresentation}. 
+La rappresentazione intermedia prodotta dall'analizzatore è modellata dall'interfaccia \texttt{SourceRepresentation} (\Cref{img:02-representations}). 
 %
 Tra tutte, quella implementata nell'attuale sistema è composta da una sequenza di \textit{token} e perciò denominata \texttt{TokenizedSource}.
-
-L'elenco dei possibili tipi di \textit{token} dipende chiaramente dal linguaggio utilizzato.
+%
+L'elenco dei possibili tipi di \textit{token} che la compongono dipende chiaramente dal linguaggio utilizzato.
 %
 La strategia di recupero di questi ultimi è affidata, al solito tramite \textit{Strategy}, all'interfaccia \texttt{TokenTypesSupplier}, la cui implementazione di \textit{default} effettua la de-serializzazione di un file di configurazione in cui sono salvati tutti le tipologie di \textit{token}.
 
@@ -171,13 +173,23 @@ La strategia di recupero di questi ultimi è affidata, al solito tramite \textit
     \label{img:02-representations}
 \end{figure}
 
-\texttt{PlagiarismDetector} rappresenta invece il componente che individua le similarità tra una coppia di \texttt{SourceRepresentation} e si occupa di calcolare la similarità tra due sorgenti.
+Le rappresentazioni generate dal processo di analisi, vengono poi opportunamente filtrate per mezzo di un \texttt{RepresentationFilter} che, preso in \textit{input} una istanza dell'insieme delle \textit{submission} e l'insieme del \textit{corpus} con cui confrontarla, ne effettua un filtraggio secondo opportune metriche.
 %
-\texttt{ComparisonStrategy} incapsula lo specifico algoritmo utilizzato per il confronto e \texttt{SimilarityEstimationStrategy} la particolare strategia usata per determinare la similarità.
+Per farlo, fa uso di un \texttt{Indexer} che crea, a partire dalle rappresentazioni, indici (strutture dati) su cui poter effettuare analisi \dots
 
-\texttt{Match} è la generica interfaccia che modella due sezioni di \texttt{SourceRepresentation} che sono simili, reificata in \texttt{TokenMatch} nel caso di \texttt{TokenizedSource}.
+\todo{filter + schema}
+
+\texttt{PlagiarismDetector} rappresenta invece il componente che individua le similarità tra una coppia di \texttt{SourceRepresentation} e si occupa di calcolare la loro similarità.
 %
-\texttt{ComparisonResult} rappresenta invece il risultato del confronto tra due sorgenti.
+Poiché vi sono una molteplicità di algoritmi presenti in letteratura che assolvono a questo compito, si è deciso d'implementarli sotto forma di gerarchia di classi di algoritmi il cui contratto comune è definito da \texttt{ComparisonStrategy}. 
+%
+In particolare, ogni classe implementante \texttt{ComparisonStrategy} genera un \texttt{Match}, dove per \texttt{Match} si intende due sezioni simili di \textit{SourceRepresentation}.
+%
+L'insieme dei \texttt{Match} che compongono la comparazione di due \texttt{SourceRepresentation} sono raggruppate in un \texttt{ComparisonResult}, il cui grado di similarità è stimato dalla \texttt{SimilarityEstimationStrategy}.
+
+Applicato alla tecnica di \textit{tokenizzazione}, i due concreti algoritmi che implementano la \textit{detection} sono \texttt{Greedy String Tiling} e \texttt{RKRGreedyStringTiling} che ne rappresenta un'estensione più performante.
+%
+Entrambi generano dei \texttt{TokenMatch}. \dots
 
 \begin{sidewaysfigure}
     \centering
@@ -186,13 +198,19 @@ La strategia di recupero di questi ultimi è affidata, al solito tramite \textit
     \label{img:02-detector}
 \end{sidewaysfigure}
 
-Entrambi i componenti, \texttt{Analyzer} e \texttt{PlagiarismDetector}, sono incapsulati all'interno di un concreto \texttt{TechniqueFacade} \cite{gof}.
+Tutti e tre i componenti, \texttt{Analyzer}, \texttt{Filter} e \texttt{PlagiarismDetector}, sono incapsulati all'interno di un concreto \texttt{TechniqueFacade} \cite{gof}.
 %
 Si è deciso di adottare questo approccio principalmente per due motivi:
 \begin{itemize}
-    \item la specifiche strategie di analisi e di confronto devono essere istanziate e opportunamente configurate a \textit{runtime} a seconda del tipo di tecnica e delle opzioni scelte dall'utente. Inoltre, devono essere coerenti tra loro: non dovrebbe essere possibile, ad esempio, poter istanziare un analizzatore per effettuare la \textit{tokenizzazione} e un rilevatore che non operi sulla sequenza di \textit{token}.
+    \item la specifiche strategie di analisi e di confronto devono essere istanziate e opportunamente configurate a \textit{runtime} a seconda del tipo di tecnica e delle opzioni scelte dall'utente. Inoltre, devono essere coerenti tra loro: non è possibile, ad esempio, poter istanziare un analizzatore per effettuare la \textit{tokenizzazione} e un rilevatore che non operi sulla sequenza di \textit{token}.
     \item Il processo di analisi e confronto può essere complesso. Pertanto si fornisce ai \textit{client} un'interfaccia semplificata che assolve al compito di eseguire una generica tecnica, rendendo di fatto trasparente al chiamante la complessità del sottosistema che, dal suo punto di vista, è di fatto una \textit{black box}.
 \end{itemize}
+
+Come abbiamo già detto, l'aspetto della configurabilità è molto importante in questo contesto.
+%
+In particolare, gli aspetti critici che devono necessariamente essere configurabili per una buona riuscita sono....
+
+\todo{configurabilità}
 
 \begin{sidewaysfigure}
     \centering
@@ -200,3 +218,5 @@ Si è deciso di adottare questo approccio principalmente per due motivi:
     \caption{Schema UML della sessione}
     \label{img:02-session}
 \end{sidewaysfigure}
+
+\todo{caching}
