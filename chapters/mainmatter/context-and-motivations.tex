@@ -50,11 +50,11 @@ In \Cref{img:01-levels-of-plagiarism} viene riportata la tassonomia dei livelli 
 Un qualunque sistema di rilevamento di plagi, perché possa essere considerato robusto ed efficace, dovrà tener conto di queste possibili rifattorizzazioni in fase di esecuzione.
 
 \section{Sistemi antiplagio automatici}
-A causa dell'elevato volume di dati e informazioni disponibili che oggigiorno si hanno a disposizione, l'approccio tradizionale al rilevamento di codice copiato attraverso un'ispezione manuale, oltre che essere tedioso, è nei fatti impraticabile e, nel corso degli anni, è stato necessario porsi il problema di sviluppare strumenti di rilevamento automatici di plagio che siano efficienti ed efficaci.
+A causa dell'elevato volume di dati e informazioni disponibili che oggigiorno si hanno a disposizione, l'approccio tradizionale al rilevamento di codice copiato attraverso un'ispezione manuale, oltre che essere tedioso, è nei fatti impraticabile e, nel corso degli anni, è stato necessario porsi il problema di sviluppare strumenti di rilevamento automatici di plagi che siano efficienti ed efficaci.
 %
-Ciononostante, un'ispezione manuale a seguito di quella automatica è tuttora ancora necessaria per stabilire con ragionevole certezza se effettivamente le porzioni di codice individuate dal sistema sono effettivamente copiature o, più ingenuamente, blocchi simili di codice.
+Ciononostante, un'ispezione manuale a seguito di quella automatica è tuttora ancora necessaria per stabilire con ragionevole certezza se le porzioni di codice individuate dal sistema sono effettivamente copiature o, più ingenuamente, blocchi simili di codice.
 
-Più formalmente, detto $p = \{s_{plg}, d_{plg}, s_{src}, d_{src}\}$ un caso di plagio, $s_{plg}$ un passaggio del documento $d_{plg}$ che è copiato a partire da un passaggio $s_{src}$ in un documento $d_{src}$, il compito di un sistema automatico di rilevamento di plagi consiste nell'individuare $p$ \cite{yalcin-et-al-2022}.
+Più formalmente, detto $p = \{s_{plg}, d_{plg}, s_{src}, d_{src}\}$ un caso di plagio, $s_{plg}$ un passaggio del documento $d_{plg}$ che è copiato a partire da un passaggio $s_{src}$ in un documento $d_{src}$, il compito di un sistema automatico di rilevamento di plagi consiste nell'individuare la tupla $p$ \cite{yalcin-et-al-2022}.
 
 Già a partire dagli anni settanta del novecento, sono stati proposti algoritmi e tecniche per l'analisi del codice, nonché l'identificazione e localizzazione di plagi.
 
@@ -98,8 +98,6 @@ Questo si verifica soprattutto nei casi in cui l'ottimizzazione è molto marcata
 
 Il bilanciamento tra le prestazioni e l'efficacia del sistema è, dunque, di fondamentale importanza.
 
-\todo{spiegare cosa esiste?}
-
 \section{Stato dell'arte}
 
 % preso spunto da "Current trends in source code analysis, plagiarism detection and issues of analysis big datasets" -- si deve citare??
@@ -112,7 +110,6 @@ Poiché il problema è complesso, gli attuali metodi analizzano il codice sorgen
 Con lo sviluppo della tecnologia, molti ricercatori hanno fatto progressi in questo campo e proposto diversi algoritmi, formando gradualmente tre popolari famiglie di tecniche: \textbf{\textit{attribute-based}}, \textbf{\textit{structure-based}} e \textbf{\textit{hybrid detection}} \cite{es-plag}.
 
 \subsection{Analisi \textit{attribute-based}}
-\todo{filter...}
 Il primo sistema automatico di rilevazione di codice copiato che sia stato documentato in letteratura risale al 1976 \cite{ottenstein} ed era basato sulle seguenti quattro metriche di Healstead per determinare il livello di similarità tra coppie di sorgenti \cite{halstead}:
 
 \begin{itemize}
@@ -124,11 +121,11 @@ Il primo sistema automatico di rilevazione di codice copiato che sia stato docum
 
 Coppie di sorgenti con valori identici per ciascuna di queste metriche si presumeva fossero simili e meritevoli di un esame più approfondito.
 
-Nel corso degli anni, sono state proposte altre metriche per ottenere stime sempre più accurate di somiglianza e per riflettere sempre più la struttura del flusso di controllo del programma, come il numero d'istruzioni di \textit{loop} e di espressioni condizionali, il numero di procedure, il numero d'istruzioni di \textit{input}, il numero medio di caratteri per linea e altre ancora \cite{pdectet}.
+Nel corso degli anni, sono state proposte altre metriche per ottenere stime sempre più accurate di somiglianza e per riflettere sempre più la struttura del flusso di controllo del programma, come il numero d'istruzioni di \textit{loop} e di espressioni condizionali, il numero di procedure e di istruzioni di \textit{input}, il numero medio di caratteri per linea e altre ancora \cite{pdectet}.
 
 Collettivamente, questi sistemi sono stati definiti \textit{attribute counting metric systems} in quanto fondano il confronto sull'analisi di metriche basate su attributi intrinseci del codice sorgente.
 
-Tuttavia, considerando che le caratteristiche del codice sorgente non sono strettamente correlate alla semantica del programma e che la misurazione della somiglianza può risultare essere imprecisa, l'efficacia di queste tecniche è considerevolmente limitata in termini di accuratezza nell'identificazione di plagi se confrontata con quella di tecniche \textit{structure-based} \cite{es-plag}.
+Tuttavia, considerando che le caratteristiche del codice sorgente non sono strettamente correlate alla semantica del programma e che la misurazione della somiglianza può risultare essere imprecisa, l'efficacia di queste tecniche è considerevolmente limitata in termini di accuratezza se confrontata con quella di tecniche \textit{structure-based} \cite{es-plag}.
 
 \subsection{Analisi \textit{structure-based}}
 Le tecniche di analisi \textit{structure-based}, a differenza di quelle \textit{attribute-based}, si basano, come suggerisce il nome stesso, sulla struttura dei codici sorgenti per determinare il grado di similarità tra gli stessi.
@@ -253,15 +250,45 @@ La fase di filtraggio consiste nel ridurre il numero di rappresentazioni da dove
 %
 Questo stadio è preceduto da una fase d'indicizzazione, in cui vengono generati alcuni indici a partire dalla sequenza di \textit{token}.
 %
-Una tra gli indici più comuni è costituito da coppie chiave $-$ valore in cui nelle chiavi sono memorizzati i tipi di \textit{token} e nei valori la loro frequenza.
+Una tra gli indici più comuni è costituito da coppie chiave$-$valore in cui nelle chiavi sono memorizzati i tipi di \textit{token} e nei valori la loro frequenza.
 %
-Tali indici sono successivamente impiegati nella vera e propria fase di filtraggio, in cui viene applicata una particolare metrica, ad esempio la similarità coseno, e viene utilizzato un valore di soglia per escludere coppie di sorgenti che hanno bassa similarità in accordo con la metrica scelta.
+Un esempio di indice a costruito a partire dalla sequenza di \textit{token} elencati in \Cref{table:token-associations} è mostrato in \Cref{table:token-indexing}.
 
-\todo{more on filtering}
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|} 
+        \hline
+        \textbf{Tipo di \textit{token}} & \textbf{Frequenza} \\ [0.5ex] 
+        \hline\hline
+        \texttt{ClassInterfaceDeclaration}  & 1 \\ \hline
+        \texttt{Identifier}                 & 3 \\ \hline
+        \texttt{Modifier}                   & 2 \\ \hline
+        \texttt{VoidType}                   & 1 \\ \hline
+        \texttt{ArrayType}                  & 1 \\ \hline
+        \texttt{IfStmt}                     & 1 \\ \hline
+        \texttt{FieldAccessExpr}            & 1 \\ \hline
+        \texttt{Operator}                   & 1 \\ \hline
+        \texttt{IntegerLiteralExpr}         & 1 \\ \hline
+        \texttt{MethodCallExpr}             & 3 \\ \hline
+        \texttt{NameExpr}                   & 1 \\ \hline
+        \texttt{elseStmt}                   & 1 \\ \hline
+        \texttt{StringLiteralExpr}          & 2 \\ \hline
+    \end{tabular}
+    \caption{Indice con coppie tipo di \textit{token}$-$frequenze generate a partire dalla \Cref{table:token-associations}}
+    \label{table:token-indexing}
+\end{table}
 
-Tra i due più conosciuti vi sono \textbf{\textit{Winnowing}} e \textbf{\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)}}.
+Tali indici sono successivamente impiegati nella vera e propria fase di filtraggio, in cui viene applicata una particolare metrica, ad esempio la similarità coseno, e viene utilizzato un valore di soglia per escludere coppie di sorgenti che hanno più bassa similarità in accordo con la metrica scelta.
 
-\textit{Winnowing} costituisce un miglioramento del metodo \textit{n-grams} e consiste nel suddividere il documento in una lista di sottostrighe di lunghezza $n$ e  usare una funzione di \textit{hashing} per selezionare solo un loro sottoinsieme rappresentativo da usare come impronta digitale dello stesso (i cosiddetti \textit{n-grams fingerprinting}).
+\todo{...}
+
+A seguire i sorgenti vengono confrontati.
+%
+I due algoritmi di confronto più conosciuti sono \textbf{\textit{Winnowing}} e \textbf{\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)}}.
+
+\textit{Winnowing} costituisce un miglioramento del metodo \textit{n-grams} e consiste nel suddividere il documento in una lista di sottostrighe di lunghezza $n$ e usare una funzione di \textit{hashing} per selezionare solo un loro sottoinsieme rappresentativo da usare come impronta digitale dello stesso (i cosiddetti \textit{n-grams fingerprinting}).
+
+\todo{...}
 
 \textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)} costituisce l'altra popolare alternativa a \textit{Winnowing}, che tenta di aumentare la sua precisione a discapito dell'efficienza. 
 %
@@ -274,6 +301,8 @@ Esso incorpora, di fatto, due algoritmi.
 I due algoritmi cooperano in questo modo: \textit{RKR} è eseguito su due programmi.
 %
 Per ogni sottosequenza comune identificata da \textit{RKR}, \textit{GST} è eseguito per estendere il \textit{match} rintracciato mediante l'uso della funzione di \textit{hashing}.
+
+I dettagli sono descritti in ...
 
 \subsubsection{Analisi basata su un modello}
 Anziché utilizzare la sequenza di \textit{token} generata dal \textit{lexer} possono essere generate delle strutture e dei modelli più complessi, che permettano di astrarre ulteriormente dalla sintassi del linguaggio.
@@ -324,6 +353,7 @@ Altri approcci sono presenti in letteratura, tra cui l'utilizzo di grafi delle d
 In \Cref{img:01-pdg} è mostrato un esempio, tratto da \cite{gplag}, di \textit{PDG} per le due funzioni presentate nel \Cref{lst:pdg}.
 
 \lstinputlisting[
+    float,
     language=c,
     caption={Somma di un array, in C},
     label={lst:pdg}
@@ -348,7 +378,7 @@ La prima è un metodo di elaborazione del linguaggio naturale che analizza le re
 
 La seconda utilizza una rappresentazione a grafo in cui i vertici rappresentano gli identificatori e gli archi (pesati) la misura di similarità tra i programmi, trasformando il problema di trovare sezioni di codice duplicati nel problema di \textit{clustering} di un grafo pesato.
 
-Altri metodi, qui non approfonditi, sono in via di sviluppo e impiegano algoritmi di \textit{machine learning} come \textit{Random Forest} e \textit{Gradient Boosting} applicati agli alberi di regressione .
+Altri metodi, qui non approfonditi, sono in via di sviluppo e impiegano algoritmi di \textit{machine learning} come \textit{Random Forest} e \textit{Gradient Boosting} applicati agli alberi di regressione.
 
 \subsection{Quale tecnica scegliere?}
 In conclusione, bisogna rendersi conto che, a prescindere dal grado di sofisticatezza della tecnica che si utilizza, è sempre possibile che si verifichi un plagio non rilevabile \cite{joy-99}.
