@@ -28,7 +28,7 @@ JavaParser è una libreria \textit{open source} che permette di effettuare il \t
 
 Il risultato del \textit{parsing} è un albero sintattico equivalente a quello mostrato in \Cref{img:01-ast} che rappresenta la struttura dei sorgenti.
 
-Tuttavia, nonostante la generazione dell'albero sintattico sollevi dalla responsabilità di eliminare dal sorgente \textit{token} superflui, come gli spazi e i punti e virgola, in quanto naturalmente modellati dalla struttura stessa dell'albero, tale AST contiene ancora informazioni superflue al fine di identificare codice simile, come le dichiarazioni di \texttt{import} e dei \texttt{package}.
+Tuttavia, nonostante la generazione dell'albero sintattico sollevi dalla responsabilità di eliminare dal sorgente \textit{token} superflui, come gli spazi e i punti e virgola, in quanto naturalmente modellati dalla struttura stessa dell'albero, tale AST contiene ancora informazioni sovrabbondanti, come le dichiarazioni di \texttt{import} e dei \texttt{package}.
 %
 Per questo motivo è necessario una fase intermedia di \textit{preprocessing} in cui l'albero viene “sfoltito”. In particolare, in questa fase l'albero viene visitato e, oltre a rimuove le dichiarazioni suddette, sono rimosse anche le funzioni \texttt{hashCode()}, \texttt{equals()} e \texttt{toString()}.
 %
@@ -42,7 +42,7 @@ Tali \textit{token}, tuttavia, rappresentano in modo molto specifico la struttur
 %
 Come descritto nella \Cref{01-tokenization} l'obiettivo è creare invece un insieme di \textit{token} "lasco" che raggruppi tipi di \textit{token} equivalenti a livello semantico.
 
-A questo scopo, l'albero sintattico preprocessato viene visitato e, per ogni nodo, si emette un \textit{token}, con le relative informazioni circa la sua posizione nel sorgente, o meno a seconda sia una dichiarazione semanticamente rilevante o meno.
+A questo scopo, l'albero sintattico preprocessato viene visitato e, per ogni nodo, si emette un \textit{token}, con le relative informazioni circa la sua posizione nel sorgente, o meno a seconda sia una dichiarazione semanticamente rilevante.
 
 In particolare, è stato costruito un file di configurazione \textit{Yaml}\footnotetext{Linguaggio, \textit{superset} di Json, per la serializzazione di dati che viene impiegato per la scrittura di file di configurazione: \url{https://yaml.org/}.} (\Cref{lst:token-config-file}) in cui sono elencati i tipi di dichiarazioni rilevanti, eventualmente aggregando tra loro dichiarazione semanticamente simili e che potrebbero essere facilmente cambiate per offuscare la copiatura.
 %
@@ -64,6 +64,8 @@ Il risultato dell'applicazione del processo sopra descritto al \Cref{lst:test-an
  	caption={Risultato dell'analisi del \Cref{lst:test-analysis}},
  	label={lst:result-tokenization},
 ]{resources/code/03-AnalyzedTestAnalysis}
+
+% vengono anche tolti i duplicati :)
 
 \section{Filtraggio}
 
@@ -103,21 +105,36 @@ Lo pseudocodice dell'algoritmo è presentato nel \Cref{lst:gst}.
 
 Questo algoritmo è dimostrato \cite{wise-running-93} essere ottimo in termini di massimizzazione della copertura delle stringhe.
 %
-Nonostante ciò, nel caso peggiore, ha una complessità $O(n^3)$.
+Nonostante ciò, nel caso peggiore, ha una complessità $O(n^3)$ e pertanto è molto inefficiente.
+
+Per far fronte a questo problema è stato ideato un nuovo algoritmo chiamato \textit{Running Karp Rabin Greedy String Tiling}.
+%
+L'idea su cui si fonda per velocizzare il confronto è impiegare una funzione di \textit{hashing}.
+%
+In particolare, il valore di \textit{hash} di ogni sottosequenza di lunghezza $s$ del \textit{pattern} viene confrontato con il valore di \textit{hash} di quelle del \textit{text}.
+%
+Laddove i due valori corrispondano, e solo in questo caso, le sottosequenze vengono confrontate \textit{token} per \textit{token} per assicurarsi che effettivamente siano uguali e non frutto di una collisione della funzione di \textit{hash}.
+
+Nel \Cref{lst:rkr-scanpattern} viene mostrato lo pseudocodice della \textit{routine} che si occupa di effettuare questo confronto.
+%
+Come si può osservare, nelle righe 1-3 vengono calcolati i valori di \textit{hash} di tutte le sottosequenze (non marcate) di lunghezza $s$ del \textit{text} e vengono salvati in una \textit{hashtable}, una mappa con le corrispondenze sottosequenza di \textit{token} $-$ valore di \textit{hash}.
+%
+Lo stesso viene fatto per il \textit{pattern} con la differenza che, non appena calcolato il valore \textit{hash} per la sottosequenza considerata, si verifica se lo stesso valore è già presente nella \textit{hashtable}.
+%
+In questo caso, infatti, potrebbe effettivamente esserci una corrispondenza e si procede verificando \textit{token} per \textit{token}.
+%
+Si noti che nei casi in cui la corrispondenza sia effettiva e non sia causata da un artefatto della funzione di \textit{hash}, il \textit{match} è esteso fino al primo \textit{token} non corrispondente, proprio come nel precedente algoritmo.
 
 \lstinputlisting[
 	float,
  	language=pseudocode,
- 	caption={top level algorithm},
- 	label={lst:rkr-top-level},
-]{resources/code/03-rkr-gst-top-algorithm}
-
-\lstinputlisting[
-	float,
- 	language=pseudocode,
- 	caption={scanpattern},
+ 	caption={Pseudocodice routine \texttt{scanpattern} dell'algoritmo \textit{RKR-GST}},
  	label={lst:rkr-scanpattern},
 ]{resources/code/03-rkr-gst-scanpattern}
+
+Il \Cref{lst:rkr-markarrays} presenta lo pseudocodice della \textit{routine} che effettua la marcatura dei \textit{match} individuati in \texttt{scanpattern}, corrispondente alla seconda fase dell'algoritmo precedente.
+%
+La principale differenza è...
 
 \lstinputlisting[
 	float,
@@ -126,10 +143,30 @@ Nonostante ciò, nel caso peggiore, ha una complessità $O(n^3)$.
  	label={lst:rkr-markarrays},
 ]{resources/code/03-rkr-gst-markarrays}
 
+Infine, nel \Cref{lst:rkr-top-level} è mostrato l'\textit{entry-point} dell'algoritmo.
+%
+% s come viene scelto?
+%
+
+\lstinputlisting[
+	float,
+ 	language=pseudocode,
+ 	caption={top level algorithm},
+ 	label={lst:rkr-top-level},
+]{resources/code/03-rkr-gst-top-algorithm}
+
+Sebbene la complessità di questo algoritmo sia dimostrato essere, nel caso peggiore, $O(n^2)$, nel caso medio la complessità è pressoché lineare.
+%
+Ciò migliora notevolmente le prestazioni rispetto all'algoritmo \textit{Greedy String Tiling}.
+
+\section{Stima della similarità}
+
 \section{Strumenti di sviluppo}
 
-\begin{itemize}
-	\item Kotlin
-	\item liberie estendere
-	\item controllo di qualità
-\end{itemize}
+\subsection*{Kotlin}
+
+\subsection*{Git e \textit{CI}}
+
+\subsection*{Librerie esterne}
+
+\subsection*{Controllo di qualità}
