@@ -1,0 +1,17 @@
+length_of_tokens_tiled $:=$ 0
+Repeat
+  max_match $:=$ minimum_match_length
+  starting at the first unmarked token of $P$, foreach $P_p$ do
+    starting at the first unmarked tokne of $T$, foreach $T_t$ do
+      $j := 0$
+      while $P_{p+j} = T_{t+j} \land$ unmarked($P_{p+j}$) $\land$ unmarked($T_{t+j}$) do
+        $j := j+1$
+        if $j =$ max_match then add match($p, t, j$) to list of matches of length $j$
+        else if $j >$ max_match then start new list with match match($p, t, j$) and max_match $= j$
+  for each match($p, t$, max_match) in list
+    if not occluded then
+      for $j := 0$ to max_match - 1 do
+        mark_token($P_{p+j}$)
+        mark_token($T_{t+j}$)
+      length_of_tokens_tiled $:=$ length_of_tokens_tiled + max_match
+Until max_match = minimum_match_length

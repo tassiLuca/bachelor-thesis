@@ -72,20 +72,55 @@ Gli algoritmi impiegati per confrontare due sequenze di \textit{token} sono il \
 %
 Sebbene questi algoritmi siano stati concepiti per lavorare su sequenze di stringhe, possono essere facilmente riadattati per operare su sequenze di \textit{token}.
 
+Dette $A$ e $B$ due sequenze di \textit{token} un algoritmo per misurare la similarità in questo dominio deve determinare una sottosequenza comune che abbia le seguenti proprietà:
+\begin{itemize}
+	\item ogni \textit{token} di $A$ può essere abbinato solo con esattamente un solo \textit{token} di $B$;
+	\item le sottosequenze comuni devono essere trovate indipendentemente dalla loro posizione nel sorgente;
+	\item le sottosequenze più lunghe sono preferite a quelle più piccole, in quanto le sottosequenze brevi è molto probabile rappresentino casi spuri.
+\end{itemize}
+
+L'algoritmo si compone principalmente di due fasi:
+\begin{itemize}
+	\item \textbf{Fase 1}: in questa fase, viene ricercata la corrispondenza più lunga. Questo è fatto grazie un triplo ciclo innestato: il primo itera sui token della sequenza più corta, denominata nel \textit{paper} come \textit{pattern}, il secondo compara ciascuno di questi con ogni \textit{token} della sequenza più lunga, denominata \textit{text}. Se i due \textit{token} corrispondono il ciclo più interno cerca di estendere il \textit{match} il più possibile (fermandosi non appena trova un \textit{token} che nelle due sequenze differisce).
+
+	\item \textbf{Fase 2}: questa fase marca ciascun \textit{match} trovato nella fase precedente partendo da quello più lungo. Questo garantisce che ciascun \textit{token} venga usato per un solo \textit{match} e divenga indisponibile per i \textit{match} successivi (che hanno una minor lunghezza). Nella terminologia di \cite{wise-running-93} i \textit{match} i cui \textit{token} sono stati marcati è denominato \textit{tile}.
+\end{itemize}
+
+Queste due fasi vengono ripetute fino a quando non vengono trovate più corrispondenze di lunghezza almeno \texttt{minimum\_match\_length}.
+%
+Tale valore è imposto per non generare troppe sequenze spurie di lunghezza minima e garantire risultati migliori.
+%
+Giacché la lunghezza dei \textit{match} diminuisce, nel caso peggiore, di un'unità ad ogni iterazione è garantito che l'algoritmo termini.
+
+Lo pseudocodice dell'algoritmo è presentato nel \Cref{lst:gst}.
 
 \lstinputlisting[
+	float,
+	language=pseudocode,
+ 	caption={Pseudocodice dell'algoritmo \textit{Greedy String Tiling (GST)}. $P$ rappresenta il \textit{pattern} ovvero la sequenza da confrontare più corta, mentre $T$ il \textit{text} ovvero la sequenza tra le due più lunga.},
+ 	label={lst:gst},
+]{resources/code/03-gst}
+
+Questo algoritmo è dimostrato \cite{wise-running-93} essere ottimo in termini di massimizzazione della copertura delle stringhe.
+%
+Nonostante ciò, nel caso peggiore, ha una complessità $O(n^3)$.
+
+\lstinputlisting[
+	float,
  	language=pseudocode,
  	caption={top level algorithm},
  	label={lst:rkr-top-level},
 ]{resources/code/03-rkr-gst-top-algorithm}
 
 \lstinputlisting[
+	float,
  	language=pseudocode,
  	caption={scanpattern},
  	label={lst:rkr-scanpattern},
 ]{resources/code/03-rkr-gst-scanpattern}
 
 \lstinputlisting[
+	float,
  	language=pseudocode,
  	caption={markarrays},
  	label={lst:rkr-markarrays},
