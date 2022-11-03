@@ -27,7 +27,7 @@ direction BT
     }
     JavaPreprocessor ..|> StepHandler
 
-    class JavaTokenizer~CU, Sequence<Token>~ {
+    class JavaTokenizer~CU, Sequence< Token >~ {
         +invoke(input: CU) Sequence~Token~
     }
     JavaTokenizer ..|> StepHandler
