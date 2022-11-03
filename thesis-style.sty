@@ -82,7 +82,7 @@
 }
 
 % defining style for not yet supported languages:
-\lstdefinelanguage{Kotlin}{
+\lstdefinelanguage{Kotlin} {
 	comment=[l]{//},
 	emph={delegate, filter, first, firstOrNull, forEach, lazy, map, mapNotNull, println, return@},
 	keywords={abstract, actual, as, as?, break, by, class, companion, continue, data, do, dynamic, else, enum, expect, false, final, for, fun, get, if, import, in, interface, internal, is, null, object, override, package, private, public, return, set, super, suspend, this, throw, true, try, typealias, val, var, vararg, when, where, while},
@@ -93,7 +93,7 @@
 	sensitive=true
 }
 
-\lstdefinelanguage{pseudocode}{
+\lstdefinelanguage{pseudocode} {
 	sensitive=false,
 	keywords={while, do, endwhile, if, then, else, endif, repeat, until, for, endfor, from, to, each, step, function, procedure, begin, end, return, input, output, data, result, type, object, class, array, integer, boolean, true, false, real, string}, 
 	comment=[l]{//},
@@ -101,4 +101,20 @@
 	string=[b]{"},
 	mathescape=true,
 	literate={:=}{{$\gets$ }}1 {<-}{{$\gets$ }}1 {<=}{{$\leq$ }}1 {>=}{{$\geq$ }}1 {<>}{{$\neq$ }}1 {!=}{{$\neq$ }}1
+}
+
+\lstdefinelanguage{yaml} {
+	keywords={true,false,null,y,n},
+	sensitive=false,
+	comment=[l]{\#},
+	morecomment=[s]{/*}{*/},
+	stringstyle=\color{blue}\mdseries\ttfamily,
+	moredelim=[l][\color{orange}]{\&},
+	moredelim=[l][\color{magenta}]{*},
+	morestring=[b]',
+	morestring=[b]",
+	moredelim=**[il][\color{magenta}\mdseries{:}\color{blue}\mdseries]{:},
+	literate={>}{{\textcolor{magenta}\textgreater}}1
+			 {|}{{\textcolor{magenta}\textbar}}1
+			 {\ -\ }{{\mdseries\ -\ }}3,
 }

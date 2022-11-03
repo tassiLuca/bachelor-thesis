@@ -1,0 +1,48 @@
+# DECLARATIONS
+- name: class-interface-decl
+  languageConstructs:
+    - ClassOrInterfaceDeclaration
+- name: constructor-decl
+  languageConstructs:
+    - ConstructorDeclaration
+    - CompactConstructorDeclaration
+...
+# EXPRESSIONS
+- name: literal-expr
+  languageConstructs:
+    - DoubleLiteralExpr
+    - IntegerLiteralExpr
+    - LongLiteralExpr
+    - NullLiteralExpr
+    - CharLiteralExpr
+    - StringLiteralExpr
+    - TextBlockLiteralExpr
+- name: class-expr
+  languageConstructs:
+    - ClassExpr
+- name: lambda-expr
+  languageConstructs:
+    - LambdaExpr
+- name: annotation-expr
+  languageConstructs:
+    - MarkerAnnotationExpr
+    - NormalAnnotationExpr
+    - SingleMemberAnnotationExpr
+- name: variable-decl-expr
+  languageConstructs:
+    - VariableDeclarationExpr
+...
+# STATEMENTS
+- name: loop-stmt
+  languageConstructs:
+    - ForEachStmt
+    - ForStmt
+    - WhileStmt
+    - DoStmt
+- name: break-stmt
+  languageConstructs:
+    - BreakStmt
+- name: return-stmt
+  languageConstructs:
+    - ReturnStmt
+...

@@ -135,6 +135,8 @@ Nella maggioranza dei casi, i sistemi che implementano questo di tipo di tecnica
 All'interno di questo tipo di analisi possiamo annoverare principalmente due diversi metodi: l'analisi lessicale e quella basata su un modello astratto e derivato dai sorgenti.
 
 \subsubsection{Analisi lessicale (\textit{tokenizzazione})}
+\label{01-tokenization}
+
 Tra tutte, la tecnica più usata è l'analisi lessicale del codice sorgente (\textbf{\textit{lexical analysis}} o \textbf{\textit{tokenization}} in inglese), che consiste nel convertire la sequenza di caratteri di cui è composto il programma in una sequenza di \textit{token}.
 %
 Un \textit{token} è, a sua volta, un simbolo astratto che rappresenta un tipo di unità lessicale nella grammatica del linguaggio. 
@@ -288,7 +290,7 @@ I due algoritmi di confronto più conosciuti sono \textbf{\textit{Winnowing}} \c
 
 \textit{Winnowing} costituisce un miglioramento del metodo \textit{n-grams} e consiste nel suddividere il documento in una lista di sottostrighe di lunghezza $n$ e usare una funzione di \textit{hashing} per selezionare solo un loro sottoinsieme rappresentativo da usare come impronta digitale dello stesso (i cosiddetti \textit{n-grams fingerprinting}).
 
-\todo{...}
+\todo{... / esempio di n-gram...}
 
 \textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)} costituisce l'altra popolare alternativa a \textit{Winnowing}, che tenta di aumentare la sua precisione a discapito dell'efficienza. 
 %
