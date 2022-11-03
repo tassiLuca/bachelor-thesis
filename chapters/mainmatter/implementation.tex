@@ -44,7 +44,7 @@ Come descritto nella \Cref{01-tokenization} l'obiettivo è creare invece un insi
 
 A questo scopo, l'albero sintattico preprocessato viene visitato e, per ogni nodo, si emette un \textit{token}, con le relative informazioni circa la sua posizione nel sorgente, o meno a seconda sia una dichiarazione semanticamente rilevante o meno.
 
-In particolare, è stato costruito un file di configurazione \textit{Yaml}\footnotetext{Linguaggio, \textit{superset} di Json, per la serializzazione di dati che viene impiegato per la scrittura dei file di configurazione: \url{https://yaml.org/}.} (\Cref{lst:token-config-file}) in cui sono elencati i tipi di dichiarazioni rilevanti, eventualmente aggregando tra loro dichiarazione semanticamente simili e che potrebbero essere facilmente cambiate per offuscare la copiatura.
+In particolare, è stato costruito un file di configurazione \textit{Yaml}\footnotetext{Linguaggio, \textit{superset} di Json, per la serializzazione di dati che viene impiegato per la scrittura di file di configurazione: \url{https://yaml.org/}.} (\Cref{lst:token-config-file}) in cui sono elencati i tipi di dichiarazioni rilevanti, eventualmente aggregando tra loro dichiarazione semanticamente simili e che potrebbero essere facilmente cambiate per offuscare la copiatura.
 %
 Ad esempio, sono state aggregate sotto un unico tipo \texttt{loop-stmt} tutti i costrutti che effettuano un ciclo.
 %
@@ -61,13 +61,17 @@ Si noti che questo approccio è molto flessibile e può essere "aggiustato" a pi
 Il risultato dell'applicazione del processo sopra descritto al \Cref{lst:test-analysis} viene presentato nel \Cref{lst:result-tokenization}
 
 \lstinputlisting[
- 	caption={Risultato dell'analisi del \Cref{lst:token-config-file}},
+ 	caption={Risultato dell'analisi del \Cref{lst:test-analysis}},
  	label={lst:result-tokenization},
 ]{resources/code/03-AnalyzedTestAnalysis}
 
 \section{Filtraggio}
 
 \section{Rilevamento delle somiglianze}
+Gli algoritmi impiegati per confrontare due sequenze di \textit{token} sono il \textit{Greedy String Tiling} e \textit{Running Karp-Rabin Matching}, che ne rappresenta una sua evoluzione, introdotti da M. Wise nel 1993 in \cite{wise-running-93}.
+%
+Sebbene questi algoritmi siano stati concepiti per lavorare su sequenze di stringhe, possono essere facilmente riadattati per operare su sequenze di \textit{token}.
+
 
 \lstinputlisting[
  	language=pseudocode,
