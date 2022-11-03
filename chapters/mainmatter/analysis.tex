@@ -202,15 +202,19 @@ Tutti e tre i componenti, \texttt{Analyzer}, \texttt{Filter} e \texttt{Plagiaris
 %
 Si è deciso di adottare questo approccio principalmente per due motivi:
 \begin{itemize}
-    \item la specifiche strategie di analisi e di confronto devono essere istanziate e opportunamente configurate a \textit{runtime} a seconda del tipo di tecnica e delle opzioni scelte dall'utente. Inoltre, devono essere coerenti tra loro: non è possibile, ad esempio, poter istanziare un analizzatore per effettuare la \textit{tokenizzazione} e un rilevatore che non operi sulla sequenza di \textit{token}.
+    \item la specifiche strategie di analisi e di confronto devono essere istanziate e opportunamente configurate a \textit{runtime} a seconda del tipo di tecnica e delle opzioni scelte dall'utente. Inoltre, devono essere coerenti tra loro: non è possibile, ad esempio, poter istanziare un analizzatore per effettuare la \textit{tokenizzazione} e un rilevatore che non operi sulla sequenza di \textit{token}. Il \textit{facade} pertanto si occupa d'istanziare i corretti componenti necessari all'esecuzione della tecnica in accordo con i parametri a lui fornitogli, sollevando il \textit{client} da questa responsabilità.
     \item Il processo di analisi e confronto può essere complesso. Pertanto si fornisce ai \textit{client} un'interfaccia semplificata che assolve al compito di eseguire una generica tecnica, rendendo di fatto trasparente al chiamante la complessità del sottosistema che, dal suo punto di vista, è di fatto una \textit{black box}.
 \end{itemize}
 
-Come abbiamo già detto, l'aspetto della configurabilità è molto importante in questo contesto.
+Come già detto, l'aspetto della configurabilità è un aspetto molto importante in questo contesto, in quanto la scelta dei parametri influisce sull'efficacia del rilevamento.
 %
-In particolare, gli aspetti critici che devono necessariamente essere configurabili per una buona riuscita sono....
+In particolare, una specifica sessione è legata ad una particolare configurazione (\texttt{RunConfiguration}) che contiene tutte le informazioni necessarie per l'esecuzione, tra cui la tecnica da utilizzare, l'insieme delle \textit{repository} che compongono la \textit{submission} e quelle del \textit{corpus}, nonché il concreto \texttt{ReportsExporter} a cui è affidata l'esportazione dei \textit{report} generati.
+%
+Tale configurazione è creata da un concreto \texttt{RunConfigurator}: i due metodi supportati, alternativi tra loro, sono il \texttt{CLIConfigurator} che crea la configurazione a partire dagli argomenti da riga di comando, oppure il \texttt{FileConfigurator} che sfrutta un file di configurazione per impostare tutti i parametri.
+%
+Nulla vieta che in un prossimo futuro, se si volesse dare una veste grafica al sistema, si possa implementare una interfaccia che specializza \texttt{RunConfigurator} e che viene implementata dalla o dalle classi che si occupano di creare le componenti grafiche.
 
-\todo{configurabilità}
+In \Cref{img:02-session} è mostrato lo schema UML complessivo della sessione, nonché...
 
 \begin{sidewaysfigure}
     \centering
