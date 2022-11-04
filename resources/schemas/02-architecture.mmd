@@ -4,11 +4,7 @@ direction TB
         <<interface>>
         +invoke()
     }
-
-    class RepositoryProvider {
-        <<interface>>
-    }
-    RepositoryProvider "1..*" <--* RunConfiguration
+    AntiPlagiarismSession *--> RunConfiguration
 
     class RunConfigurator {
         <<interface>>
@@ -18,8 +14,16 @@ direction TB
     class RunConfiguration {
         <<inteface>>
     }
-    RunConfigurator ..> RunConfiguration: creates
-    AntiPlagiarismSession *--> RunConfiguration
+    RunConfigurator ..> RunConfiguration: << creates >>
+
+    class RepositoryProvider {
+        <<interface>>
+    }
+    class Repository {
+        <<interface>>
+    }
+    Repository "2..*" <--* RunConfiguration
+    RepositoryProvider ..> Repository: << creates >>
 
     class PlagiarismDetector {
         <<interface>>
@@ -41,7 +45,7 @@ direction TB
         + save()
         + load()
     }
-    KnoledgeBaseRepository "1" <--* RunConfiguration
+    KnoledgeBaseRepository "1" <--* AntiPlagiarismSession
 
     class Output {
         <<interface>>

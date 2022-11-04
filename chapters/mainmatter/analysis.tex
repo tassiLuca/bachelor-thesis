@@ -28,14 +28,20 @@ Di seguito vengono descritti, per punti, i requisiti del sistema, suddivisi tra 
 \subsection*{Requisiti non funzionali}
 \begin{itemize}
     \item L'algoritmo per determinare la similarità, così come le metriche utilizzate, devono essere interscambiabili, facilmente estendibili e configurabili da parte dell'utente;
-    \item Le informazioni estrapolate dai sorgenti sono salavate in modo tale da essere riutilizzate nelle analisi successive di altri progetti;
+
+    \item Le informazioni estrapolate dai sorgenti sono salavate in modo tale da essere riutilizzate nelle analisi successive di altri progetti. 
+    %
+    Si noti che questo è possibile data la natura, invariante nel tempo, degli stessi.
+    %
+    Questo presumibilmente abbatterà i tempi di esecuzione derivanti dallo scaricamento dei sorgenti, che rappresenta spesso un notevole "collo di bottiglia".
+
     \item \`E necessario che il sistema impieghi un tempo "ragionevole" per effettuare la computazione.
 \end{itemize}
 
 \section{Analisi e modello del dominio}
 Il sistema deve essere in grado, a partire da un insieme di \texttt{Repository}, corrispondenti a progetti coerenti per linguaggio di programmazione, di estrarne una rappresentazione confrontabile (\texttt{SourceRepresentation}) medianti opportuni algoritmi di analisi (\texttt{Analyzer}).
 %
-Ciascuna coppia di rappresentazioni intermedie deve essere successivamente filtrata per mezzo di un apposito \texttt{Filter} e confrontata tramite algoritmi di rilevamento di somiglianze (\texttt{PlagiarismDetector}) al fine di poter determinare eventuali parti di codice duplicato e/o somiglianze, generando infine dei \texttt{report}.
+Ciascuna coppia di rappresentazioni intermedie deve essere successivamente filtrata per mezzo di un apposito \texttt{Filter} e confrontata tramite algoritmi di rilevamento di somiglianze (\texttt{PlagiarismDetector}) al fine di poter determinare eventuali parti di codice duplicato e/o somiglianze (\texttt{ComparisonResult}), generando infine dei \texttt{Report}.
 
 Gli elementi costitutivi il problema sono sintetizzati in \Cref{img:02-domain}.
 
@@ -55,17 +61,21 @@ Inoltre, il requisito non funzionale sulle \textit{performance} richiederà un'a
 \section{\textit{Design}}
 
 \subsection{Architettura}
-%
-% --- inizio da rivedere! ---
-% manca la trattazione degli input e su come viene configurato, nonché la gestione del salvataggio.
-%
 L'architettura del sistema è così organizzata: \textbf{\texttt{AntiPlagiarismSession}} è l'interfaccia responsabile della logica dell'applicazione e rappresenta una specifica sessione, dove per sessione si intende l'entità che, una volta opportunamente configurata, esegue la logica dell'applicazione.
+%
+La configurazione su cui essa opera è reificata dall'interfaccia \texttt{RunConfiguration} e rappresenta un "contenitore" d'informazioni necessarie per l'esecuzione del sistema, tra cui la triade composta da \texttt{Analyzer}, \texttt{Detector} e \texttt{Filter}, nonché le \texttt{Repository} su cui deve essere effettuata l'analisi, a loro volta recuperate da un \texttt{RepositoryProvider} che si occuperà di scaricare i progetti dai servizi di \textit{hosting} che verranno supportati dal sistema.
+%
+Tale configurazione è creata da un \texttt{RunConfigurator}, a cui spetta la corretta istanziazione in accordo con le opzioni definite dall'utente.
 
-Gli \texttt{Output} rappresentano le risorse su cui andare a rappresentare i risultati ottenuti, mentre il \texttt{RepositoryProvider} rappresenta la strategia con cui recuperare i progetti su cui effettuare l'analisi.
+Gli \texttt{Output} rappresentano le risorse su cui \textit{loggare} le informazioni durante l'esecuzione.
+%
+Un particolare tipo di \texttt{Output} è rappresentato dal \texttt{ReportsExporter}, il componente che si occuperà di esportare opportunamente i risultati dell'analisi.
 
-Il confronto e l'analisi dei sorgenti vengono effettuati, rispettivamente, dal \texttt{PlagiarismDetector} e dall'\texttt{Analyzer}, che incapsula la specifica strategia utilizzata e demanda a \texttt{KnoledgeBaseRepository} il salvataggio e il recupero delle rappresentazioni dei sorgenti già precedentemente analizzati e, perciò, salvati.
+Infine, \texttt{KnoledgeBaseRepository} rappresenta l'interfaccia che permette il salvataggio e il recupero delle rappresentazioni dei sorgenti già precedentemente analizzati e, perciò, salvati in locale. 
 
-Questa architettura permetterebbe facilmente l'aggiunta di un nuovo \texttt{Output} e di poter cambiare sia la strategia per recuperare i progetti, sia la logica con cui questi vengono processati.
+Questa architettura permette di configurare opportunamente ogni sessione in base alle proprie esigenze utilizzando le tecniche e le metriche che si ritengono più consone in relazione al contesto in cui lo strumento viene calato.
+%
+Inoltre, si lascia aperta la possibilità di estendere le strategie per l'esportazione dei dati e per la creazione della configurazione, nel caso in futuro si voglia anche aggiungere un'interfaccia grafica al sistema.
 
 In \Cref{img:02-architecture} è esemplificato il diagramma UML architetturale.
 
