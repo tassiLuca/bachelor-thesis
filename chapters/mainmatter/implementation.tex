@@ -70,7 +70,7 @@ Il risultato dell'applicazione del processo sopra descritto al \Cref{lst:test-an
 \section{Filtraggio}
 A seguito dell'analisi del codice sorgente e della generazione della sequenza di \textit{token} i sorgenti del \textit{corpus} possono essere filtrati, al fine di limitare il numero di progetti da dover confrontare.
 %
-Questo \textit{step} rappresenta uno snodo critico nella \textit{pipeline} di azione da eseguire in quanto scambia una frazione dell'efficacia del sistema in favore dell'efficienza: una stima fuorviante della similarità di due progetti può comportare l'esclusione dello stesso, con la conseguente perdita di sensibilità.
+Questo \textit{step} rappresenta uno snodo critico nella \textit{pipeline} di azioni da eseguire in quanto scambia una frazione dell'efficacia del sistema in favore dell'efficienza: una stima fuorviante della similarità di una coppia di progetti può comportare l'esclusione della comparazione tra gli stessi, con la conseguente perdita di sensibilità nel caso in cui rappresentassero dei veri positivi.
 %
 Per questo motivo la fase di filtraggio è \textit{opzionalmente} eseguita a discrezione dell'utente.
 
@@ -100,7 +100,9 @@ Tale valore è calcolato, seguendo quanto riportato in \cite{es-plag}, utilizzan
 	threshold = sim_{min} + init_threshold \cdot (sim_{max} - sim_{min})
 \end{equation}
 
-dove $init_threshold$ è un valore compreso tra $0$ e $1$ (corrispondente al range $0-100$) e $sim_{max}$ e $sim_{min}$ sono rispettivamente la similarità coseno massima e minima risultante dalla comparazione di tutte le coppie.
+dove $init_threshold$ è un valore compreso tra $0$ e $1$ (corrispondente al range $0-100\%$) e $sim_{max}$ e $sim_{min}$ sono rispettivamente la similarità coseno massima e minima risultante dalla comparazione di tutte le coppie.
+
+Secondo le valutazioni presentate in \cite{es-plag} questo tipo di filtraggio aumenta l'efficienza del sistema con un compromesso in termini di efficacia che rimane accettabile fintanto che la soglia $init\_threshold$ è mantenuta al di sotto del 60\%.
 
 \section{Rilevamento delle somiglianze}
 \label{03-matching-algorithms}
@@ -159,16 +161,18 @@ In questo caso, infatti, potrebbe effettivamente esserci una corrispondenza e si
 %
 Si noti che nei casi in cui la corrispondenza sia effettiva e non sia causata da un artefatto della funzione di \textit{hash}, il \textit{match} è esteso fino al primo \textit{token} non corrispondente, proprio come nel precedente algoritmo.
 
+Nella versione originale dell'algoritmo la struttura dati utilizzata per memorizzare i \textit{match} è una lista di code in cui ogni coda memorizza i \textit{match} della stessa lunghezza, mantenuta ordinata per valori descrenti di lunghezza.
+
 \lstinputlisting[
 	float,
  	language=pseudocode,
- 	caption={Pseudocodice routine \texttt{scanpattern} dell'algoritmo \textit{RKR-GST}},
+ 	caption={Pseudocodice della \textit{routine} \texttt{scanpattern} dell'algoritmo \textit{RKR-GST}},
  	label={lst:rkr-scanpattern},
 ]{resources/code/03-rkr-gst-scanpattern}
 
-Il \Cref{lst:rkr-markarrays} presenta lo pseudocodice della \textit{routine} che effettua la marcatura dei \textit{match} individuati in \texttt{scanpattern}, corrispondente alla seconda fase dell'algoritmo precedente.
+Il \Cref{lst:rkr-markarrays} presenta lo pseudocodice della \textit{routine} che effettua la marcatura dei \textit{match} individuati nella \textit{routine} \texttt{scanpattern}, corrispondente alla seconda fase dell'algoritmo precedente.
 %
-La principale differenza è...
+La principale differenza con la precedente versione risiede nel fatto che la marcatura dei \textit{match} viene effettuata sulla base...
 
 \lstinputlisting[
 	float,
@@ -179,8 +183,11 @@ La principale differenza è...
 
 Infine, nel \Cref{lst:rkr-top-level} è mostrato l'\textit{entry-point} dell'algoritmo.
 %
-% s come viene scelto?
+Come si può osservare, corrispondenze molto lunghe vengono trovate solo durante la prima iterazione e dopo di questa non saranno trovate corrispondenze maggiori del doppio della lunghezza di ricerca corrente.
 %
+Il valore di $s$ (l'equivalente di \texttt{minimum\_match\_length} nell'algoritmo \textit{Greedy String Tiling}) è scelto in modo tale da garantire che non vengano cercate corrispondenze troppo piccole.
+%
+Un valore plausibile di $s$ consigliato in \cite{wise-running-93} è 20.
 
 \lstinputlisting[
 	float,
@@ -189,7 +196,7 @@ Infine, nel \Cref{lst:rkr-top-level} è mostrato l'\textit{entry-point} dell'alg
  	label={lst:rkr-top-level},
 ]{resources/code/03-rkr-gst-top-algorithm}
 
-Sebbene la complessità di questo algoritmo sia dimostrato essere, nel caso peggiore, $O(n^2)$, nel caso medio la complessità è pressoché lineare.
+Sebbene la complessità di questo algoritmo sia dimostrato essere, nel caso peggiore, $O(n^2)$, nel caso medio la complessità è pressoché \textbf{lineare}.
 %
 Ciò migliora notevolmente le prestazioni rispetto all'algoritmo \textit{Greedy String Tiling}.
 
