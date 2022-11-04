@@ -32,7 +32,7 @@ Di seguito alcuni esempi di rifattorizzazioni che rientrano in questa classe:
 \begin{itemize}
     \item aggiungere istruzioni ridondanti, come dichiarazioni, inizializzazioni, istruzioni di stampa;
     \item sostituire i costrutti di loop con costrutti equivalenti: passare da \texttt{for} a \texttt{do/while}, o da un approccio iterativo a uno funzionale, ad esempio tramite l'uso degli \texttt{Stream} in Java;
-    \item sostituire istruzioni \texttt{if} nidificate con dichiarazioni equivalenti, ad esempio \texttt{switch-case} o \texttt{when} (in Kotlin), e viceversa;
+    \item sostituire istruzioni \texttt{if} nidificate con dichiarazioni equivalenti, ad esempio \texttt{switch-case} o \texttt{when} in Kotlin, e viceversa;
     \item cambiare l'ordine di istruzioni indipendenti;
     \item cambiare l'ordine degli operandi: ad esempio \texttt{x < y} può essere cambiato in \texttt{y >= x};
     \item sostituire la chiamata a funzione con il corpo della stessa.
@@ -56,7 +56,7 @@ Ciononostante, un'ispezione manuale a seguito di quella automatica è tuttora an
 
 Più formalmente, detto $p = \{s_{plg}, d_{plg}, s_{src}, d_{src}\}$ un caso di plagio, $s_{plg}$ un passaggio del documento $d_{plg}$ che è copiato a partire da un passaggio $s_{src}$ in un documento $d_{src}$, il compito di un sistema automatico di rilevamento di plagi consiste nell'individuare la tupla $p$ \cite{yalcin-et-al-2022}.
 
-Già a partire dagli anni settanta del novecento, sono stati proposti algoritmi e tecniche per l'analisi del codice, nonché l'identificazione e localizzazione di plagi.
+Già a partire dagli anni settanta del novecento, sono stati proposti algoritmi e tecniche per l'analisi del codice, nonché l'identificazione e localizzazione di sezioni simili di sorgenti.
 
 In questo contesto è da porre in evidenza la differenza tra l'individuazione di cloni e quella di plagi.
 %
@@ -84,7 +84,7 @@ L'altro problema emergente nello sviluppo di un programma antiplagio che non si 
 %
 Infatti, la maggioranza delle tecniche e degli algoritmi per effettuare i confronti sono inefficienti in termini di tempo costo. 
 %
-Questo è in larga parte dovuto al fatto che la misurazione della somiglianza tra una coppia di sorgenti, nella gran parte degli algoritmi noti, ha una complessità almeno quadratica nel numero delle istanze delle sue rappresentazioni, e che, per ogni valutazione, il numero di confronti da effettuare è tipicamente elevato: detto $N$ il numero di progetti, volendo confrontare tutte le coppie di progetti tra loro, dovrebbero essere eseguite $\frac{N(N-1)}{2}$ comparazioni.
+Questo è in larga parte dovuto al fatto che la misurazione della somiglianza tra una coppia di sorgenti, nella gran parte degli algoritmi noti in letteratura, ha una complessità almeno quadratica nel numero delle istanze delle sue rappresentazioni, e che, per ogni valutazione, il numero di confronti da effettuare è tipicamente elevato: detto $N$ il numero di progetti, volendo confrontare tutte le coppie di progetti tra loro, dovrebbero essere eseguite $\frac{N(N-1)}{2}$ comparazioni.
 %
 Questo problema è acuito inoltre dal fatto che i progetti \textit{software} stanno diventando sempre più complessi e si hanno a disposizione una sempre maggior quantità di dati da dover processare.
 
@@ -92,15 +92,13 @@ Per questa ragione vengono sfruttate tecniche di parallelizzazione e devono esse
 %
 Per farlo, si utilizzano tecniche euristiche che permettono di determinare il grado di somiglianza dei sorgenti senza dover effettivamente eseguire il confronto.
 
-Va da sé che l'utilizzo di tali tecniche impatta inevitabilmente la sensibilità del sistema: una stima errata, a monte, della somiglianza di due sorgenti può portare a non effettuare alcun confronto tra di questi e quindi a non individuare possibili plagi. 
+Va da sé che l'utilizzo di tali tecniche impatta inevitabilmente la sensibilità del sistema: una stima errata, a monte, della somiglianza di due sorgenti può portare a non effettuare alcun confronto tra questi e quindi a non individuare possibili plagi. 
 %
 Questo si verifica soprattutto nei casi in cui l'ottimizzazione è molto marcata e si riduce in modo eccessivo l'insieme dei sorgenti su cui effettuare il confronto, rendendo di fatto svantaggioso l'impiego di tali tecniche.
 
 Il bilanciamento tra le prestazioni e l'efficacia del sistema è, dunque, di fondamentale importanza.
 
 \section{Stato dell'arte}
-
-% preso spunto da "Current trends in source code analysis, plagiarism detection and issues of analysis big datasets" -- si deve citare??
 Il codice sorgente non è nient'altro che un file di testo scritto da sviluppatori, che deve essere compilato o interpretato e che, pertanto, si basa su regole sintattiche e grammaticali proprie del linguaggio di programmazione con cui è scritto che permettono a entrambi gli attori, il programmatore e il calcolatore, di "capirlo" ed elaborarlo.
 %
 Per questo motivo, se processare la struttura di un sorgente non presenta grandi difficoltà, processare il significato, ovvero l'idea e la logica sottesa al codice, costituisce una sfida più grande, se non altro perché entra in gioco la competenza dello sviluppatore e la sua esperienza nella scrittura di codice "pulito".
@@ -246,16 +244,14 @@ D'altro canto, un set di \textit{token} "lasco" potrebbe rappresentare tutti e q
 %
 Pertanto un insieme di \textit{token} "lasco" aiuta il sistema a riconoscere e catalogare come equivalenti tipi di dato diversi e fornire quindi una maggiore resilienza alle tecniche di rifattorizzazione.
 
-In seguito, la sequenza di \textit{token} generata viene eventualmente filtrata e successivamente confrontata con algoritmi di \textit{string matching}. 
-
-La fase di filtraggio consiste nel ridurre il numero di rappresentazioni da dover confrontare e, quindi, il numero stesso dei confronti, portando a una riduzione dei tempi di esecuzione.
+Spesso, la fase di analisi lessicale è seguita da una fase di filtraggio, che consente di ridurre il numero di rappresentazioni da dover confrontare e, quindi, il numero stesso dei confronti, portando a una riduzione dei tempi di esecuzione.
 %
-Questo stadio è preceduto da una fase d'indicizzazione, in cui vengono generati alcuni indici a partire dalla sequenza di \textit{token}.
+Questo stadio è preceduto da una fase d'indicizzazione in cui, a partire dalla sequenza di \textit{token}, vengono generati alcuni indici, ovvero strutture che raggruppano i dati e che permettono di inferire una stima euristica della similarità, senza dover effettuare il confronto \textit{token} per \textit{token}.
 %
-Una tra gli indici più comuni è costituito da coppie chiave$-$valore in cui nelle chiavi sono memorizzati i tipi di \textit{token} e nei valori la loro frequenza.
+Una tra gli indici più comuni è costituito da coppie chiave$-$valore in cui nelle chiavi sono memorizzati i tipi di \textit{token} e nei valori la loro frequenza, in termini di numero di occorrenze all'interno del sorgente.
 %
-Un esempio di indice a costruito a partire dalla sequenza di \textit{token} elencati in \Cref{table:token-associations} è mostrato in \Cref{table:token-indexing}.
-
+Un esempio di indice costruito a partire dalla sequenza di \textit{token} elencata in \Cref{table:token-associations} è mostrato in \Cref{table:token-indexing}.
+%
 \begin{table}[h!]
     \centering
     \begin{tabular}{|c|c|} 
@@ -279,18 +275,23 @@ Un esempio di indice a costruito a partire dalla sequenza di \textit{token} elen
     \caption{Indice con coppie tipo di \textit{token}$-$frequenze generate a partire dalla \Cref{table:token-associations}}
     \label{table:token-indexing}
 \end{table}
-
-Tali indici sono successivamente impiegati nella vera e propria fase di filtraggio, in cui viene applicata una particolare metrica, ad esempio la similarità coseno, e viene utilizzato un valore di soglia per escludere coppie di sorgenti che hanno più bassa similarità in accordo con la metrica scelta.
-
-\todo{...}
-
-A seguire i sorgenti vengono confrontati.
 %
-I due algoritmi di confronto più conosciuti sono \textbf{\textit{Winnowing}} \cite{winnowing} e \textbf{\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)}} \cite{wise-running-93}.
+Tali indici sono successivamente impiegati nella vera e propria fase di filtraggio in cui viene applicata una particolare metrica, ad esempio la similarità coseno, e viene utilizzato un valore di soglia per escludere le coppie di sorgenti che hanno un valore di similarità inferiore ad essa in accordo con la metrica scelta.
 
-\textit{Winnowing} costituisce un miglioramento del metodo \textit{n-grams} e consiste nel suddividere il documento in una lista di sottostrighe di lunghezza $n$ e usare una funzione di \textit{hashing} per selezionare solo un loro sottoinsieme rappresentativo da usare come impronta digitale dello stesso (i cosiddetti \textit{n-grams fingerprinting}).
+A seguire i sorgenti vengono confrontati con algoritmi di \textit{string matching}.
+%
+Tra questi, i due più conosciuti sono \textbf{\textit{Winnowing}} \cite{winnowing} e \textbf{\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)}} \cite{wise-running-93}.
 
-\todo{... / esempio di n-gram...}
+\textit{Winnowing} costituisce un miglioramento della tecnica nota come \textit{k-gram fingerprinting} e consiste nel suddividere il documento in una lista di sottostrighe di lunghezza $k$, denominati \textit{k-grams}, che grazie all'utilizzo di una funzione di \textit{hashing} sono trasformati in una sequenza numerica e infine selezionare un insieme rappresentativo di questi da usare come impronta digitale considerando il valore minimo di una finestra di valori di \textit{hash}.
+%
+In figura \Cref{img:01-winnowing-example} è presentato un esempio tratto da \cite{winnowing} in cui vengono mostrati i passi dell'algoritmo, applicati a un semplice testo in linguaggio naturale.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{resources/img/01-winnowing-example.pdf}
+    \caption{Passi esemplificativi dell'algoritmo \textit{Winnowing} applicati a un semplice testo scritto in linguaggio naturale.}
+    \label{img:01-winnowing-example}
+\end{figure}
 
 \textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)} costituisce l'altra popolare alternativa a \textit{Winnowing}, che tenta di aumentare la sua precisione a discapito dell'efficienza. 
 %
