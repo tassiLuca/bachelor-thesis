@@ -68,6 +68,39 @@ Il risultato dell'applicazione del processo sopra descritto al \Cref{lst:test-an
 % vengono anche tolti i duplicati :)
 
 \section{Filtraggio}
+A seguito dell'analisi del codice sorgente e della generazione della sequenza di \textit{token} i sorgenti del \textit{corpus} possono essere filtrati, al fine di limitare il numero di progetti da dover confrontare.
+%
+Questo \textit{step} rappresenta uno snodo critico nella \textit{pipeline} di azione da eseguire in quanto scambia una frazione dell'efficacia del sistema in favore dell'efficienza: una stima fuorviante della similarità di due progetti può comportare l'esclusione dello stesso, con la conseguente perdita di sensibilità.
+%
+Per questo motivo la fase di filtraggio è \textit{opzionalmente} eseguita a discrezione dell'utente.
+
+Come già presentato nella \Cref{01-tokenization}, il processo di filtraggio è preceduto da una fase d'indicizzazione in cui vengono aggregati i dati sotto forma di una struttura dati per mezzo della quale è possibile estrarre informazioni statistiche significative per la stima della similarità.
+
+Nel sistema è attualmente stato implementato un indice equivalente a quello presentato in \Cref{table:token-indexing} a partire dal quale la similarità tra progetti è stata calcolata mediante la \textbf{similarità coseno}.
+%
+Essa è una metrica euristica per la misurazione della similutidine di due vettori effettuata calcolando il coseno del loro angolo, ampiamente utilizzata nel contesto dell'analisi testuale ed è definita come segue: 
+\begin{equation}
+	cosine\_similarity(A,B) = \frac{A \cdot B}{||A|| ||B||} 
+		= \frac{\sum_{k=1}^{n} A(k) B(k)}{\sqrt{\sum_{k=1}^{n}A(k)^2 \cdot \sum_{k=1}^{n} B(k)^2}}
+\end{equation}
+dove $A$ e $B$ sono due vettori di attributi numerici a $n$ dimensioni.
+
+In generale, il risultato della similarità è un valore compreso tra $-1$ e $1$ dove $-1$ indica che i due vettori sono \textit{anti}-correlati (hanno verso opposto), $1$ indica massima correlazione e $0$ un'assenza di correlazione (i due vettori sono ortogonali tra loro).
+
+Nel nostro caso, il contenuto dei due vettori è la frequenza dei tipi di \textit{token} in cui il $k$-esimo elemento contiene il numero di volte in cui il tipo di \textit{token} numerato con $k$ ricorre nel sorgente, oppure $0$ se non presente.
+%
+Poiché le frequenze sono valori sempre positivi nel caso in esame si otterranno valori compresi tra $0$ e $1$, dove $1$ indica che i tipi di \textit{token} contenuti nelle due rappresentazioni sono gli stessi, presenti in egual numero, ma non necessariamente disposti nello stesso ordine, e $0$ indica che non c'è alcun tipo di \textit{token} comune.
+
+A seguito della stima della similarità coseno, tutte le coppie di rappresentazioni la cui similarità è inferiore a un valore di soglia sono esclusi.
+%
+Tale valore è calcolato, seguendo quanto riportato in \cite{es-plag}, utilizzando la formula riportata in \Cref{eq:cosine-filtering-threshold}.
+
+\begin{equation}
+\label{eq:cosine-filtering-threshold}	
+	threshold = sim_{min} + init_threshold \cdot (sim_{max} - sim_{min})
+\end{equation}
+
+dove $init_threshold$ è un valore compreso tra $0$ e $1$ (corrispondente al range $0-100$) e $sim_{max}$ e $sim_{min}$ sono rispettivamente la similarità coseno massima e minima risultante dalla comparazione di tutte le coppie.
 
 \section{Rilevamento delle somiglianze}
 \label{03-matching-algorithms}
@@ -75,7 +108,7 @@ Gli algoritmi impiegati per confrontare due sequenze di \textit{token} sono il \
 %
 Sebbene questi algoritmi siano stati concepiti per lavorare su sequenze di stringhe, possono essere facilmente riadattati per operare su sequenze di \textit{token}.
 
-Dette $A$ e $B$ due sequenze di \textit{token} un algoritmo per misurare la similarità in questo dominio deve determinare una sottosequenza comune che abbia le seguenti proprietà:
+Dette $A$ e $B$ due sequenze di \textit{token}, un algoritmo per misurare la similarità in questo dominio deve determinare una sottosequenza comune che abbia le seguenti proprietà:
 \begin{itemize}
 	\item ogni \textit{token} di $A$ può essere abbinato solo con esattamente un solo \textit{token} di $B$;
 	\item le sottosequenze comuni devono essere trovate indipendentemente dalla loro posizione nel sorgente;
@@ -84,14 +117,14 @@ Dette $A$ e $B$ due sequenze di \textit{token} un algoritmo per misurare la simi
 
 L'algoritmo si compone principalmente di due fasi:
 \begin{itemize}
-	\item \textbf{Fase 1}: in questa fase, viene ricercata la corrispondenza più lunga. Questo è fatto grazie un triplo ciclo innestato: il primo itera sui token della sequenza più corta, denominata nel \textit{paper} come \textit{pattern}, il secondo compara ciascuno di questi con ogni \textit{token} della sequenza più lunga, denominata \textit{text}. Se i due \textit{token} corrispondono il ciclo più interno cerca di estendere il \textit{match} il più possibile (fermandosi non appena trova un \textit{token} che nelle due sequenze differisce).
+	\item \textbf{Fase 1}: in questa fase, viene ricercata la corrispondenza più lunga. Questo è fatto grazie un triplo ciclo innestato: il primo itera sui token della sequenza più corta, denominata \textit{pattern}, il secondo compara ciascuno di questi con ogni \textit{token} della sequenza più lunga, denominata \textit{text}. Se i due \textit{token} corrispondono il ciclo più interno cerca di estendere il \textit{match} il più possibile (fermandosi non appena trova un \textit{token} che nelle due sequenze differisce).
 
-	\item \textbf{Fase 2}: questa fase marca ciascun \textit{match} trovato nella fase precedente partendo da quello più lungo. Questo garantisce che ciascun \textit{token} venga usato per un solo \textit{match} e divenga indisponibile per i \textit{match} successivi (che hanno una minor lunghezza). Nella terminologia di \cite{wise-running-93} i \textit{match} i cui \textit{token} sono stati marcati è denominato \textit{tile}.
+	\item \textbf{Fase 2}: questa fase marca ciascun \textit{match} trovato nella fase precedente partendo da quello più lungo. Questo garantisce che ciascun \textit{token} venga usato per un solo \textit{match} e divenga indisponibile per i \textit{match} successivi (che hanno una minor lunghezza). Nella terminologia di \cite{wise-running-93} i \textit{match} i cui \textit{token} sono stati marcati sono denominati \textit{tile}.
 \end{itemize}
 
 Queste due fasi vengono ripetute fino a quando non vengono trovate più corrispondenze di lunghezza almeno \texttt{minimum\_match\_length}.
 %
-Tale valore è imposto per non generare troppe sequenze spurie di lunghezza minima e garantire risultati migliori.
+Tale valore è imposto per non generare troppe sequenze spurie di lunghezza irrisoria e garantire risultati migliori.
 %
 Giacché la lunghezza dei \textit{match} diminuisce, nel caso peggiore, di un'unità ad ogni iterazione è garantito che l'algoritmo termini.
 
@@ -120,7 +153,7 @@ Nel \Cref{lst:rkr-scanpattern} viene mostrato lo pseudocodice della \textit{rout
 %
 Come si può osservare, nelle righe 1-3 vengono calcolati i valori di \textit{hash} di tutte le sottosequenze (non marcate) di lunghezza $s$ del \textit{text} e vengono salvati in una \textit{hashtable}, una mappa con le corrispondenze sottosequenza di \textit{token} $-$ valore di \textit{hash}.
 %
-Lo stesso viene fatto per il \textit{pattern} con la differenza che, non appena calcolato il valore \textit{hash} per la sottosequenza considerata, si verifica se lo stesso valore è già presente nella \textit{hashtable}.
+Lo stesso viene fatto per il \textit{pattern} con la differenza che, non appena calcolato il valore \textit{hash} per la sottosequenza considerata, si verifica se lo stesso sia già presente nella \textit{hashtable}.
 %
 In questo caso, infatti, potrebbe effettivamente esserci una corrispondenza e si procede verificando \textit{token} per \textit{token}.
 %
@@ -164,7 +197,25 @@ Ciò migliora notevolmente le prestazioni rispetto all'algoritmo \textit{Greedy 
 
 \section{Strumenti di sviluppo}
 
-\subsection*{Kotlin}
+\subsection*{\textit{Kotlin}}
+Il progetto è stato sviluppato interamente in \textit{Kotlin}, un linguaggio di programmazione \textbf{orientato agli oggetti} e \textbf{funzionale} \textit{open source}\footnote{\url{https://github.com/JetBrains/kotlin}} progettato e gestito da \textit{JetBrains}\footnote{\url{https://www.jetbrains.com/}} a partire dal 2010.
+%
+Si tratta di un linguaggio multipiattaforma compilato, tipato staticamente e  completamente interoperabile con \textit{Java} e la \textit{JVM} e \textit{Android}, applicabile in una vasta gamma di ambiti, dallo sviluppo \textit{server side} a quello di applicazioni mobili (attualmente è il linguaggio di riferimento per \textit{Android}, avendo surclassato Java).
+%
+Inoltre, oltre a Java e Android, \textit{Kotlin} può essere compilato in \textit{JavaScript}, consentendo di eseguire codice \textit{Kotlin} nel \textit{browser}.
+
+L'obiettivo principale del linguaggio è fornire un'alternativa a Java più concisa, produttiva e sicura, adatta in tutti i contesti in cui Java è tutt'oggi utilizzato.
+%
+Infatti, essendo completamente compatibile con Java, sfrutta tutte le numerose libreria di Java, estendendole e garantendo le stesse \textit{performance}.
+
+I tratti distintivi di \textit{Kotlin} sono certamente la sua espressività e concisione, che permettono di sviluppare codice che rivela l'intento senza oscurarlo con codice verboso per specificare come l'intento viene realizzato.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{resources/img/03-kotlincompilation.pdf}
+    \caption{Processo di compilazione di \textit{Kotlin}.}
+    \label{img:03-kotlin-compilation}
+\end{figure}
 
 \subsection*{Git e \textit{CI}}
 
