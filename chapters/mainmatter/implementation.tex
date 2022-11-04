@@ -177,7 +177,7 @@ La principale differenza con la precedente versione risiede nel fatto che la mar
 \lstinputlisting[
 	float,
  	language=pseudocode,
- 	caption={markarrays},
+ 	caption={Pseudocodice \textit{routine} \texttt{markarrays} dell'algoritmo \textit{RKR-GST}},
  	label={lst:rkr-markarrays},
 ]{resources/code/03-rkr-gst-markarrays}
 
@@ -190,9 +190,8 @@ Il valore di $s$ (l'equivalente di \texttt{minimum\_match\_length} nell'algoritm
 Un valore plausibile di $s$ consigliato in \cite{wise-running-93} è 20.
 
 \lstinputlisting[
-	float,
  	language=pseudocode,
- 	caption={top level algorithm},
+ 	caption={\textit{Entry-point} dell'algoritmo \textit{RKR-GST}},
  	label={lst:rkr-top-level},
 ]{resources/code/03-rkr-gst-top-algorithm}
 
@@ -201,6 +200,29 @@ Sebbene la complessità di questo algoritmo sia dimostrato essere, nel caso pegg
 Ciò migliora notevolmente le prestazioni rispetto all'algoritmo \textit{Greedy String Tiling}.
 
 \section{Stima della similarità}
+
+\subsection*{Similarità tra due sorgenti}
+La misura della similarità di due sorgenti dovrebbe intuitivamente riflettere la frazione di \textit{token} dei programmi originali che sono "coperti" da \textit{match}.
+%
+Seguendo questo principio ci sono due possibili scelte che possono essere intraprese e che determinano la formula di stima di similarità: se si vuole che la similarità del 100\% significhi che le due sequenze sono identiche dobbiamo considerare entrambe le stringhe nel computo, come segue:
+%
+\begin{equation}
+\label{eq:max-norm-sim}
+	sim(A, B) = \frac{2 \cdot \sum_{match \in tiles} length}{|A|+|B|}
+\end{equation}
+%
+Se, invece, preferiamo che ogni programma che è stato copiato completamente(e poi magari esteso) produca una similarità del 100\%, dobbiamo considerare solo la sottosequenza più corta:
+%
+\begin{equation}
+\label{eq:avg-norm-sim}
+	sim(A, B) = \frac{\sum_{match \in tiles} length}{min(|A|, |B|)}
+\end{equation} 
+
+Utilizzando le formule sopra esposte, tuttavia, si va incontro a un difetto intrinseco al tipo di tecnica utilizzata: se dall'applicazione del rilevamento risulta un insieme elevato di sottosequenze \dots
+
+Per mitigare questo problema in \cite{es-plag} viene proposto di modificare la stima formula di similarità introducendo un meccanismo di penalità: maggiore sono il numero di sottosequenze che fanno \textit{match}, maggiore sarà la penalità applicata...
+
+\subsection*{Similarità tra due progetti}
 
 \section{Strumenti di sviluppo}
 
