@@ -276,20 +276,31 @@ Un esempio di indice costruito a partire dalla sequenza di \textit{token} elenca
     \label{table:token-indexing}
 \end{table}
 %
-Tali indici sono successivamente impiegati nella vera e propria fase di filtraggio in cui viene applicata una particolare metrica, ad esempio la similarità coseno, e viene utilizzato un valore di soglia per escludere le coppie di sorgenti che hanno un valore di similarità inferiore ad essa in accordo con la metrica scelta.
+Tali indici sono successivamente impiegati nella vera e propria fase di filtraggio in cui viene applicata una particolare metrica, ad esempio la similarità coseno, per escludere le coppie di sorgenti con similarità inferiore ad un valore di soglia, scelto coerentemente alla metrica.
 
 A seguire i sorgenti vengono confrontati con algoritmi di \textit{string matching}.
 %
 Tra questi, i due più conosciuti sono \textbf{\textit{Winnowing}} \cite{winnowing} e \textbf{\textit{Running-Karp-Rabin Greedy String Tiling (RKR-GST)}} \cite{wise-running-93}.
 
-\textit{Winnowing} costituisce un miglioramento della tecnica nota come \textit{k-gram fingerprinting} e consiste nel suddividere il documento in una lista di sottostrighe di lunghezza $k$, denominati \textit{k-grams}, che grazie all'utilizzo di una funzione di \textit{hashing} sono trasformati in una sequenza numerica e infine selezionare un insieme rappresentativo di questi da usare come impronta digitale considerando il valore minimo di una finestra di valori di \textit{hash}.
+\textit{Winnowing} costituisce un miglioramento della tecnica nota come \textit{k-gram fingerprinting} e consiste nei seguenti passi:
+\begin{itemize}
+    \item il documento viene suddiviso in una lista di sottostrighe di lunghezza $k$, denominati \textit{k-grams};
+
+    \item grazie all'utilizzo di un'opportuna funzione di \textit{hashing} ciascun \textit{k-gram} è trasformato in un valore numerico;
+    
+    \item la sequenza numerica è trasformata in una sequenza di "finestre" di valori di \textit{hash}, in cui la grandezza di ciascuna, detta $w$, è data da: $w = t - n + 1$ dove $t$ rappresenta la lunghezza minima delle stringhe che è garantito siano trovate e $n$ rappresenta la lunghezza massima delle stringhe che è garantito \textit{non} siano trovate;
+    
+    \item sono selezionati un sottoinsieme dei valori di \textit{hash}, da usare come impronta digitale del documento, considerando il valore minimo di ogni finestra di valori.
+\end{itemize}
+
+La comparazione avviene successivamente sulla base di queste "impronte digitali", che sono dimostrate essere rappresentative della struttura del documento \cite{winnowing}.
 %
-In figura \Cref{img:01-winnowing-example} è presentato un esempio tratto da \cite{winnowing} in cui vengono mostrati i passi dell'algoritmo, applicati a un semplice testo in linguaggio naturale.
+In \Cref{img:01-winnowing-example} è presentato un esempio tratto da \cite{winnowing} in cui vengono mostrati i passi dell'algoritmo applicati a una semplice stringa di caratteri.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{resources/img/01-winnowing-example.pdf}
-    \caption{Passi esemplificativi dell'algoritmo \textit{Winnowing} applicati a un semplice testo scritto in linguaggio naturale.}
+    \caption[Passi esemplificativi dell'algoritmo \textit{Winnowing} applicati a un semplice testo scritto in linguaggio naturale.]{Passi esemplificativi dell'algoritmo \textit{Winnowing} applicati a una semplice sequenza di caratteri. In $(b)$ le caratteristiche irrilevanti sono state rimosse (virgole, spazi) e in $(c)$ la sequenza di caratteri è trasformata in una sequenza di \textit{5-gram}. In $(d)$ è mostrata una possibile sequenza risultante dell'applicazione di una funzione di \textit{hashing}. A partire da tale sequenza viene creata una sequenza di "finestre" di lunghezza 4, da ciascuna delle quali è selezionato il valore di \textit{hash} minore (in grassetto sottolineato) avendo cura di non selezionare più volte lo stesso valore a causa della sovrapposizione delle finestre $(f)$. Infine, in $g$,  ciascun valore di \textit{hash} selezionato viene accoppiato con l'indice \textit{0-based} della sua posizione al passo $(d)$.}
     \label{img:01-winnowing-example}
 \end{figure}
 
@@ -305,7 +316,7 @@ I due algoritmi cooperano in questo modo: \textit{RKR} è eseguito su due progra
 %
 Per ogni sottosequenza comune identificata da \textit{RKR}, \textit{GST} è eseguito per estendere il \textit{match} rintracciato mediante l'uso della funzione di \textit{hashing}.
 %
-I dettagli sono descritti nella \Cref{03-matching-algorithms}.
+I dettagli e lo pseudocodice dell'algoritmo sono descritti nella \Cref{03-matching-algorithms}.
 
 \subsubsection{Analisi basata su un modello}
 Anziché utilizzare la sequenza di \textit{token} generata dal \textit{lexer} possono essere generate delle strutture e dei modelli più complessi, che permettano di astrarre ulteriormente dalla sintassi del linguaggio.
@@ -314,7 +325,7 @@ Una tra le rappresentazioni più note e naturali in questo ambito, derivata dall
 %
 Questo è generato a partire dalla sequenza di \textit{token} descritta nel paragrafo precedente e rappresenta il risultato ottenuto a seguito dell'applicazione del secondo stadio di un compilatore: il \textbf{\textit{Parser}} (\Cref{img:01-compiler-arch}).
 %
-Esso, infatti, presa in \textit{input} la sequenza di token, la converte in una struttura dati ad albero che rappresenta la struttura logica del codice sorgente.
+Esso, infatti, presa in \textit{input} la sequenza di \textit{token}, la converte in una struttura dati ad albero che rappresenta la struttura logica del codice sorgente.
 
 \begin{figure}[h]
     \centering
@@ -349,16 +360,17 @@ Siccome la maggior parte degli AST sono strutture complesse e voluminose, la com
 %
 Per far fronte a questo problema, per ogni albero viene determinato, mediante un'opportuna funzione di \textit{hashing} che tiene conto del tipo di ciascun nodo e del suo sotto-albero, un valore di \textit{hash} e la comparazione è effettuata confrontando tali valori.
 
-Altri approcci sono presenti in letteratura, tra cui l'utilizzo di grafi delle dipendenze del programma (\textit{Program Dependency Graph}, abbreviato \textit{PDG}) \cite{gplag}.
+Altri approcci sono presenti in letteratura, tra cui l'utilizzo di grafi che descrivono le dipendenze del programma, detti \textit{Program Dependency Graph}, abbreviato \textit{PDG} \cite{gplag}.
 %
 \textit{PDG} è una rappresentazione di una procedura del sorgente a grafo in cui le istruzioni rappresentano l'insieme dei vertici e le dipendenze di dati e di controllo tra le istruzioni rappresentano gli archi.
 %
 In \Cref{img:01-pdg} è mostrato un esempio, tratto da \cite{gplag}, di \textit{PDG} per le due funzioni presentate nel \Cref{lst:pdg}.
+%
+La comparazione tra questi avviene sfruttando l'isomorfismo di grafi\footnote{Nella teoria dei grafi l'isomorfismo di due grafi, $G$ e $H$, è una biiezione tra i loro vertici che preserva i bordi, ovvero tale che, data una coppia qualsiasi $(u, v)$ adiacente in $G$, la coppia $(f(u), f(v))$ sia ancora adiacente in $H$.}.
 
 \lstinputlisting[
-    float,
     language=c,
-    caption={Somma di un array, in C},
+    caption={Due semplici funzioni, in C, che effettuanao la somma di un \textit{array} utilizzate per mostrare il corrispondente \textit{PDG}},
     label={lst:pdg}
 ]{resources/code/01-pdg.c}
 
@@ -371,7 +383,7 @@ In \Cref{img:01-pdg} è mostrato un esempio, tratto da \cite{gplag}, di \textit{
 \end{figure}
 
 \subsection{\textit{Hybrid detection}}
-Entrambi gli approcci descritti sopra hanno i loro vantaggi e svantaggi. 
+Entrambi i tipi di tecniche descritti sopra hanno i loro vantaggi e svantaggi. 
 %
 Alcuni lavori di ricerca hanno pertanto cercato di combinare entrambi gli approcci creando, di fatto, tecniche di analisi ibride, alcune delle quali adattate da altri domini, regolando l'influenza di un approccio sull'altro sulla base delle proprie esigenze.
 %
