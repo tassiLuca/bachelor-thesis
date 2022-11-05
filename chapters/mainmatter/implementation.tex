@@ -32,19 +32,19 @@ Tuttavia, nonostante la generazione dell'albero sintattico sollevi dalla respons
 %
 Per questo motivo è necessario una fase intermedia di \textit{preprocessing} in cui l'albero viene “sfoltito”. In particolare, in questa fase l'albero viene visitato e, oltre a rimuove le dichiarazioni suddette, sono rimosse anche le funzioni \texttt{hashCode()}, \texttt{equals()} e \texttt{toString()}.
 %
-Queste, infatti, nella maggioranza dei casi, vengono automaticamente generati dall'\textit{IDE} e non sono rappresentativi della logica dei sorgenti.
+Queste, infatti, nella maggioranza dei casi, vengono automaticamente generate dall'\textit{IDE} e non sono rappresentative della logica dei sorgenti.
 
 A seguire avviene la conversione del codice sorgente in una sequenza di \textit{token}.
 %
 Si noti che la fase di \textit{tokenizzazione} vera e propria descritta nella \Cref{01-tokenization} è già stata eseguita internamente dal \textit{parser} di JavaParser i cui \textit{token} sono quelli presenti nell'albero.
 %
-Tali \textit{token}, tuttavia, rappresentano in modo molto specifico la struttura del programma: ...
+Tali \textit{token}, tuttavia, rappresentano in modo molto specifico la struttura del programma: ad ogni tipo del linguaggio è associato un tipo differente di \textit{token}.
 %
 Come descritto nella \Cref{01-tokenization} l'obiettivo è creare invece un insieme di \textit{token} "lasco" che raggruppi tipi di \textit{token} equivalenti a livello semantico.
 
-A questo scopo, l'albero sintattico preprocessato viene visitato e, per ogni nodo, si emette un \textit{token}, con le relative informazioni circa la sua posizione nel sorgente, o meno a seconda sia una dichiarazione semanticamente rilevante.
+A questo scopo, l'albero sintattico preprocessato viene visitato e, per ogni nodo, si emette un \textit{token}, con le relative informazioni circa la sua posizione nel sorgente, a seconda sia una dichiarazione semanticamente rilevante o meno.
 
-In particolare, è stato costruito un file di configurazione \textit{Yaml}\footnotetext{Linguaggio, \textit{superset} di Json, per la serializzazione di dati che viene impiegato per la scrittura di file di configurazione: \url{https://yaml.org/}.} (\Cref{lst:token-config-file}) in cui sono elencati i tipi di dichiarazioni rilevanti, eventualmente aggregando tra loro dichiarazione semanticamente simili e che potrebbero essere facilmente cambiate per offuscare la copiatura.
+In particolare, è stato costruito un file di configurazione \textit{Yaml}\footnote{Linguaggio, \textit{superset} di Json, per la serializzazione di dati che viene impiegato per la scrittura di file di configurazione: \url{https://yaml.org/}.} (\Cref{lst:token-config-file}) in cui sono elencati i tipi di dichiarazioni rilevanti, eventualmente tralasciando tipi troppo dettagliati, come \texttt{PrimitiveType} o \texttt{VarType}, ed aggregando tra loro dichiarazione semanticamente simili e che potrebbero essere facilmente cambiate per offuscare la copiatura.
 %
 Ad esempio, sono state aggregate sotto un unico tipo \texttt{loop-stmt} tutti i costrutti che effettuano un ciclo.
 %
@@ -70,15 +70,15 @@ Il risultato dell'applicazione del processo sopra descritto al \Cref{lst:test-an
 \section{Filtraggio}
 A seguito dell'analisi del codice sorgente e della generazione della sequenza di \textit{token} i sorgenti del \textit{corpus} possono essere filtrati, al fine di limitare il numero di progetti da dover confrontare.
 %
-Questo \textit{step} rappresenta uno snodo critico nella \textit{pipeline} di azioni da eseguire in quanto scambia una frazione dell'efficacia del sistema in favore dell'efficienza: una stima fuorviante della similarità di una coppia di progetti può comportare l'esclusione della comparazione tra gli stessi, con la conseguente perdita di sensibilità nel caso in cui rappresentassero dei veri positivi.
+Questo \textit{step} rappresenta uno snodo critico nella \textit{pipeline} di azioni da eseguire in quanto scambia una frazione dell'efficacia del sistema in favore dell'efficienza: una stima fuorviante della similarità di una coppia di progetti può comportare l'esclusione dalla comparazione degli stessi, con la conseguente perdita di sensibilità nel caso in cui rappresentassero dei veri casi di copiatura.
 %
-Per questo motivo la fase di filtraggio è \textit{opzionalmente} eseguita a discrezione dell'utente.
+Per questo motivo la fase di filtraggio è \textit{opzionalmente} eseguita a discrezione dell'utente, che si presume possa valutare se necessita di un'analisi più veloce ma meno esaustiva o viceversa.
 
 Come già presentato nella \Cref{01-tokenization}, il processo di filtraggio è preceduto da una fase d'indicizzazione in cui vengono aggregati i dati sotto forma di una struttura dati per mezzo della quale è possibile estrarre informazioni statistiche significative per la stima della similarità.
 
-Nel sistema è attualmente stato implementato un indice equivalente a quello presentato in \Cref{table:token-indexing} a partire dal quale la similarità tra progetti è stata calcolata mediante la \textbf{similarità coseno}.
+Nel sistema è attualmente implementato un indice equivalente a quello presentato in \Cref{table:token-indexing} a partire dal quale la similarità tra progetti è stata calcolata mediante la \textbf{similarità coseno}.
 %
-Essa è una metrica euristica per la misurazione della similutidine di due vettori effettuata calcolando il coseno del loro angolo, ampiamente utilizzata nel contesto dell'analisi testuale ed è definita come segue: 
+Essa è una metrica euristica ampiamente utilizzata nel contesto dell'analisi testuale che misura la similutidine di due vettori calcolando il coseno del loro angolo: 
 \begin{equation}
 	cosine\_similarity(A,B) = \frac{A \cdot B}{||A|| ||B||} 
 		= \frac{\sum_{k=1}^{n} A(k) B(k)}{\sqrt{\sum_{k=1}^{n}A(k)^2 \cdot \sum_{k=1}^{n} B(k)^2}}
@@ -87,28 +87,28 @@ dove $A$ e $B$ sono due vettori di attributi numerici a $n$ dimensioni.
 
 In generale, il risultato della similarità è un valore compreso tra $-1$ e $1$ dove $-1$ indica che i due vettori sono \textit{anti}-correlati (hanno verso opposto), $1$ indica massima correlazione e $0$ un'assenza di correlazione (i due vettori sono ortogonali tra loro).
 
-Nel nostro caso, il contenuto dei due vettori è la frequenza dei tipi di \textit{token} in cui il $k$-esimo elemento contiene il numero di volte in cui il tipo di \textit{token} numerato con $k$ ricorre nel sorgente, oppure $0$ se non presente.
+Nel nostro caso, il contenuto dei due vettori è la frequenza dei tipi di \textit{token} in cui il $k$-esimo elemento contiene il numero di volte in cui il $k$-esimo tipo di \textit{token} ricorre nel sorgente, oppure $0$ se non presente.
 %
-Poiché le frequenze sono valori sempre positivi nel caso in esame si otterranno valori compresi tra $0$ e $1$, dove $1$ indica che i tipi di \textit{token} contenuti nelle due rappresentazioni sono gli stessi, presenti in egual numero, ma non necessariamente disposti nello stesso ordine, e $0$ indica che non c'è alcun tipo di \textit{token} comune.
+Poiché le frequenze sono valori sempre positivi, nel caso in esame, si otterranno valori compresi tra $0$ e $1$, dove $1$ indica che i tipi di \textit{token} contenuti nelle due rappresentazioni sono gli stessi, presenti in egual numero ma non necessariamente disposti nello stesso ordine, e $0$ indica che non c'è alcun tipo di \textit{token} comune.
 
 A seguito della stima della similarità coseno, tutte le coppie di rappresentazioni la cui similarità è inferiore a un valore di soglia sono esclusi.
 %
-Tale valore è calcolato, seguendo quanto riportato in \cite{es-plag}, utilizzando la formula riportata in \Cref{eq:cosine-filtering-threshold}.
+Tale valore è calcolato, seguendo quanto riportato in \cite{es-plag}, utilizzando la formula riportata nell'\Cref{eq:cosine-filtering-threshold}.
 
 \begin{equation}
 \label{eq:cosine-filtering-threshold}	
-	threshold = sim_{min} + init_threshold \cdot (sim_{max} - sim_{min})
+	threshold = sim_{min} + init\_threshold \cdot (sim_{max} - sim_{min})
 \end{equation}
 
-dove $init_threshold$ è un valore compreso tra $0$ e $1$ (corrispondente al range $0-100\%$) e $sim_{max}$ e $sim_{min}$ sono rispettivamente la similarità coseno massima e minima risultante dalla comparazione di tutte le coppie.
+dove $init\_threshold$ è un valore compreso tra $0$ e $1$ (corrispondente al range $0-100\%$) e $sim_{max}$ e $sim_{min}$ sono rispettivamente la similarità coseno massima e minima risultante dalla comparazione di tutte le coppie.
 
 Secondo le valutazioni presentate in \cite{es-plag} questo tipo di filtraggio aumenta l'efficienza del sistema con un compromesso in termini di efficacia che rimane accettabile fintanto che la soglia $init\_threshold$ è mantenuta al di sotto del 60\%.
 
 \section{Rilevamento delle somiglianze}
 \label{03-matching-algorithms}
-Gli algoritmi impiegati per confrontare due sequenze di \textit{token} sono il \textit{Greedy String Tiling} e \textit{Running Karp-Rabin Matching}, che ne rappresenta una sua evoluzione, introdotti da M. Wise nel 1993 in \cite{wise-running-93}.
-%
-Sebbene questi algoritmi siano stati concepiti per lavorare su sequenze di stringhe, possono essere facilmente riadattati per operare su sequenze di \textit{token}.
+Gli algoritmi impiegati per confrontare due sequenze di \textit{token} sono il \textit{Greedy String Tiling} e il \textit{Running Karp-Rabin Greedy String Tiling}, che ne rappresenta una sua evoluzione, introdotti da M. Wise nel 1993 in \cite{wise-running-93} a seguito della necessità di sviluppare proprio un sistema automatico antiplagio, anche se negli anni successivi gli stessi algoritmi sono stati impiegati in altri campi, tra cui il confronto di sequenze di proteine/DNA.
+
+Sebbene questi siano stati concepiti per lavorare su sequenze di stringhe, possono essere facilmente riadattati per operare su sequenze di \textit{token}
 
 Dette $A$ e $B$ due sequenze di \textit{token}, un algoritmo per misurare la similarità in questo dominio deve determinare una sottosequenza comune che abbia le seguenti proprietà:
 \begin{itemize}
@@ -121,19 +121,18 @@ L'algoritmo si compone principalmente di due fasi:
 \begin{itemize}
 	\item \textbf{Fase 1}: in questa fase, viene ricercata la corrispondenza più lunga. Questo è fatto grazie un triplo ciclo innestato: il primo itera sui token della sequenza più corta, denominata \textit{pattern}, il secondo compara ciascuno di questi con ogni \textit{token} della sequenza più lunga, denominata \textit{text}. Se i due \textit{token} corrispondono il ciclo più interno cerca di estendere il \textit{match} il più possibile (fermandosi non appena trova un \textit{token} che nelle due sequenze differisce).
 
-	\item \textbf{Fase 2}: questa fase marca ciascun \textit{match} trovato nella fase precedente partendo da quello più lungo. Questo garantisce che ciascun \textit{token} venga usato per un solo \textit{match} e divenga indisponibile per i \textit{match} successivi (che hanno una minor lunghezza). Nella terminologia di \cite{wise-running-93} i \textit{match} i cui \textit{token} sono stati marcati sono denominati \textit{tile}.
+	\item \textbf{Fase 2}: questa fase marca ciascun natch di lunghezza massima (\textit{maximal match}) trovato nella fase precedente. Questo garantisce che ciascun \textit{token} venga usato per un solo \textit{match} e divenga indisponibile per i \textit{match} successivi (che hanno una minor lunghezza). Nella terminologia di \cite{wise-running-93} i \textit{match} i cui \textit{token} sono stati marcati sono denominati \textit{tile}. Si noti che, anche se un \textit{match} è parzialmente occluso e perciò non viene marcato, una versione più corta dello stesso \textit{match} può essere marcato durante le successive iterazioni.
 \end{itemize}
 
 Queste due fasi vengono ripetute fino a quando non vengono trovate più corrispondenze di lunghezza almeno \texttt{minimum\_match\_length}.
 %
 Tale valore è imposto per non generare troppe sequenze spurie di lunghezza irrisoria e garantire risultati migliori.
 %
-Giacché la lunghezza dei \textit{match} diminuisce, nel caso peggiore, di un'unità ad ogni iterazione è garantito che l'algoritmo termini.
+Giacché la lunghezza dei \textit{match} diminuisce ad ogni iterazione è garantito che l'algoritmo termini.
 
 Lo pseudocodice dell'algoritmo è presentato nel \Cref{lst:gst}.
 
 \lstinputlisting[
-	float,
 	language=pseudocode,
  	caption={Pseudocodice dell'algoritmo \textit{Greedy String Tiling (GST)}. In accordo con la terminologia del \textit{paper} $P$ rappresenta il \textit{pattern} ovvero la sequenza da confrontare più corta, mentre $T$ il \textit{text} ovvero la sequenza tra le due più lunga.},
  	label={lst:gst},
@@ -153,7 +152,7 @@ Laddove i due valori corrispondano, e solo in questo caso, le sottosequenze veng
 
 Nel \Cref{lst:rkr-scanpattern} viene mostrato lo pseudocodice della \textit{routine} che si occupa di effettuare questo confronto.
 %
-Come si può osservare, nelle righe 1-3 vengono calcolati i valori di \textit{hash} di tutte le sottosequenze (non marcate) di lunghezza $s$ del \textit{text} e vengono salvati in una \textit{hashtable}, una mappa con le corrispondenze sottosequenza di \textit{token} $-$ valore di \textit{hash}.
+Come si può osservare, nelle righe 1-3 vengono calcolati i valori di \textit{hash} di tutte le sottosequenze (non marcate) di lunghezza $s$ del \textit{text} e vengono salvati in una \textit{hashtable}, una mappa con le corrispondenze sottosequenza di \textit{token}-valore di \textit{hash}.
 %
 Lo stesso viene fatto per il \textit{pattern} con la differenza che, non appena calcolato il valore \textit{hash} per la sottosequenza considerata, si verifica se lo stesso sia già presente nella \textit{hashtable}.
 %
@@ -161,21 +160,21 @@ In questo caso, infatti, potrebbe effettivamente esserci una corrispondenza e si
 %
 Si noti che nei casi in cui la corrispondenza sia effettiva e non sia causata da un artefatto della funzione di \textit{hash}, il \textit{match} è esteso fino al primo \textit{token} non corrispondente, proprio come nel precedente algoritmo.
 
-Nella versione originale dell'algoritmo la struttura dati utilizzata per memorizzare i \textit{match} è una lista di code in cui ogni coda memorizza i \textit{match} della stessa lunghezza, mantenuta ordinata per valori descrenti di lunghezza.
-
 \lstinputlisting[
-	float,
  	language=pseudocode,
  	caption={Pseudocodice della \textit{routine} \texttt{scanpattern} dell'algoritmo \textit{RKR-GST}},
  	label={lst:rkr-scanpattern},
 ]{resources/code/03-rkr-gst-scanpattern}
 
+Nella versione originale dell'algoritmo la struttura dati utilizzata per memorizzare i \textit{match} è una lista di code in cui ogni coda memorizza i \textit{match} della stessa lunghezza, mantenuta ordinata per valori descrenti.
+
 Il \Cref{lst:rkr-markarrays} presenta lo pseudocodice della \textit{routine} che effettua la marcatura dei \textit{match} individuati nella \textit{routine} \texttt{scanpattern}, corrispondente alla seconda fase dell'algoritmo precedente.
 %
-La principale differenza con la precedente versione risiede nel fatto che la marcatura dei \textit{match} viene effettuata sulla base...
+La principale differenza con la precedente versione risiede nel fatto che la marcatura viene effettuata per ogni \textit{match} e non solo per quelli di lunghezza massima.
+%
+Inoltre, se il \textit{match} risulta parzialmente occluso, ma la rimanente parte non occlusa è  di lunghezza $m > s$, questa viene salvata nella lista di code, in modo tale da essere valutata nella successiva iterazione in cui vengono valutati tutti i \textit{match} di lunghezza $m$ (righe 11-13).
 
 \lstinputlisting[
-	float,
  	language=pseudocode,
  	caption={Pseudocodice \textit{routine} \texttt{markarrays} dell'algoritmo \textit{RKR-GST}},
  	label={lst:rkr-markarrays},
@@ -183,17 +182,19 @@ La principale differenza con la precedente versione risiede nel fatto che la mar
 
 Infine, nel \Cref{lst:rkr-top-level} è mostrato l'\textit{entry-point} dell'algoritmo.
 %
-Come si può osservare, corrispondenze molto lunghe vengono trovate solo durante la prima iterazione e dopo di questa non saranno trovate corrispondenze maggiori del doppio della lunghezza di ricerca corrente.
+Come si può osservare, corrispondenze molto lunghe vengono trovate solo durante la prima iterazione: dopo di questa, infatti, non è possibile siano trovate corrispondenze maggiori del doppio della lunghezza di ricerca corrente.
 %
-Il valore di $s$ (l'equivalente di \texttt{minimum\_match\_length} nell'algoritmo \textit{Greedy String Tiling}) è scelto in modo tale da garantire che non vengano cercate corrispondenze troppo piccole.
-%
-Un valore plausibile di $s$ consigliato in \cite{wise-running-93} è 20.
+Questo garantisce che, nelle successive iterazioni, l'algoritmo termini.
 
 \lstinputlisting[
  	language=pseudocode,
  	caption={\textit{Entry-point} dell'algoritmo \textit{RKR-GST}},
  	label={lst:rkr-top-level},
 ]{resources/code/03-rkr-gst-top-algorithm}
+
+Il valore di $s$ (l'equivalente di \texttt{minimum\_match\_length} nell'algoritmo \textit{GST}) è scelto in modo tale da garantire che non vengano cercate corrispondenze troppo piccole.
+%
+Un valore plausibile di $s$ consigliato in \cite{wise-running-93} è 20.
 
 Sebbene la complessità di questo algoritmo sia dimostrato essere, nel caso peggiore, $O(n^2)$, nel caso medio la complessità è pressoché \textbf{lineare}.
 %

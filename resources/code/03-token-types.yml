@@ -39,9 +39,6 @@
     - ForStmt
     - WhileStmt
     - DoStmt
-- name: break-stmt
-  languageConstructs:
-    - BreakStmt
 - name: return-stmt
   languageConstructs:
     - ReturnStmt
