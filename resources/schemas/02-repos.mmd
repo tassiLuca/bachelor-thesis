@@ -13,7 +13,7 @@ direction BT
     }
     AbstractRepository ..|> Repository
     class GitHubRepository {
-        -repository: Repo
+        -repository: GHRepository
         +GitHubRepository(\nㅤㅤrepository: GHRepository\n)
     }
     class BitBucketRepository {

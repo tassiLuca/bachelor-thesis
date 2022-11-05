@@ -1,5 +1,6 @@
 classDiagram
 direction BT
+    direction BT
     class RunConfigurator {
         <<interface>>
         +sessionFrom(args: List~String~) AntiPlagiarismSession
@@ -14,9 +15,8 @@ direction BT
         +submission: Set~Repository~
         +corpus: Set~Repository~
         +filesToExclude: Set~String~
-        +exporter: ResultsExporter~M~
+        +exporter: ReportsExporter~M~
     }
-    class RunConfigurationImpl~M : Match~
     RunConfiguration <.. RunConfigurator : creates
 
     class TechniqueFacade~out M : Match~ {
@@ -26,10 +26,15 @@ direction BT
     class TokenizationFacade~TokenMatch~ {
         -analyzer: TokenizationAnalyzer
         -detector: TokenBasedPlagiarismDetector
+        -filter: TokenizedSourceFilter
     }
     TokenizationFacade ..|> TechniqueFacade
 
-    class ResultExporter~in M : Match~ {
+    class Repository {
+        <<interace>>
+    }
+
+    class ReportsExporter~in M : Match~ {
         <<interface>>
         +invoke(results: Set~Result<M>~)
     }
@@ -37,20 +42,21 @@ direction BT
         <<abstract>>
         +FileExporter(outputDirectory: Path)
     }
-    FileExporter ..|> ResultExporter
+    FileExporter ..|> ReportsExporter
     PlainFileExporter~in M : Match~ --|> FileExporter
 
-    TechniqueFacade --* RunConfiguration
-    ResultExporter --* RunConfiguration
+    Repository "*" --* RunConfiguration
+    TechniqueFacade "1" --* RunConfiguration
+    ReportsExporter "1" --* RunConfiguration
 
     class AntiPlagiarismSession {
         <<interface>>
         +invoke()
     }
-    class AntiPlagiarismSessionImpl~out C : Configuration<‎M‎>, M : Match~ {
+    class AntiPlagiarismSessionImpl~out C : Configuration<M>, M : Match~ {
         -configuration: C
         +AntiPlagiarismSessionImpl(configuration: C)
         +invoke()
     }
     AntiPlagiarismSessionImpl ..|> AntiPlagiarismSession
-    AntiPlagiarismSessionImpl *--> RunConfiguration
+    AntiPlagiarismSessionImpl *--> "1" RunConfiguration

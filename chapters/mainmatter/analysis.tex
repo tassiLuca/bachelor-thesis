@@ -29,7 +29,7 @@ Di seguito vengono descritti, per punti, i requisiti del sistema, suddivisi tra 
 \begin{itemize}
     \item L'algoritmo per determinare la similarità, così come le metriche utilizzate, devono essere interscambiabili, facilmente estendibili e configurabili da parte dell'utente;
 
-    \item Le informazioni estrapolate dai sorgenti sono salavate in modo tale da essere riutilizzate nelle analisi successive di altri progetti. 
+    \item Le informazioni estrapolate dai sorgenti sono salvate in modo tale da essere riutilizzate nelle analisi successive di altri progetti. 
     %
     Si noti che questo è possibile data la natura, invariante nel tempo, degli stessi.
     %
@@ -39,7 +39,7 @@ Di seguito vengono descritti, per punti, i requisiti del sistema, suddivisi tra 
 \end{itemize}
 
 \section{Analisi e modello del dominio}
-Il sistema deve essere in grado, a partire da un insieme di \texttt{Repository}, corrispondenti a progetti coerenti per linguaggio di programmazione, di estrarne una rappresentazione confrontabile (\texttt{SourceRepresentation}) medianti opportuni algoritmi di analisi (\texttt{Analyzer}).
+Il sistema deve essere in grado, a partire da un insieme di \texttt{Repository}, corrispondenti a progetti coerenti per linguaggio di programmazione, di estrarne una rappresentazione confrontabile (\texttt{SourceRepresentation}) mediante opportuni algoritmi di analisi (\texttt{Analyzer}).
 %
 Ciascuna coppia di rappresentazioni intermedie deve essere successivamente filtrata per mezzo di un apposito \texttt{Filter} e confrontata tramite algoritmi di rilevamento di somiglianze (\texttt{PlagiarismDetector}) al fine di poter determinare eventuali parti di codice duplicato e/o somiglianze (\texttt{ComparisonResult}), generando infine dei \texttt{Report}.
 
@@ -64,7 +64,7 @@ Inoltre, il requisito non funzionale sulle \textit{performance} richiederà un'a
 \label{02-architecture}
 L'architettura del sistema è così organizzata: \textbf{\texttt{AntiPlagiarismSession}} è l'interfaccia responsabile della logica dell'applicazione e rappresenta una specifica sessione, dove per sessione si intende l'entità che, una volta opportunamente configurata, esegue la logica dell'applicazione.
 %
-La configurazione su cui essa opera è reificata dall'interfaccia \texttt{RunConfiguration} e rappresenta un "contenitore" d'informazioni necessarie per l'esecuzione del sistema, tra cui la triade composta da \texttt{Analyzer}, \texttt{Detector} e \texttt{Filter}, nonché le \texttt{Repository} su cui deve essere effettuata l'analisi, a loro volta recuperate da un \texttt{RepositoryProvider} che si occuperà di scaricare i progetti dai servizi di \textit{hosting} che verranno supportati dal sistema.
+La configurazione su cui essa opera è reificata nell'interfaccia \texttt{RunConfiguration} e rappresenta un "contenitore" d'informazioni necessarie per l'esecuzione del sistema, tra cui la triade composta da \texttt{Analyzer}, \texttt{Detector} e \texttt{Filter}, nonché le \texttt{Repository} su cui deve essere effettuata l'analisi, a loro volta recuperate da un \texttt{RepositoryProvider} che si occuperà di scaricare i progetti dai servizi di \textit{hosting} che verranno supportati dal sistema.
 %
 Tale configurazione è creata da un \texttt{RunConfigurator}, a cui spetta la corretta istanziazione in accordo con le opzioni definite dall'utente.
 
@@ -127,7 +127,7 @@ Il \textit{design} è presentato in \Cref{img:02-search-criteria}.
     \label{img:02-search-criteria}
 \end{sidewaysfigure}
 
-Le \textit{repository} sono modellate attraverso l'omonima interfaccia, le cui concrete implementazioni rappresentano degli \textit{Adapter} \cite{gof} alle interfacce di libreria utilizzate.
+Le \textit{repository} sono modellate attraverso l'omonima interfaccia, le cui concrete implementazioni rappresentano degli \textit{Adapter} \cite{gof} alle interfacce di libreria utilizzate (si veda \Cref{img:02-repos}).
 %
 Questo permette di essere indipendenti dalla specifica libreria utilizzata, che rimane un dettaglio implementativo, e avere un livello di astrazione adeguato al contesto applicativo.
 %
@@ -138,7 +138,7 @@ La strategia attualmente in uso consiste nell'effettuare il \textit{clone} della
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{resources/img/02-repos.pdf}
-    \caption{Schema UML delle repository.}
+    \caption{Schema UML delle \textit{repository}.}
     \label{img:02-repos}
 \end{figure}
 
@@ -160,6 +160,8 @@ Indipendentemente dalla tipologia di analisi che si voglia applicare, la trasfor
 Nel caso in esame, queste sono: il \textit{parsing} del file, una fase di \textit{preprocessing} ed infine la \textit{tokenizzazione} del sorgente.
 %
 Questa sequenza di azioni è naturalmente modellata attraverso il pattern \textit{Pipeline} \cite{pipeline-pattern}: ogni singolo stadio è modellato attraverso l'interfaccia \texttt{StepHandler} e la \textit{pipeline} viene costruita all'interno del concreto \texttt{Analyzer}, nel nostro caso \texttt{JavaTokenizationAnalyzer}.
+%
+Il \textit{design} dell'analizzatore è esemplificato in \Cref{img:02-analyzer}.
 
 \begin{figure}[h!]
     \makebox[\textwidth][c]{
@@ -175,7 +177,7 @@ Tra tutte, quella implementata nell'attuale sistema è composta da una sequenza 
 %
 L'elenco dei possibili tipi di \textit{token} che la compongono dipende chiaramente dal linguaggio utilizzato.
 %
-La strategia di recupero di questi ultimi è affidata, al solito tramite \textit{Strategy}, all'interfaccia \texttt{TokenTypesSupplier}, la cui implementazione di \textit{default} effettua la de-serializzazione di un file di configurazione in cui sono salvati tutti le tipologie di \textit{token}.
+La strategia di recupero di questi ultimi è affidata, al solito tramite \textit{Strategy}, all'interfaccia \texttt{TokenTypesSupplier}, la cui implementazione di \textit{default} effettua la de-serializzazione di un file di configurazione in cui sono salvate tutte le tipologie di \textit{token}.
 
 \begin{figure}[h!]
     \centering
@@ -244,8 +246,9 @@ In \Cref{img:02-session} è mostrato lo schema UML delle classi che mostra compl
 \todo{schema sequenza}
 
 \begin{sidewaysfigure}
-    \centering
-    \includegraphics[width=0.9\textheight]{resources/img/02-session.pdf}
+    \makebox[\textwidth][c]{
+        \includegraphics[width=1\textheight]{resources/img/02-session.pdf}
+    }
     \caption{Schema UML della sessione}
     \label{img:02-session}
 \end{sidewaysfigure}
@@ -257,10 +260,9 @@ Per il momento, la tecnica utilizzata consiste nel salvare le rappresentazioni i
 %
 Per tale motivo, la concreta implementazione \texttt{KnoledgeBaseRepositoryImpl} delega la (de)serializzazione delle rappresentazioni a un'interfaccia \texttt{RepresentationSerializer} le cui implementazioni hanno l'onere di serializzare la specifica rappresentazione cui fanno riferimento.
 
-\begin{figure}[h!]
-    \makebox[\textwidth][c]{
-        \includegraphics[width=1.2\textwidth]{resources/img/02-cache.pdf}
-    }
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=\textwidth]{resources/img/02-cache.pdf}
     \caption{Schema UML del caching.}
     \label{img:02-caching}
-\end{figure}
+\end{sidewaysfigure}

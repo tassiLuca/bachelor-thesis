@@ -1,11 +1,11 @@
 classDiagram
     direction BT
-    class KnoledgeBaseRepository~S: SourceRepresentation<T>, T~ {
+    class KnoledgeBaseRepository~S: SourceRepresentation<‎T‎>, T~ {
         <<interface>>
         +save(repository: Repository, representations: Sequence~S~)
         +loadIfExists(repository: Repository) Sequence~S~
     }
-    class FileKnoledgeBaseRepository~S: SourceRepresentation<T>, T~ {
+    class FileKnoledgeBaseRepository~S: SourceRepresentation<‎T‎>, T~ {
         -repositoryFolder: File
         -serializer: RepresentationSerializer~S, T~
         +FileKnoledgeBaseRepository(serializer: RepresentationSerializer~S, T~)
@@ -14,14 +14,27 @@ classDiagram
     }
     FileKnoledgeBaseRepository ..|> KnoledgeBaseRepository
 
-    class RepresentationSerializer~S: SourceRepresentation< T >, T~ {
+    class RepresentationSerializer~S: SourceRepresentation<‎T‎>, T~ {
         <<interface>>
         +serialize(representations: Set~S~, out: File)
         +deserialize(serializedContent: File) Set~S~
     }
-    class TokenizedSourceSerializer~TokenizedSource, Sequence<Token>~ {
+    class TokenizedSourceSerializer~TokenizedSource, Sequence<‎Token‎>~ {
         +serialize(representations: Set~TokenizedSource~, out: File)
         +deserialize(serializedContent: File) Set~TokenizedSource~
     }
     TokenizedSourceSerializer ..|> RepresentationSerializer
-    FileKnoledgeBaseRepository *--> RepresentationSerializer
+    RepresentationSerializer "1" <--* FileKnoledgeBaseRepository
+
+    class TechniqueFacade~out M : Match~ {
+        <<interface>>
+        +execute(\nㅤㅤsubmittedRepo: Repository, \n ㅤㅤcomparedRepo: Repository, \n ㅤㅤfilesToExclude: Set~String~, \n ㅤㅤminDuplicationPercentage: Double\n) Result~M~
+    }
+    class TokenizationFacade~TokenMatch~ {
+        -analyzer: TokenizationAnalyzer
+        -detector: TokenBasedPlagiarismDetector
+        -filter: TokenizedSourceFilter
+        -baseRepository: FileKnoledgeBaseRepository~TokenizedSource, Sequence<‎Token‎>~
+    }
+    TokenizationFacade ..|> TechniqueFacade
+    TechniqueFacade *--> "1" FileKnoledgeBaseRepository
