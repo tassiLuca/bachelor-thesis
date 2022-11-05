@@ -243,8 +243,6 @@ In futuro, il design potrebbe essere esteso per supportare un'interfaccia grafic
 
 In \Cref{img:02-session} è mostrato lo schema UML delle classi che mostra complessivamente i rapporti tra le varie componenti.
 
-\todo{schema sequenza}
-
 \begin{sidewaysfigure}
     \makebox[\textwidth][c]{
         \includegraphics[width=1\textheight]{resources/img/02-session.pdf}
@@ -266,3 +264,14 @@ Per tale motivo, la concreta implementazione \texttt{KnoledgeBaseRepositoryImpl}
     \caption{Schema UML del caching.}
     \label{img:02-caching}
 \end{sidewaysfigure}
+
+\subsubsection*{Comportamento}
+Per concludere, in \Cref{img:02-sequence-diagram} viene mostrato il diagramma UML di sequenza che mostra macroscopicamente il flusso delle azioni del sistema e come le varie componenti cooperano tra loro.
+
+\begin{figure}[h!]
+    \makebox[\textwidth][c]{
+        \includegraphics[width=1.25\textwidth]{resources/img/02-sequence-diagram.pdf}
+    }
+    \caption{Diagramma UML di sequenza rappresentante l'interazione tra le componenti del sistema.}
+    \label{img:02-sequence-diagram}
+\end{figure}
