@@ -1,0 +1,27 @@
+classDiagram
+    direction BT
+    class KnoledgeBaseRepository~S: SourceRepresentation<T>, T~ {
+        <<interface>>
+        +save(repository: Repository, representations: Sequence~S~)
+        +loadIfExists(repository: Repository) Sequence~S~
+    }
+    class FileKnoledgeBaseRepository~S: SourceRepresentation<T>, T~ {
+        -repositoryFolder: File
+        -serializer: RepresentationSerializer~S, T~
+        +FileKnoledgeBaseRepository(serializer: RepresentationSerializer~S, T~)
+        +save(repository: Repository, representations: Sequence~S~)
+        +loadIfExists(repository: Repository) Sequence~S~
+    }
+    FileKnoledgeBaseRepository ..|> KnoledgeBaseRepository
+
+    class RepresentationSerializer~S: SourceRepresentation< T >, T~ {
+        <<interface>>
+        +serialize(representations: Set~S~, out: File)
+        +deserialize(serializedContent: File) Set~S~
+    }
+    class TokenizedSourceSerializer~TokenizedSource, Sequence<Token>~ {
+        +serialize(representations: Set~TokenizedSource~, out: File)
+        +deserialize(serializedContent: File) Set~TokenizedSource~
+    }
+    TokenizedSourceSerializer ..|> RepresentationSerializer
+    FileKnoledgeBaseRepository *--> RepresentationSerializer

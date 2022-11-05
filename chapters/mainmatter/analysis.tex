@@ -251,4 +251,16 @@ In \Cref{img:02-session} è mostrato lo schema UML delle classi che mostra compl
 \end{sidewaysfigure}
 
 \subsubsection*{Caching delle rappresentazioni}
+Il salvataggio delle rappresentazioni e il loro recupero, in modo tale che possano essere riusate in sessioni successive senza dover ri-scaricare i progetti ed effettuare la loro analisi, è affidato all'interfaccia \texttt{KnoledgeBaseRepository}.
+%
+Per il momento, la tecnica utilizzata consiste nel salvare le rappresentazioni in locale all'interno di file.
+%
+Per tale motivo, la concreta implementazione \texttt{KnoledgeBaseRepositoryImpl} delega la (de)serializzazione delle rappresentazioni a un'interfaccia \texttt{RepresentationSerializer} le cui implementazioni hanno l'onere di serializzare la specifica rappresentazione cui fanno riferimento.
 
+\begin{figure}[h!]
+    \makebox[\textwidth][c]{
+        \includegraphics[width=1.2\textwidth]{resources/img/02-cache.pdf}
+    }
+    \caption{Schema UML del caching.}
+    \label{img:02-caching}
+\end{figure}
