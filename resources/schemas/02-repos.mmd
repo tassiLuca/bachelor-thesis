@@ -14,18 +14,18 @@ direction BT
     AbstractRepository ..|> Repository
     class GitHubRepository {
         -repository: Repo
-        +GitHubRepository(repository: GHRepository)
+        +GitHubRepository(\nㅤㅤrepository: GHRepository\n)
     }
     class BitBucketRepository {
         -repoInfos: JSONObject
-        +BitBucketRepository(repoInfos: JSONObject)
+        +BitBucketRepository(\nㅤㅤrepoInfos: JSONObject\n)
     }
     GitHubRepository --|> AbstractRepository
     BitBucketRepository --|> AbstractRepository
 
     class RepoContentSupplierStrategy {
         <<interface>>
-        +getFilesOf(extensions: Iterable~String~)
+        +getFilesOf(\nㅤㅤextensions: Iterable~String~\n)
     }
     RepoContentSupplierStrategy <--* AbstractRepository
     CloneStrategy ..|> RepoContentSupplierStrategy

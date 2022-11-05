@@ -1,0 +1,16 @@
+classDiagram
+direction BT
+    class RepresentationFilter~S: SourceRepresentation<‎T‎>, T~ {
+        <<interface>>
+        +invoke(submission: S, corpus: Sequence~S~) Sequence~S~
+    }
+    class TokenizedSourceFilter~TokenizedSource, Sequence<‎Token‎>~
+    RepresentationFilter <|.. TokenizedSourceFilter
+
+    class Indexer~in S: SourceRepresentation<T>, T, I~ {
+        +invoke(input: S) I
+    }
+    class TokenBasedIndexer~TokenizedSource, Sequence<‎Token‎>, Map<‎TokenType, Int‎>~
+    TokenBasedIndexer ..|> Indexer
+
+    TokenizedSourceFilter *--> TokenBasedIndexer

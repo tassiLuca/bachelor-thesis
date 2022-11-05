@@ -5,6 +5,7 @@ direction BT
         +sessionFrom(args: List~String~) AntiPlagiarismSession
     }
     RunConfigurator <|.. CLIConfigurator
+    RunConfigurator <|.. FileConfigurator
 
     class RunConfiguration~M : Match~ {
         <<interface>>
@@ -46,7 +47,7 @@ direction BT
         <<interface>>
         +invoke()
     }
-    class AntiPlagiarismSessionImpl~out C : Configuration<M>, M : Match~ {
+    class AntiPlagiarismSessionImpl~out C : Configuration<‎M‎>, M : Match~ {
         -configuration: C
         +AntiPlagiarismSessionImpl(configuration: C)
         +invoke()

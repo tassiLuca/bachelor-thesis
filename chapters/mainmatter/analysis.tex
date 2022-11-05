@@ -53,7 +53,7 @@ Inoltre, il requisito non funzionale sulle \textit{performance} richiederà un'a
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.9\textwidth]{resources/img/02-domain.pdf}
+    \includegraphics[width=\textwidth]{resources/img/02-domain.pdf}
     \caption{Schema UML delle classi dell'analisi del problema, con rappresentate le entità principali ed i rapporti fra loro.}
     \label{img:02-domain}
 \end{figure}
@@ -61,6 +61,7 @@ Inoltre, il requisito non funzionale sulle \textit{performance} richiederà un'a
 \section{\textit{Design}}
 
 \subsection{Architettura}
+\label{02-architecture}
 L'architettura del sistema è così organizzata: \textbf{\texttt{AntiPlagiarismSession}} è l'interfaccia responsabile della logica dell'applicazione e rappresenta una specifica sessione, dove per sessione si intende l'entità che, una volta opportunamente configurata, esegue la logica dell'applicazione.
 %
 La configurazione su cui essa opera è reificata dall'interfaccia \texttt{RunConfiguration} e rappresenta un "contenitore" d'informazioni necessarie per l'esecuzione del sistema, tra cui la triade composta da \texttt{Analyzer}, \texttt{Detector} e \texttt{Filter}, nonché le \texttt{Repository} su cui deve essere effettuata l'analisi, a loro volta recuperate da un \texttt{RepositoryProvider} che si occuperà di scaricare i progetti dai servizi di \textit{hosting} che verranno supportati dal sistema.
@@ -71,11 +72,13 @@ Gli \texttt{Output} rappresentano le risorse su cui \textit{loggare} le informaz
 %
 Un particolare tipo di \texttt{Output} è rappresentato dal \texttt{ReportsExporter}, il componente che si occuperà di esportare opportunamente i risultati dell'analisi.
 
-Infine, \texttt{KnoledgeBaseRepository} rappresenta l'interfaccia che permette il salvataggio e il recupero delle rappresentazioni dei sorgenti già precedentemente analizzati e, perciò, salvati in locale. 
+Infine, \texttt{KnoledgeBaseRepository} rappresenta l'interfaccia che permette il salvataggio e il recupero delle rappresentazioni dei sorgenti già precedentemente analizzate e, perciò, salvate.
+%
+La tecnica con cui questo verrà realizzato, salvataggio su \textit{file} piuttosto che l'uso di un \textit{database}, è un aspetto tecnologico implementativo che non deve impattare sull'architettura e di cui non si tiene qui conto.
 
 Questa architettura permette di configurare opportunamente ogni sessione in base alle proprie esigenze utilizzando le tecniche e le metriche che si ritengono più consone in relazione al contesto in cui lo strumento viene calato.
 %
-Inoltre, si lascia aperta la possibilità di estendere le strategie per l'esportazione dei dati e per la creazione della configurazione, nel caso in futuro si voglia anche aggiungere un'interfaccia grafica al sistema.
+Inoltre, si lascia aperta la possibilità di estendere le strategie per l'esportazione dei risultati (più in generale dell'\texttt{Output}) e per la creazione della configurazione, nel caso in futuro si voglia aggiungere un'interfaccia grafica al sistema.
 
 In \Cref{img:02-architecture} è esemplificato il diagramma UML architetturale.
 
@@ -86,9 +89,6 @@ In \Cref{img:02-architecture} è esemplificato il diagramma UML architetturale.
     \caption{Schema UML architetturale del sistema.}
     \label{img:02-architecture}
 \end{figure}
-%
-% --- fine da rivedere ---
-%
 
 \subsection{\textit{Design} dettagliato}
 
@@ -102,7 +102,7 @@ Per quanto concerne i \textit{provider} di \textit{repository}, ovvero i compone
     \label{img:02-provider}
 \end{figure}
 
-Viste le limitazioni in termini di numero di richieste che i due servizi impongono \footnote{Sia \textit{GitHub} che \textit{Bitbuckt} hanno un limite massimo di richieste che possono essere effettuate in un certo intervallo di tempo che varia in base la richiesta sia autenticata o meno. Questi vincoli sono imposti per garantire la protezione da attacchi di tipo \textit{Denial of Service}, consentire la scalabilità e garantire buone prestazioni in termini di tempo di risposta.} e la conseguente necessità di autenticarsi mediante degli opportuni \textit{token} per effettuare le richieste \textit{REST}, si è optato di demandare la logica di recupero dei suddetti \textit{token} di autenticazione all'interfaccia \texttt{TokenSupplierStrategy} che reifica il \textit{pattern} \textit{Strategy} \cite{gof}.
+Viste le limitazioni in termini di numero di richieste che i due servizi impongono\footnote{Sia \textit{GitHub} che \textit{Bitbuckt} hanno un limite massimo di richieste che possono essere effettuate in un certo intervallo di tempo che varia in base la richiesta sia autenticata o meno. Questi vincoli sono imposti per garantire la protezione da attacchi di tipo \textit{Denial of Service}, consentire la scalabilità e garantire buone prestazioni in termini di tempo di risposta.} e la conseguente necessità di autenticarsi mediante degli opportuni \textit{token} per effettuare le richieste \textit{REST}, si è optato di demandare la logica di recupero dei suddetti \textit{token} di autenticazione all'interfaccia \texttt{TokenSupplierStrategy} che reifica il \textit{pattern} \textit{Strategy} \cite{gof}.
 %
 L'implementazione di \textit{default} ricerca tra variabili d'ambiente, ma altri approcci possono essere introdotti in modo del tutto trasparente ai \textit{provider}.
 
@@ -116,7 +116,7 @@ Per permettere che questi siano componibili è stato qui utilizzato il pattern \
 %
 La classe astratta che funge da decoratore è \texttt{(GitHub|BitBucket)CompoundCriteria} e le sue concrete implementazioni permettono di specificare il nome della \textit{repository} o il linguaggio.
 %
-In questo modo possono essere creati dinamicamente criteri compositi in base alle esigenze del \textit{client} e in futuro potrebbero essere aggiunti nuovi criteri di ricerca, come il numero di stelle ricevute, il \textit{topic} piuttosto che la data di creazione, aderendo all'\textit{Open Closed Principle} secondo cui le entità di un sistema devono essere aperte all'estensione, ma chiuse alla modifica.
+In questo modo possono essere creati dinamicamente criteri compositi in base alle esigenze del \textit{client} e in futuro potrebbero essere aggiunti nuovi criteri di ricerca, come, ad esempio, il numero di stelle ricevute o la data di creazione, aderendo all'\textit{Open Closed Principle} secondo cui le entità di un sistema devono essere aperte all'estensione, ma chiuse alla modifica.
 %
 Il \textit{design} è presentato in \Cref{img:02-search-criteria}.
 
@@ -136,9 +136,8 @@ Per quanto attiene la logica del recupero dei sorgenti, in pieno accordo con il 
 La strategia attualmente in uso consiste nell'effettuare il \textit{clone} della repository in una cartella in locale.
 
 \begin{figure}[h!]
-    \makebox[\textwidth][c]{
-        \includegraphics[width=1.2\textwidth]{resources/img/02-repos.pdf}
-    }
+    \centering
+    \includegraphics[width=\textwidth]{resources/img/02-repos.pdf}
     \caption{Schema UML delle repository.}
     \label{img:02-repos}
 \end{figure}
@@ -150,7 +149,7 @@ Il loro \textit{design} è stato pensato in modo tale da permettere il massimo g
 %
 Presumibilmente, infatti, questi sono i componenti che varieranno più spesso nell'arco del ciclo di vita di questo \textit{software} e il cui grado di configurabilità influirà certamentente in modo preponderante sia sulle prestazioni, sia sull'efficacia del sistema.
 
-Tutti e tre i componenti sono stati progettati, in stile funzionale, come delle funzioni che, preso i \textit{input} uno più argomenti, ritornano in \textit{output} l'\textit{input} del componente successivo:.
+Tutti e tre i componenti sono stati progettati, in stile funzionale, come delle funzioni che, preso i \textit{input} uno più argomenti, ritornano in \textit{output} l'\textit{input} del componente successivo.
 %
 L'esecuzione di una tecnica è, infatti, una catena di funzioni applicate in sequenza.
 
@@ -163,8 +162,9 @@ Nel caso in esame, queste sono: il \textit{parsing} del file, una fase di \texti
 Questa sequenza di azioni è naturalmente modellata attraverso il pattern \textit{Pipeline} \cite{pipeline-pattern}: ogni singolo stadio è modellato attraverso l'interfaccia \texttt{StepHandler} e la \textit{pipeline} viene costruita all'interno del concreto \texttt{Analyzer}, nel nostro caso \texttt{JavaTokenizationAnalyzer}.
 
 \begin{figure}[h!]
-    \centering
-    \includegraphics[width=\textwidth]{resources/img/02-analyzer.pdf}
+    \makebox[\textwidth][c]{
+        \includegraphics[width=1.1\textwidth]{resources/img/02-analyzer.pdf}
+    }
     \caption{Schema UML dell'analizzatore.}
     \label{img:02-analyzer}
 \end{figure}
@@ -186,25 +186,35 @@ La strategia di recupero di questi ultimi è affidata, al solito tramite \textit
 
 Le rappresentazioni generate dal processo di analisi, vengono poi opportunamente filtrate per mezzo di un \texttt{RepresentationFilter} che, preso in \textit{input} una istanza dell'insieme delle \textit{submission} e l'insieme del \textit{corpus} con cui confrontarla, ne effettua un filtraggio secondo opportune metriche.
 %
-Per farlo, fa uso di un \texttt{Indexer} che crea, a partire dalle rappresentazioni, indici (strutture dati) su cui poter effettuare analisi \dots
+Per farlo, fa uso di un \texttt{Indexer} che crea, a partire dalle rappresentazioni, indici (strutture dati) su cui poter calcolare stime di similarità.
+%
+Uno schema di massima è presentato in \Cref{img:02-filter}
 
-\todo{filter + schema}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{resources/img/02-filter.pdf}
+    \caption{Schema UML del filtro.}
+    \label{img:02-filter}
+\end{figure}
 
-\texttt{PlagiarismDetector} rappresenta invece il componente che individua le similarità tra una coppia di \texttt{SourceRepresentation} e si occupa di calcolare la loro similarità.
+\texttt{PlagiarismDetector} (\Cref{img:02-detector}) rappresenta invece il componente che individua le similarità tra una coppia di \texttt{SourceRepresentation} e si occupa di calcolare la loro similarità.
 %
 Poiché vi sono una molteplicità di algoritmi presenti in letteratura che assolvono a questo compito, si è deciso d'implementarli sotto forma di gerarchia di classi di algoritmi il cui contratto comune è definito da \texttt{ComparisonStrategy}. 
 %
-In particolare, ogni classe implementante \texttt{ComparisonStrategy} genera un \texttt{Match}, dove per \texttt{Match} si intende due sezioni simili di \textit{SourceRepresentation}.
+In particolare, ogni classe implementante \texttt{ComparisonStrategy} genera un \texttt{Match}, dove per \texttt{Match} si intende due sezioni simili di \texttt{SourceRepresentation}.
 %
 L'insieme dei \texttt{Match} che compongono la comparazione di due \texttt{SourceRepresentation} sono raggruppate in un \texttt{ComparisonResult}, il cui grado di similarità è stimato dalla \texttt{SimilarityEstimationStrategy}.
 
-Applicato alla tecnica di \textit{tokenizzazione}, i due concreti algoritmi che implementano la \textit{detection} sono \texttt{Greedy String Tiling} e \texttt{RKRGreedyStringTiling} che ne rappresenta un'estensione più performante.
+Nel contesto della \textit{tokenizzazione}, i due concreti algoritmi che sono implementati come strategia di confronto sono rappresentati dalle sottoclassi \texttt{GreedyStringTiling} e \texttt{RKRGreedyStringTiling}.
 %
-Entrambi generano dei \texttt{TokenMatch}. \dots
+Entrambi generano dei \texttt{TokenMatch}, costituiti da sequenze contigue di \textit{token} dello stesso tipo.
+%
+A partire da queste la classe concreta \texttt{TokenBasedPlagiarismDetector} demanda alle concrete implementazioni di \texttt{TokenBasedSimilarityStrategy} il calcolo della similarità.
 
 \begin{sidewaysfigure}
-    \centering
-    \includegraphics[width=\textwidth]{resources/img/02-detector.pdf}
+    \makebox[\textwidth][c]{
+        \includegraphics[width=1.22\textwidth]{resources/img/02-detector.pdf}
+    }
     \caption{Schema UML del \textit{detector}.}
     \label{img:02-detector}
 \end{sidewaysfigure}
@@ -217,15 +227,19 @@ Si è deciso di adottare questo approccio principalmente per due motivi:
     \item Il processo di analisi e confronto può essere complesso. Pertanto si fornisce ai \textit{client} un'interfaccia semplificata che assolve al compito di eseguire una generica tecnica, rendendo di fatto trasparente al chiamante la complessità del sottosistema che, dal suo punto di vista, è di fatto una \textit{black box}.
 \end{itemize}
 
+\subsubsection*{Configurabilità, Input e Output}
+
 Come già detto, l'aspetto della configurabilità è un aspetto molto importante in questo contesto, in quanto la scelta dei parametri influisce sull'efficacia del rilevamento.
 %
-In particolare, una specifica sessione è legata ad una particolare configurazione (\texttt{RunConfiguration}) che contiene tutte le informazioni necessarie per l'esecuzione, tra cui la tecnica da utilizzare, l'insieme delle \textit{repository} che compongono la \textit{submission} e quelle del \textit{corpus}, nonché il concreto \texttt{ReportsExporter} a cui è affidata l'esportazione dei \textit{report} generati.
+Come già presentato nell'architettura, una specifica sessione è legata ad una particolare configurazione (\texttt{RunConfiguration}) che contiene tutte le informazioni necessarie per l'esecuzione della stessa.
 %
-Tale configurazione è creata da un concreto \texttt{RunConfigurator}: i due metodi supportati, alternativi tra loro, sono il \texttt{CLIConfigurator} che crea la configurazione a partire dagli argomenti da riga di comando, oppure il \texttt{FileConfigurator} che sfrutta un file di configurazione per impostare tutti i parametri.
-%
-Nulla vieta che in un prossimo futuro, se si volesse dare una veste grafica al sistema, si possa implementare una interfaccia che specializza \texttt{RunConfigurator} e che viene implementata dalla o dalle classi che si occupano di creare le componenti grafiche.
+A differenza di quanto presentato nella \Cref{02-architecture}, giacché per i motivi suddetti \texttt{Analyzer}, \texttt{Filter} e \texttt{Detector} sono stati incapsulati all'interno della \texttt{TechniqueFacade}, la configurazione non ha un riferimento diretto a ciascuno dei tre componenti, bensì all'oggetto \textit{facade}.
 
-In \Cref{img:02-session} è mostrato lo schema UML delle classi che mostra i rapporti 
+L'attuale \texttt{ReportsExporter} implementato esporta i dati in un semplice \textit{file} di testo e i \texttt{RunConfigurator} attualmente supportati sono il \texttt{CLIConfigurator}, che crea la configurazione a partire dagli argomenti da riga di comando, oppure il \texttt{FileConfigurator} che sfrutta un file di configurazione per impostare tutti i parametri.
+%
+In futuro, il design potrebbe essere esteso per supportare un'interfaccia grafica per la configurazione o per generare \textit{report} più ricchi in termini di presentazione (ad esempio un file \textit{HTML}).
+
+In \Cref{img:02-session} è mostrato lo schema UML delle classi che mostra complessivamente i rapporti tra le varie componenti.
 
 \todo{schema sequenza}
 
@@ -236,4 +250,5 @@ In \Cref{img:02-session} è mostrato lo schema UML delle classi che mostra i rap
     \label{img:02-session}
 \end{sidewaysfigure}
 
-\todo{caching}
+\subsubsection*{Caching delle rappresentazioni}
+

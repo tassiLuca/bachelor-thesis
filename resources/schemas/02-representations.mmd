@@ -1,11 +1,11 @@
 classDiagram
-direction BT
+direction BT    
     class SourceRepresentation~T~ {
         <<interface>>
         +sourceFile: File
         +representation: T
     }
-    class TokenizedSource~Sequence<Token>~ {
+    class TokenizedSource~Sequence<‎Token‎>~ {
         <<interface>>
         +splitInGramsOf(dimension: Int) Sequence~Gram~
     }
@@ -42,7 +42,7 @@ direction BT
 
     class TokenTypesSupplier {
         <<interface>>
-        +tyèes: LanguageTokenTypes
+        +types: LanguageTokenTypes
     }
     LanguageTokenTypes <--* TokenTypesSupplier
 

@@ -1,6 +1,6 @@
 classDiagram
 direction BT
-    class PlagiarismDetector~in S: SourceRepresentation<T>, T, out M: Match~ {
+    class PlagiarismDetector~in S: SourceRepresentation<‎T‎>, T, out M: Match~ {
         <<interface>>
         +invoke(first: S, second: S) ComparisonResult~M~
     }
@@ -13,30 +13,32 @@ direction BT
     PlagiarismDetector -- ComparisonResult
     ComparisonResult <|.. TokenBasedComparisonResult~TokenMatch~
 
-    class TokenBasedPlagiarismDetector~TokenizedSource, Sequence<Token, TokenMatch~ {
-        -comparisonStrategy: ComparisonStrategy~TokenizedSource, Sequence<Token, TokenMatch~
+    class TokenBasedPlagiarismDetector~TokenizedSource, Sequence<‎Token‎, TokenMatch~ {
+        -comparisonStrategy: ComparisonStrategy~TokenizedSource, Sequence<‎Token‎>, TokenMatch~
         -similarityEstimationStrategy: TokenBasedSimilarityStrategy
         +invoke(Pair~TokenizedSource, TokenizedSource~) ComparisonResult~TokenMatch~
     }
     TokenBasedPlagiarismDetector ..|> PlagiarismDetector
 
-    class SimilarityEstimationStrategy~in S: SourceRepresentation<T>, T, out M: Match~ {
+    class SimilarityEstimationStrategy~in S: SourceRepresentation<‎T‎>, T, out M: Match~ {
         <<interface>>
         +similarityOf(representation: Pair~S, S~, matches: Set~M~) Double
     }
-    class TokenBasedSimilarityStrategy~TokenizedSource, Sequence<Token>, TokenMatch~
-    SimilarityEstimationStrategy <|-- TokenBasedSimilarityStrategy
-    %% NormalizedAverageSimilarityStrategy ..|> TokenBasedSimilarityStrategy
-    %% NormalizedMaxSimilarityStrategy ..|> TokenBasedSimilarityStrategy
+    class TokenBasedSimilarityStrategy~TokenizedSource, Sequence<‎Token‎>, TokenMatch~ {
+        <<interface>>
+    }
+    NormalizedAverageSimilarityStrategy ..|> TokenBasedSimilarityStrategy
+    NormalizedMaxSimilarityStrategy ..|> TokenBasedSimilarityStrategy
     TokenBasedSimilarityStrategy --* TokenBasedPlagiarismDetector
+    SimilarityEstimationStrategy <|-- TokenBasedSimilarityStrategy
 
-    class ComparisonStrategy~in S: SourceRepresentation<T>, T, out M: Match~ {
+    class ComparisonStrategy~in S: SourceRepresentation<‎T‎>, T, out M: Match~ {
         <<interface>>
         +invoke(representations: Pair~S, S~) Set~Match~
     }
     TokenBasedPlagiarismDetector *--> ComparisonStrategy
 
-    BaseGreedyStringTiling~TokenizedSource, Sequence<Token>, TokenMatch~ ..|> ComparisonStrategy
+    BaseGreedyStringTiling~TokenizedSource, Sequence<‎Token‎>, TokenMatch~ ..|> ComparisonStrategy
     GreedyStringTiling --|> BaseGreedyStringTiling
     RKRGreedyStringTiling --|> BaseGreedyStringTiling
 
@@ -46,8 +48,8 @@ direction BT
     
     class TokenMatch {
         <<interface>>
-        +pattern: Pair~TokenizedSource, List<Token>~
-        +text: Pair~TokenizedSource, List<Token>~
+        +pattern: Pair~TokenizedSource, List<‎Token‎>~
+        +text: Pair~TokenizedSource, List<‎Token‎>~
         +length: Int
     }
     TokenMatch --|> Match
