@@ -219,9 +219,19 @@ Se, invece, preferiamo che ogni programma che è stato copiato completamente(e p
 	sim(A, B) = \frac{\sum_{match \in tiles} length}{min(|A|, |B|)}
 \end{equation} 
 
-Utilizzando le formule sopra esposte, tuttavia, si va incontro a un difetto intrinseco al tipo di tecnica utilizzata: se dall'applicazione del rilevamento risulta un insieme elevato di sottosequenze \dots
+Per mitigare il problema dell'insensibilità al riordino delle sottosequenze di cui è intrinsicamente affetta la tecnica di analisi impiegata, in \cite{es-plag} viene proposto di modificare la formula di stima della similarità introducendo un meccanismo di penalità ispirato dal principio che, solitamente, un numero elevato di sottosequenze comuni si verifica proprio a causa del riordino delle stesse. 
+%
+Applicando pertanto una penalità proporzionata al numero di sottosequenze comuni, maggiore sarà il numero di sottosequenze individuate, minore sarà il grado di similarità determinato.
+%
+Le formule aggiornate sono di seguito presentate.
 
-Per mitigare questo problema in \cite{es-plag} viene proposto di modificare la stima formula di similarità introducendo un meccanismo di penalità: maggiore sono il numero di sottosequenze che fanno \textit{match}, maggiore sarà la penalità applicata...
+\begin{equation}
+	sim(A, B) = \frac{2 \cdot \bigl( \sum_{match \in tiles} length - (|tiles|-1) \bigr)}{|A|+|B|}
+\end{equation}
+
+\begin{equation}
+	sim(A, B) = \frac{\sum_{match \in tiles} length - (|tiles|-1)}{min(|A|, |B|)}
+\end{equation} 
 
 \subsection*{Similarità tra due progetti}
 
@@ -234,11 +244,11 @@ Si tratta di un linguaggio multipiattaforma compilato, tipato staticamente e  co
 %
 Inoltre, oltre a Java e Android, \textit{Kotlin} può essere compilato in \textit{JavaScript}, consentendo di eseguire codice \textit{Kotlin} nel \textit{browser}.
 
-L'obiettivo principale del linguaggio è fornire un'alternativa a Java più concisa, produttiva e sicura, adatta in tutti i contesti in cui Java è tutt'oggi utilizzato.
+L'obiettivo principale del linguaggio è fornire un'alternativa a Java più concisa, produttiva e sicura, adatta in tutti i contesti in cui è tutt'oggi utilizzato.
 %
-Infatti, essendo completamente compatibile con Java, sfrutta tutte le numerose libreria di Java, estendendole e garantendo le stesse \textit{performance}.
+Infatti, essendo completamente compatibile con Java, sfrutta tutte le sue numerose librerie, estendendole e garantendo le stesse \textit{performance}.
 
-I tratti distintivi di \textit{Kotlin} sono certamente la sua espressività e concisione, che permettono di sviluppare codice che rivela l'intento senza oscurarlo con codice verboso per specificare come l'intento viene realizzato.
+I tratti distintivi di \textit{Kotlin} sono certamente la sua espressività e concisione, che permettono di sviluppare codice che rivela l'intento senza oscurarlo con codice verboso per specificare come viene realizzato.
 
 \begin{figure}[h]
     \centering
@@ -248,6 +258,7 @@ I tratti distintivi di \textit{Kotlin} sono certamente la sua espressività e co
 \end{figure}
 
 \subsection*{Git e \textit{CI}}
+Per lo sviluppo del progetto, si è utilizzato Git, uno \textit{standard de facto} nell'ambito dei sistemi di controllo di versione decentralizzato, che permettere di tenere traccia dello storico delle modifiche e lo sviluppo simultaneo da parte di più sviluppatori, senza che questi debbano sobbarcarsi la gestione dell'intero progetto a mano, con tutti i conseguenti problemi...
 
 \subsection*{Librerie esterne}
 
