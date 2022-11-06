@@ -60,7 +60,7 @@ Già a partire dagli anni settanta del novecento, sono stati proposti algoritmi 
 
 In questo contesto è da porre in evidenza la differenza tra l'individuazione di cloni e quella di plagi.
 %
-Quando ci si riferisce a un clone, infatti, lo si fa con riferimento a un frammento di codice che è stata copiato e marginalmente modificato. 
+Quando ci si riferisce a un clone, infatti, lo si fa con riferimento a un frammento di codice che è stato copiato e marginalmente modificato. 
 %
 Quando invece ci si riferisce ad un plagio si intende una sezione che è stata copiata e la cui opera di copiatura si è cercato di dissimulare, mediante opportune azioni di rifattorizzazione del codice \cite{cpdp}, descritte nel paragrafo precedente.
 %
@@ -128,7 +128,7 @@ Tuttavia, considerando che le caratteristiche del codice sorgente non sono stret
 \subsection{Analisi \textit{structure-based}}
 Le tecniche di analisi \textit{structure-based}, a differenza di quelle \textit{attribute-based}, si basano, come suggerisce il nome stesso, sulla struttura dei codici sorgenti per determinare il grado di similarità tra gli stessi.
 
-Nella maggioranza dei casi, i sistemi che implementano questo di tipo di tecnica lavorano in due fasi consecutive: prima il codice sorgente viene analizzato e viene generata una rappresentazione intermedia, poi si effettua il confronto dei sorgenti sulle rappresentazioni intermedie.
+Nella maggioranza dei casi, i sistemi che implementano questo tipo di tecnica lavorano in due fasi consecutive: prima il codice sorgente viene analizzato e viene generata una rappresentazione intermedia, poi si effettua il confronto dei sorgenti sulle rappresentazioni intermedie.
 
 All'interno di questo tipo di analisi possiamo annoverare principalmente due diversi metodi: l'analisi lessicale e quella basata su un modello astratto e derivato dai sorgenti.
 
@@ -164,7 +164,7 @@ Alcuni possibili esempi di \textit{token} comuni con i relativi \textit{pattern}
 
 L'analisi lessicale rappresenta il primo stadio della struttura di un compilatore ed è eseguita da programmi denominati \textbf{\textit{lexer}}. 
 %
-Questi sono generati in maniera dichiarativa a partire da generatori di \textit{lexer} (\textbf{\textit{lexer generator}}) che, presi in input più automa a stati finiti, espressi per mezzo di espressioni regolari che definiscono in maniera formale la grammatica del linguaggio, generano il codice che implementa l'algoritmo di analisi lessicale. 
+Questi sono generati in maniera dichiarativa a partire da generatori di \textit{lexer} (\textbf{\textit{lexer generator}}) che, presi in input più automi a stati finiti, espressi per mezzo di espressioni regolari che definiscono in maniera formale la grammatica del linguaggio, generano il codice che implementa l'algoritmo di analisi lessicale. 
 %
 In \Cref{img:01-id-finite-automa} è mostrato un esempio di automa a stati finiti che riconosce un identificatore.
 %
