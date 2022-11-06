@@ -121,7 +121,7 @@ L'algoritmo si compone principalmente di due fasi:
 \begin{itemize}
 	\item \textbf{Fase 1}: in questa fase, viene ricercata la corrispondenza più lunga. Questo è fatto grazie un triplo ciclo innestato: il primo itera sui token della sequenza più corta, denominata \textit{pattern}, il secondo compara ciascuno di questi con ogni \textit{token} della sequenza più lunga, denominata \textit{text}. Se i due \textit{token} corrispondono il ciclo più interno cerca di estendere il \textit{match} il più possibile (fermandosi non appena trova un \textit{token} che nelle due sequenze differisce).
 
-	\item \textbf{Fase 2}: questa fase marca ciascun natch di lunghezza massima (\textit{maximal match}) trovato nella fase precedente. Questo garantisce che ciascun \textit{token} venga usato per un solo \textit{match} e divenga indisponibile per i \textit{match} successivi (che hanno una minor lunghezza). Nella terminologia di \cite{wise-running-93} i \textit{match} i cui \textit{token} sono stati marcati sono denominati \textit{tile}. Si noti che, anche se un \textit{match} è parzialmente occluso e perciò non viene marcato, una versione più corta dello stesso \textit{match} può essere marcato durante le successive iterazioni.
+	\item \textbf{Fase 2}: questa fase marca ciascun \textit{match} di lunghezza massima (\textit{maximal match}) trovato nella fase precedente. Questo garantisce che ciascun \textit{token} venga usato per un solo \textit{match} e divenga indisponibile per i \textit{match} successivi (che hanno una minor lunghezza). Nella terminologia di \cite{wise-running-93} i \textit{match} i cui \textit{token} sono stati marcati sono denominati \textit{tile}. Si noti che, anche se un \textit{match} è parzialmente occluso e perciò non viene marcato, una versione più corta dello stesso \textit{match} può essere marcato durante le successive iterazioni.
 \end{itemize}
 
 Queste due fasi vengono ripetute fino a quando non vengono trovate più corrispondenze di lunghezza almeno \texttt{minimum\_match\_length}.
@@ -212,7 +212,7 @@ Seguendo questo principio ci sono due possibili scelte che possono essere intrap
 	sim(A, B) = \frac{2 \cdot \sum_{match \in tiles} length}{|A|+|B|}
 \end{equation}
 %
-Se, invece, preferiamo che ogni programma che è stato copiato completamente(e poi magari esteso) produca una similarità del 100\%, dobbiamo considerare solo la sottosequenza più corta:
+Se, invece, preferiamo che ogni programma che è stato copiato completamente (e poi magari esteso) produca una similarità del 100\%, dobbiamo considerare solo la sottosequenza più corta:
 %
 \begin{equation}
 \label{eq:avg-norm-sim}
