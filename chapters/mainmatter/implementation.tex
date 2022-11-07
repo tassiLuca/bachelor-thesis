@@ -250,7 +250,7 @@ In questo modo, la seconda parte dell'equazione fornisce una stima aggregata del
 %
 L'utilizzo di questa statistica è migliore della semplice media o mediana, in quanto queste darebbero stessa importanza a tutte le stime di similarità, fornendo risultati troppo bassi anche nei casi effettivi di copiatura, visto che, generalmente, anche in questi, vengono rintracciate sezioni con una bassa stima di similarità.
 
-D'altro canto, applicare solo una statistica di aggregazione dei valori di similarità dei sorgenti segnalati può fornire misure fuorvianti nel caso in cui questi siano pochi (nell'ordine dell'unità) ma elevati.
+Tuttavia, applicare solo una statistica di aggregazione dei valori di similarità dei sorgenti segnalati può fornire misure fuorvianti nel caso in cui questi siano pochi (nell'ordine dell'unità) ma elevati.
 %
 Per questo motivo, la misura di similarità aggregata sopra descritta viene "pesata" sulla base del rapporto tra il numero di sorgenti segnalati e quelli del progetto in esame.
 %
@@ -260,6 +260,7 @@ Questo chiaramente determina che una singola copiatura, ad esempio, di una class
 %
 D'altro canto, l'obiettivo non è determinare tutte le similarità tra tutti i sorgenti, bensì avere un'indicazione dei progetti più simili e, perciò, presumibilmente copiati.
 
+\newpage
 \section{Strumenti di sviluppo}
 
 \subsection*{\textit{Kotlin}}
@@ -290,28 +291,24 @@ In particolare, il \textit{workflow} adottato è il seguente: il progetto è man
 %
 Non appena una \textit{feature} è completata o si arriva a un buon grado di sviluppo si aprono delle \textit{pull request}, nelle quali i contributi sono revisionati per accertarsi passino i controlli di qualità.
 %
-Questi vengono eseguiti automaticamente grazie all'utilizzo delle \textit{GitHub Actions}, una piattaforma di \textit{Continuous Integration and Delivery} (CI/CD) che permette di automattizare il processo di \textit{testing}, \textit{building} e \textit{deployment}.
+Questi vengono eseguiti automaticamente grazie all'utilizzo delle \textit{GitHub Actions}, una piattaforma di \textit{Continuous Integration and Delivery} (\textit{CI/CD}) che permette di automattizare il processo di \textit{testing}, \textit{building} e \textit{deployment}.
 %
-Tramite un file di configurazione \textit{Yaml} è possibile definire uno o più \textit{workflow} che effettuino i controlli desiderati utilizzando ... su più sistemi operativi.
+Tramite un file di configurazione \textit{Yaml} è possibile definire uno o più \textit{workflow} che effettuino i controlli desiderati al verificarsi di alcuni eventi come, ad esempio, una \textit{pull request} o il \textit{push} di un nuovo commit.
+%
+In particolare, il progetto è configurato per eseguire i \textit{test} ad ogni \textit{commit} che viene \textit{pushato} su tutti e tre i sistemi operativi più diffusi, \textit{Linux}, \textit{MacOS}, \textit{Windows}, e per effettuare,ad ogni \textit{pull request}, ulteriori controlli come la copertura del codice in termini di test\footnote{\url{https://about.codecov.io/}} e la qualità del codice\footnote{\href{shorturl.at/enwzD}{\texttt{Sonatype Lift}}} al fine di identificare problemi di sicurezza, prestazioni, affidabilità e stile.
+%
+Questo metodo di operare è alla base della filosofia \textit{DevOps} e prevede di verificare, ad ogni cambiamento, che la \textit{build} rimanga intatta, al fine di individuare eventuali problemi appena questi si verificano e non dopo settimane, al termine dell'integrazione.
 
-Processo di build con aggiornamento delle dipendenze
-
-\subsection*{Librerie esterne}
-Per lo sviluppo complessivo del progetto sono state impiegate le seguenti librerie:
+\subsection*{Note di sviluppo}
 \begin{itemize}
-	\item \textbf{JavaParser}\footnote{\url{https://javaparser.org}} per effettuare l'analisi dei sorgenti sviluppati in linguaggio Java;
-	\item \textbf{Github API for Java}\footnote{\url{https://github-api.kohsuke.org}} per interagire con l'API di GitHub e recuperare le \textit{repository}. Per recuperare i progetti caricati su \textit{Bitbucket}, non essendoci di una libreria pronta all'uso, si è utilizzata \textbf{Unirest} per effettuare le richieste HTTP;
-	\item \textbf{JGit}\footnote{\url{https://www.eclipse.org/jgit/}} per lo scaricaramento (\textit{clone}) dei progetti da \textit{GitHub} e \textit{Bitbucket}.
-	\item \textbf{Clikt}\footnote{\url{https://ajalt.github.io/clikt/}} per la scrittura dell'interfaccia da riga di comando;
-	\item \textbf{Kaml}\footnote{\url{https://github.com/charleskorn/kaml}} per la (de)serializzazione di file di configurazione \textit{Yaml}.
-	\item \textbf{Kotest}\footnote{\url{https://kotest.io}} e \textbf{Mockk}\footnote{\url{https://mockk.io}} per effettuare e agevolare la scrittura di \textit{test}.
-\end{itemize}
-
-\subsection*{Controllo di qualità}
-Il controllo di qualità del \textit{software} è eseguito medianti strumenti automatici, di seguito elencati, che hanno l'obiettivo di evidenziare potenziali problemi o possibili miglioramenti:
-\begin{itemize}
-	\item \textbf{Detekt}: 
-	\item \textbf{Klint}:
-	\item ...
-	\item \textbf{CPD}:
+	\item La parallelizzazione dell'analisi dei sorgenti è stata sviluppata per mezzo di \textit{ParallelStream} i quali, a loro volta, fanno uso di un \textit{framework} di tipo \textit{fork-join}, che hanno l'onere di creare e dividere la computazione tra i vari \textit{thread} e gestire le relative \textit{join}.
+	\item Per lo sviluppo complessivo del progetto sono state impiegate le seguenti librerie:
+	\begin{itemize}
+		\item \textbf{JavaParser}\footnote{\url{https://javaparser.org}} per effettuare l'analisi dei sorgenti sviluppati in linguaggio Java;
+		\item \textbf{Github API for Java}\footnote{\url{https://github-api.kohsuke.org}} per interagire con l'API di GitHub e recuperare le \textit{repository}. Per recuperare i progetti caricati su \textit{Bitbucket}, non essendoci di una libreria pronta all'uso, si è utilizzata \textbf{Unirest} per effettuare le richieste HTTP;
+		\item \textbf{JGit}\footnote{\url{https://www.eclipse.org/jgit/}} per lo scaricaramento (\textit{clone}) dei progetti da \textit{GitHub} e \textit{Bitbucket}.
+		\item \textbf{Clikt}\footnote{\url{https://ajalt.github.io/clikt/}} per la scrittura dell'interfaccia da riga di comando;
+		\item \textbf{Kaml}\footnote{\url{https://github.com/charleskorn/kaml}} per la (de)serializzazione di file di configurazione \textit{Yaml}.
+		\item \textbf{Kotest}\footnote{\url{https://kotest.io}} e \textbf{Mockk}\footnote{\url{https://mockk.io}} per effettuare e agevolare la scrittura di \textit{test}.
+	\end{itemize}
 \end{itemize}
