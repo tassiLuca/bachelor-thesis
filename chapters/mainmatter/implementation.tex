@@ -209,14 +209,14 @@ Seguendo questo principio ci sono due possibili scelte che possono essere intrap
 %
 \begin{equation}
 \label{eq:max-norm-sim}
-	sim(A, B) = \frac{2 \cdot \sum_{match \in tiles} length}{|A|+|B|}
+	sim_S(A, B) = \frac{2 \cdot \sum_{match \in tiles} length}{|A|+|B|}
 \end{equation}
 %
 Se, invece, preferiamo che ogni programma che è stato copiato completamente (e poi magari esteso) produca una similarità del 100\%, dobbiamo considerare solo la sottosequenza più corta:
 %
 \begin{equation}
 \label{eq:avg-norm-sim}
-	sim(A, B) = \frac{\sum_{match \in tiles} length}{min(|A|, |B|)}
+	sim_S(A, B) = \frac{\sum_{match \in tiles} length}{min(|A|, |B|)}
 \end{equation} 
 
 Per mitigare il problema dell'insensibilità al riordino delle sottosequenze di cui è intrinsicamente affetta la tecnica di analisi impiegata, in \cite{es-plag} viene proposto di modificare la formula di stima della similarità introducendo un meccanismo di penalità ispirato dal principio che, solitamente, un numero elevato di sottosequenze comuni si verifica proprio a causa del riordino delle stesse. 
@@ -226,14 +226,39 @@ Applicando pertanto una penalità proporzionata al numero di sottosequenze comun
 Le formule aggiornate sono di seguito presentate.
 
 \begin{equation}
-	sim(A, B) = \frac{2 \cdot \bigl( \sum_{match \in tiles} length - (|tiles|-1) \bigr)}{|A|+|B|}
+	sim_S(A, B) = \frac{2 \cdot \bigl( \sum_{match \in tiles} length - (|tiles|-1) \bigr)}{|A|+|B|}
 \end{equation}
 
 \begin{equation}
-	sim(A, B) = \frac{\sum_{match \in tiles} length - (|tiles|-1)}{min(|A|, |B|)}
+	sim_S(A, B) = \frac{\sum_{match \in tiles} length - (|tiles|-1)}{min(|A|, |B|)}
 \end{equation} 
 
 \subsection*{Similarità tra due progetti}
+Vista la grande quantità di progetti di cui si dispone, sebbene i risultati ottenuti siano filtrati per non riportare singole coppie di sorgenti con una similarità inferiore a una soglia (scelta dall'utente), la quantità di risultati rimane corposa.
+%
+Pertanto, non è sufficiente stimare la similarità sorgente per sorgente, ma è necessario fornire una stima delle similarità progetto per progetto, così da individuare più facilmente, a un livello di granularità maggiore, i progetti simili.
+
+In generale, questa stima di similarità è inferita a partire da quelle tra sorgenti come segue:
+
+\begin{equation}
+	sim_P(A, B) = \frac{|\textit{sorgenti segnalati di B}|}{|\textit{sorgenti di B}|} \cdot P_{75}(\textit{similarità sorgenti segnalati})
+\end{equation}
+
+dove $A$ e $B$ sono due progetti e $P_{75}$ il settantacinquesimo percentile (o terzo quartile) delle similarità dei sorgenti segnalati.
+
+In questo modo, la seconda parte dell'equazione fornisce una stima aggregata delle similarità dei sorgenti, considerando il valore di similarità che "lascia alla sua sinistra" il 75\% della distribuzione.
+%
+L'utilizzo di questa statistica è migliore della semplice media o mediana, in quanto queste darebbero stessa importanza a tutte le stime di similarità, fornendo risultati troppo bassi anche nei casi effettivi di copiatura, visto che, generalmente, anche in questi, vengono rintracciate sezioni con una bassa stima di similarità.
+
+D'altro canto, applicare solo una statistica di aggregazione dei valori di similarità dei sorgenti segnalati può fornire misure fuorvianti nel caso in cui questi siano pochi (nell'ordine dell'unità) ma elevati.
+%
+Per questo motivo, la misura di similarità aggregata sopra descritta viene "pesata" sulla base del rapporto tra il numero di sorgenti segnalati e quelli del progetto in esame.
+%
+Così facendo, si andrà a diminuire il peso complessivo della similarità per quei progetti i cui sorgenti segnalati sono eseguiti rispetto alla loro totalità.
+%
+Questo chiaramente determina che una singola copiatura, ad esempio, di una classe non verrà rilevata dal sistema.
+%
+D'altro canto, l'obiettivo non è determinare tutte le similarità tra tutti i sorgenti, bensì avere un'indicazione dei progetti più simili e, perciò, presumibilmente copiati.
 
 \section{Strumenti di sviluppo}
 
@@ -258,6 +283,7 @@ I tratti distintivi di \textit{Kotlin} sono certamente la sua espressività e co
 \end{figure}
 
 \subsection*{Git e \textit{CI/CD}}
+\label{03-git-ci}
 Per lo sviluppo del progetto, si è utilizzato Git, uno \textit{standard de facto} nell'ambito dei sistemi di controllo di versione decentralizzato, che permettere di tenere traccia dello storico delle modifiche e lo sviluppo simultaneo da parte di più sviluppatori, senza che questi debbano sobbarcarsi la gestione dell'intero progetto a mano, con tutti i conseguenti problemi.
 
 In particolare, il \textit{workflow} adottato è il seguente: il progetto è mantenuto in una \textit{repository} pubblica centrale\footnote{\url{https://github.com/DanySK/code-plagiarism-detector}} e ciascun sviluppatore lavora su una \textit{working copy} (\textit{fork}).

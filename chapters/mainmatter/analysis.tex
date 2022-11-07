@@ -108,7 +108,7 @@ L'implementazione di \textit{default} ricerca tra variabili d'ambiente, ma altri
 
 La creazione dei \textit{provider} avviene per mezzo di due \textit{static factory} \cite{effective-java}, incapsulate all'interno dei due \textit{provider}, in modo da permettere di ottenere un oggetto \textit{provider} anche senza autenticazione.
 %
-Nonostante questo sia in genere sconsigliato per via delle limitazioni sopra citate, può essere utile in fase di \textit{testing} per permettere di testare il sistema anche in contesti in cui non sia possibile usare \textit{token} di autenticazione validi, ad esempio nel contesto delle \textit{GitHub Actions} nei \textit{workflow} scatenati da eventi di tipo \textit{Pull Request} (vedi...\todo{ref al capitolo implementazione, paragrafo CI})
+Nonostante questo sia in genere sconsigliato per via delle limitazioni sopra citate, può essere utile in fase di \textit{testing} per permettere di testare il sistema anche in contesti in cui non sia possibile usare \textit{token} di autenticazione validi, ad esempio nel contesto delle \textit{GitHub Actions} nei \textit{workflow} scatenati da eventi di tipo \textit{Pull Request} (si veda \Cref{03-git-ci})
 
 Dopo una prima analisi delle \textit{API} dei due servizi di \textit{hosting} si è convenuto di permettere di recuperare i progetti mediante due metodi: un \textit{link} diretto alla \textit{repository}, oppure mediante un criterio di ricerca, rappresentato dall'interfaccia \texttt{SearchCriteria}.
 %
