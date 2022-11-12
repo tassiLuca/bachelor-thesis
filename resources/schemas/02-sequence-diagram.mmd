@@ -18,16 +18,17 @@ sequenceDiagram
             AntiPlagiarismSession -) TokenizationFacade: execute()
             activate TokenizationFacade
             TokenizationFacade ->> TokenizationFacade: analyze()
+            TokenizationFacade ->> TokenizationFacade: filter()
             TokenizationFacade ->> TokenizationFacade: compare()
             TokenizationFacade -->> AntiPlagiarismSession: reports
             deactivate TokenizationFacade
         end
 
-        AntiPlagiarismSession ->> CLIExporter: export(reports)
-        activate CLIExporter
-        CLIExporter ->> CLIExporter: data export
-        CLIExporter -->> AntiPlagiarismSession: 
-        deactivate CLIExporter
+        AntiPlagiarismSession ->> FileExporter: export(reports)
+        activate FileExporter
+        FileExporter ->> FileExporter: data export
+        FileExporter -->> AntiPlagiarismSession: 
+        deactivate FileExporter
     end
 
     AntiPlagiarismSession -->> Main: 
