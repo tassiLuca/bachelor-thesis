@@ -1,21 +1,43 @@
 % ! TeX root = ../../thesis.tex
 \chapter{Validazione dei risultati}
 \label{chapter:validation}
-In questo capitolo ci si concentra sulla validazione dei risultati ottenuti.
+In questo capitolo vengono riportati e analizzati i risultati ottenuti nell'ambito di applicazione dello strumento sviluppato.
 
-% \vspace*{0.5cm}
+\vspace*{0.5cm}
 
-% Le prestazioni del sistema sono misurate in termini di due fattori, tra loro indipendenti: il tempo di esecuzione e la capacità di rilevamento di plagi.
+Le prestazioni del sistema sono misurate sulla base di due aspetti fondamentali e indipendenti tra loro: le \textit{performance} in termini di tempo d'esecuzione, ma soprattutto l'accuratezza, ovvero la capacità di rilevare copiature e plagi.
 
-% \section{Analisi dei risultati}
-% Per testare la capacità di rilevamento dei plagi è stato considerato un semplice progetto Java e, passo a passo, sono state applicate modifiche incrementalmente sempre più complesse da rilevare, seguendo la tassonomia di Faidhi \& Robinson introdotta nella \Cref{01:automatic-plagiarism-detector}.
-% %
+\section{Accuratezza}
+L'accuratezza è l'obiettivo più importante da tenere in considerazione e in relazione alla quale misurare le prestazioni.
+%
+Infatti, lo scopo primario è rilevare con precisione casi probabili di plagio e presentarli all'utente il più in alto possibile nei \textit{report} generati dallo strumento.
+%
+\`E solo in seguito ad aver raggiunto un grado di precisione soddisfacibile che possono essere adottate ottimizzazioni che permettano di ridurre il tempo di calcolo.
+
+Dunque, per testarne l'accuratezza sono stati considerati 130 diversi progetti del corso di Programmazione ad Oggetti presentati nell'arco degli ultimi tre anni accademici e per ciascuno di questi si è effettuato il confronto con tutti i progetti a disposizione dal 2015 in poi che, complessivamente, ammontano a 354 progetti.
+%
+Tali progetti sono sviluppati in Java, generalmente in \textit{team} di quattro componenti, e rappresentano artefatti di medio-alta complessità, costituiti in media da più di un centinaio di sorgenti ciascuno.
+
+A seguito dell'analisi si è effettuata un'ispezione manuale dei sorgenti in modo tale da verificare che le stime effettuate dallo strumento non fossero fuorvianti o prive di fondamento.
+%
+I risultati complessivi sono presentati in \Cref{table:results}.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|p{0.15\linewidth}|p{0.15\linewidth}|p{0.15\linewidth}|p{0.45\textwidth}|}
+        \hline
+        \textbf{Progetto originale} & \textbf{Progetto copiato} & \textbf{Similarità} & \textbf{Ispezione manuale} \\ [0.5ex] 
+        \hline\hline
+        gym-man & gym-man & 100\% & I progetti sono realmente copiati e rappresentano una copia letterale uno dell'altro. \\
+        \hline
+        spacewar & space-invaders & 99\% & I progetti sono realmente copiati e rappresentano una copia leterale uno dell'altro. \\
+        \hline
+        boxhead & zombiegame & 90\% & I progetti presentano molto codice uguale. \\
+        \hline
+    \end{tabular}
+    \caption{Risultati ottenuti confrontando i progetti sottomessi negli anni 2021, 2020, 2019 con tutti gli altri.}
+    \label{table:results}
+\end{table}
 
 
-% \begin{itemize}
-%     \item \textbf{Livello 1}: Il progetto è lasciato inviariato, al netto di modifiche ai commenti e alla documentazione: questo livello 
-%     \item \textbf{Livello 2}: In questo livello vengono cambiati gli identificatori, e i tipi di dato e le strutture dati. Questo modifiche tuttavia sono minime: per "cambio di strutture dati" si intende a questo stadio il sostituire un array con una lista o un \texttt{float} con un \texttt{double}.
-%     \item \textbf{Livello 3}: In questo livello vengono applicati cambiamenti come espressioni equivalenti, ...
-% \end{itemize}
 
-% \section{Tempi di esecuzione}
