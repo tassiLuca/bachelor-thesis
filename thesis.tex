@@ -38,10 +38,19 @@
 	% Backmatter command leaves the page numbering alone but switches the 
 	% chapters back to being not numbered.
 	% --------------------------------------------------------------------
-	\backmatter	
-	\input{./chapters/backmatter/conclusions.tex}
+	\nocite{*}
+	{
+		\backmatter	
+		\input{./chapters/backmatter/conclusions.tex}
+		% ----------------------------------------------------------------
+		% Bibliography
+		% ----------------------------------------------------------------
+		\printbibliography
+		\input{./chapters/backmatter/thanks.tex}
+	}
 	% --------------------------------------------------------------------
-	% Bibliography
+	% Appendix
 	% --------------------------------------------------------------------
-	\printbibliography
+	\appendix
+	\input{./chapters/backmatter/appendix.tex}
 \end{document}
