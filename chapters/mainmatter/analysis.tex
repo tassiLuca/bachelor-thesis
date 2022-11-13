@@ -130,15 +130,22 @@ Il \textit{design} è presentato in \Cref{img:02-search-criteria}.
 Le \textit{repository} sono modellate attraverso l'omonima interfaccia, le cui concrete implementazioni rappresentano degli \textit{Adapter} \cite{gof} alle interfacce di libreria utilizzate (si veda \Cref{img:02-repos}).
 %
 Questo permette di essere indipendenti dalla specifica libreria utilizzata, che rimane un dettaglio implementativo, e avere un livello di astrazione adeguato al contesto applicativo.
+
+Per quanto attiene il salvataggio dei sorgenti e il loro recupero, in modo tale che possano essere riusati in sessioni successive senza dover essere ri-scaricati, è affidato ad un gestore rappresentato dall'interfaccia \texttt{KnoledgeBaseManager}.
 %
-Per quanto attiene la logica del recupero dei sorgenti, in pieno accordo con il \textit{Single Responsability Principle}, è demandata a \texttt{RepoContentSupplierStrategy}.
+Per il momento, la tecnica utilizzata consiste nel salvare i sorgenti in locale.
 %
-La strategia attualmente in uso consiste nell'effettuare il \textit{clone} della repository in una cartella in locale.
+Per tale motivo, la concreta implementazione \texttt{FileKnowledgeBaseManager} si occupa di scaricare i progetti, "ripulirli" da artefatti non importanti ai fini dell'analisi, come i file di configurazione di Gradle, e infine salvarli in un'apposita cartella di sistema.
+%
+Nel momento in cui è necessario recuperare i sorgenti di un progetto ci si interfaccia con il gestore chiedendogli di fornire tutti i sorgenti disponibili per quel determinato progetto, già precedentemente salvati.
+
+Un indomani, se si volesse sostituire questo metodo di \textit{caching} con uno più avanzato, di cui oggi non se ne ravvisa l'esigenza, si potrebbe implementare un nuovo \texttt{KnoledgeBaseManager}.
 
 \begin{figure}[h!]
-    \centering
-    \includegraphics[width=\textwidth]{resources/img/02-repos.pdf}
-    \caption{Schema UML delle \textit{repository}.}
+    \makebox[\textwidth][c]{
+        \includegraphics[width=1.15\textwidth]{resources/img/02-repos.pdf}
+        }
+    \caption{Schema UML delle \textit{repository} e del gestore dei loro sorgenti.}
     \label{img:02-repos}
 \end{figure}
 
@@ -165,7 +172,7 @@ Il \textit{design} dell'analizzatore è esemplificato in \Cref{img:02-analyzer}.
 
 \begin{figure}[h!]
     \makebox[\textwidth][c]{
-        \includegraphics[width=1.1\textwidth]{resources/img/02-analyzer.pdf}
+        \includegraphics[width=1.12\textwidth]{resources/img/02-analyzer.pdf}
     }
     \caption{Schema UML dell'analizzatore.}
     \label{img:02-analyzer}
@@ -251,27 +258,15 @@ In \Cref{img:02-session} è mostrato lo schema UML delle classi che mostra compl
     \label{img:02-session}
 \end{sidewaysfigure}
 
-\subsubsection*{Caching delle rappresentazioni}
-Il salvataggio delle rappresentazioni e il loro recupero, in modo tale che possano essere riusate in sessioni successive senza dover ri-scaricare i progetti ed effettuare la loro analisi, è affidato all'interfaccia \texttt{KnoledgeBaseRepository}.
-%
-Per il momento, la tecnica utilizzata consiste nel salvare le rappresentazioni in locale all'interno di file.
-%
-Per tale motivo, la concreta implementazione \texttt{KnoledgeBaseRepositoryImpl} delega la (de)serializzazione delle rappresentazioni a un'interfaccia \texttt{RepresentationSerializer} le cui implementazioni hanno l'onere di serializzare la specifica rappresentazione cui fanno riferimento.
-
-\begin{sidewaysfigure}
-    \centering
-    \includegraphics[width=\textwidth]{resources/img/02-cache.pdf}
-    \caption{Schema UML del caching.}
-    \label{img:02-caching}
-\end{sidewaysfigure}
-
 \subsubsection*{Comportamento}
 Per concludere, in \Cref{img:02-sequence-diagram} viene mostrato il diagramma UML di sequenza che mostra macroscopicamente il flusso delle azioni del sistema e come le varie componenti cooperano tra loro.
 
 \begin{figure}[h!]
-    \makebox[\textwidth][c]{
-        \includegraphics[width=1.25\textwidth]{resources/img/02-sequence-diagram.pdf}
+    \hspace*{-3.4cm}
+    \makebox[\textwidth][l]{
+        \includegraphics[width=1.35\textwidth]{resources/img/02-sequence-diagram.pdf}
     }
+    \hspace*{1cm}
     \caption{Diagramma UML di sequenza rappresentante l'interazione tra le componenti del sistema.}
     \label{img:02-sequence-diagram}
 \end{figure}

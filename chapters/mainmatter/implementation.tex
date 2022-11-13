@@ -301,7 +301,7 @@ Questo metodo di operare è alla base della filosofia \textit{DevOps} e prevede 
 
 \subsection*{Note di sviluppo}
 \begin{itemize}
-	\item La parallelizzazione dell'analisi dei sorgenti è stata sviluppata per mezzo di \textit{ParallelStream} i quali, a loro volta, fanno uso di un \textit{framework} di tipo \textit{fork-join}, che hanno l'onere di creare e dividere la computazione tra i vari \textit{thread} e gestire le relative \textit{join} in maniera trasparente allo sviluppatore.
+	\item La parallelizzazione dell'analisi dei sorgenti è stata sviluppata per mezzo di \textit{ParallelStream} i quali, a loro volta, fanno uso di un \textit{framework} di tipo \textit{fork-join}, che hanno l'onere di creare e dividere la computazione tra i vari \textit{thread} e gestire le relative \textit{join} in maniera trasparente allo sviluppatore. Per far ciò si è dovuto, tuttavia, prestare attenzione affinché gli algoritmi di \textit{detection} fossero \textit{thread-safe}.
 	\item Per lo sviluppo complessivo del progetto sono state impiegate le seguenti librerie:
 	\begin{itemize}
 		\item \textbf{JavaParser}\footnote{\url{https://javaparser.org}} per effettuare l'analisi dei sorgenti sviluppati in linguaggio Java;

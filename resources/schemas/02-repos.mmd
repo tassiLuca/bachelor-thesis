@@ -9,6 +9,7 @@ direction BT
     }
     class AbstractRepository {
         <<abstract>>
+        -knoledgeBaseManager: KnoledgeBaseManager
         +getSources(pattern: Regex) Sequence~File~
     }
     AbstractRepository ..|> Repository
@@ -23,9 +24,14 @@ direction BT
     GitHubRepository --|> AbstractRepository
     BitBucketRepository --|> AbstractRepository
 
-    class RepoContentSupplierStrategy {
+    class KnoledgeBaseManager {
         <<interface>>
-        +getFilesOf(\nㅤㅤextensions: Iterable~String~\n)
+        +save(repository: Repository)
+        +isCached(repository: Repository) Boolean
+        +load(repository: Repository) File
     }
-    RepoContentSupplierStrategy <--* AbstractRepository
-    CloneStrategy ..|> RepoContentSupplierStrategy
+    class FileKnowledgeBaseManager {
+        -repositoryFolder: File
+    }
+    FileKnowledgeBaseManager ..|> KnoledgeBaseManager
+    KnoledgeBaseManager <--* AbstractRepository
