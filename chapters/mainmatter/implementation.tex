@@ -202,7 +202,7 @@ Ciò migliora notevolmente le prestazioni rispetto all'algoritmo \textit{Greedy 
 
 \section{Stima della similarità}
 
-\subsection*{Similarità tra due sorgenti}
+\subsection*{Similarità tra coppie di sorgenti}
 La misura della similarità di due sorgenti dovrebbe intuitivamente riflettere la frazione di \textit{token} dei programmi originali che sono "coperti" da \textit{match}.
 %
 Seguendo questo principio ci sono due possibili scelte che possono essere intraprese e che determinano la formula di stima di similarità: se si vuole che la similarità del 100\% significhi che le due sequenze sono identiche dobbiamo considerare entrambe le stringhe nel computo, come segue:
@@ -233,15 +233,18 @@ Le formule aggiornate sono di seguito presentate.
 	sim_S(A, B) = \frac{\sum_{match \in tiles} length - (|tiles|-1)}{min(|A|, |B|)}
 \end{equation} 
 
-\subsection*{Similarità tra due progetti}
+\subsection*{Similarità tra coppie di progetti}
 Vista la grande quantità di progetti di cui si dispone, sebbene i risultati ottenuti siano filtrati per non riportare singole coppie di sorgenti con una similarità inferiore a una soglia (scelta dall'utente), la quantità di risultati rimane corposa.
 %
-Pertanto, non è sufficiente stimare la similarità sorgente per sorgente, ma è necessario fornire una stima delle similarità progetto per progetto, così da individuare più facilmente, a un livello di granularità maggiore, i progetti simili.
+Pertanto, non è sufficiente stimare la similarità sorgente per sorgente, ma è necessario fornire una stima aggregata delle similarità progetto per progetto, così da individuare più facilmente, a un livello di granularità maggiore, i progetti simili.
 
 In generale, questa stima di similarità è inferita a partire da quelle tra sorgenti come segue:
 
 \begin{equation}
-	sim_P(A, B) = \frac{|\textit{sorgenti segnalati di B}|}{|\textit{sorgenti di B}|} \cdot P_{75}(\textit{similarità sorgenti segnalati})
+	\begin{split}
+		sim_P(A, B) &= max \biggl\{ \frac{|\textit{sorgenti segnalati di A}|}{|\textit{sorgenti di A}|}, \frac{|\textit{sorgenti segnalati di B}|}{|\textit{sorgenti di B}|} \biggr\} \\
+		&  \cdot P_{75}(\textit{similarità sorgenti segnalati})
+	\end{split}	
 \end{equation}
 
 dove $A$ e $B$ sono due progetti e $P_{75}$ il settantacinquesimo percentile (o terzo quartile) delle similarità dei sorgenti segnalati.
@@ -250,12 +253,14 @@ In questo modo, la seconda parte dell'equazione fornisce una stima aggregata del
 %
 L'utilizzo di questa statistica è migliore della semplice media o mediana, in quanto queste darebbero stessa importanza a tutte le stime di similarità, fornendo risultati troppo bassi anche nei casi effettivi di copiatura, visto che, generalmente, anche in questi, vengono rintracciate sezioni con una bassa stima di similarità.
 
-Tuttavia, applicare solo una statistica di aggregazione dei valori di similarità dei sorgenti segnalati può fornire misure fuorvianti nel caso in cui questi siano pochi (nell'ordine dell'unità) ma elevati.
+Tuttavia, applicare solo una statistica di aggregazione dei valori di similarità dei sorgenti segnalati può fornire misure fuorvianti nel caso in cui questi siano pochi (nell'ordine di alcune unità) ma con valori di similarità elevati.
 %
-Per questo motivo, la misura di similarità aggregata sopra descritta viene "pesata" sulla base del rapporto tra il numero di sorgenti segnalati e quelli del progetto in esame.
+Per questo motivo, la misura di similarità aggregata sopra descritta viene "pesata" sulla base del massimo rapporto tra il numero di sorgenti segnalati di $A$ e $B$ e quelli del progetto in esame.
 %
-Così facendo, si andrà a diminuire il peso complessivo della similarità per quei progetti i cui sorgenti segnalati sono eseguiti rispetto alla loro totalità.
+Così facendo, si andrà a diminuire il peso complessivo della similarità per quei progetti i cui sorgenti segnalati sono esegui rispetto alla loro totalità.
 %
+Questo tuttavia, ha un effetto negativo: consideriamo ad esempio che \dots
+
 Questo chiaramente determina che una singola copiatura, ad esempio, di una classe non verrà rilevata dal sistema.
 %
 D'altro canto, l'obiettivo non è determinare tutte le similarità tra tutti i sorgenti, bensì avere un'indicazione dei progetti più simili e, perciò, presumibilmente copiati.

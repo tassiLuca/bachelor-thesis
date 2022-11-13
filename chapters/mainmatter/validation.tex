@@ -5,7 +5,7 @@ In questo capitolo vengono riportati e analizzati i risultati ottenuti nell'ambi
 
 \vspace*{0.5cm}
 
-Le prestazioni del sistema sono misurate sulla base di due aspetti fondamentali e indipendenti tra loro: le \textit{performance} in termini di tempo d'esecuzione, ma soprattutto l'accuratezza, ovvero la capacità di rilevare copiature e plagi.
+Le prestazioni del sistema sono misurate sulla base di due aspetti fondamentali e indipendenti tra loro: le \textit{performance}, in termini di tempo d'esecuzione ma, soprattutto, l'accuratezza, ovvero la capacità di rilevare copiature e plagi.
 
 \section{Accuratezza}
 L'accuratezza è l'obiettivo più importante da tenere in considerazione e in relazione alla quale misurare le prestazioni.
@@ -16,28 +16,43 @@ Infatti, lo scopo primario è rilevare con precisione casi probabili di plagio e
 
 Dunque, per testarne l'accuratezza sono stati considerati 130 diversi progetti del corso di Programmazione ad Oggetti presentati nell'arco degli ultimi tre anni accademici e per ciascuno di questi si è effettuato il confronto con tutti i progetti a disposizione dal 2015 in poi che, complessivamente, ammontano a 354 progetti.
 %
-Tali progetti sono sviluppati in Java, generalmente in \textit{team} di quattro componenti, e rappresentano artefatti di medio-alta complessità, costituiti in media da più di un centinaio di sorgenti ciascuno.
+Questi sono sviluppati in Java, generalmente in \textit{team} di quattro componenti, e rappresentano artefatti di medio-alta complessità, costituiti in media da più di un centinaio di sorgenti ciascuno.
 
 A seguito dell'analisi si è effettuata un'ispezione manuale dei sorgenti in modo tale da verificare che le stime effettuate dallo strumento non fossero fuorvianti o prive di fondamento.
 %
-I risultati complessivi sono presentati in \Cref{table:results}.
+I risultati complessivi sono presentati in \Cref{table:results}; per semplicità sono riportati solo le corrispondenze con similarità maggiore del 40\%.
 
-\begin{table}[h]
+\begin{table}[h!]
     \centering
-    \begin{tabular}{|p{0.15\linewidth}|p{0.15\linewidth}|p{0.15\linewidth}|p{0.45\textwidth}|}
+    \begin{tabular}{|p{0.2\linewidth}|p{0.2\linewidth}|p{0.15\linewidth}|p{0.35\textwidth}|}
         \hline
         \textbf{Progetto originale} & \textbf{Progetto copiato} & \textbf{Similarità} & \textbf{Ispezione manuale} \\ [0.5ex] 
         \hline\hline
-        gym-man & gym-man & 100\% & I progetti sono realmente copiati e rappresentano una copia letterale uno dell'altro. \\
+        gym-man & gym-man & 100\% & corrispondenza totale \\
         \hline
-        spacewar & space-invaders & 99\% & I progetti sono realmente copiati e rappresentano una copia leterale uno dell'altro. \\
+        spacewar & space-invaders & 90\% & corrispondenza totale \\
         \hline
-        boxhead & zombiegame & 90\% & I progetti presentano molto codice uguale. \\
+        boxhead & zombiegame & 90\% & elevata \\
+        \hline
+        alone-in-the-space & space-run & 64\% & parziale \\
+        \hline
+        b.b.evo & paranoid & 59\% & parziale \\
+        \hline
+        harbor-mgr & Teatro & 48\% & parziale \\
+        \hline
+        ALA & traffic-sim & 48\% & falso positivo \\
         \hline
     \end{tabular}
-    \caption{Risultati ottenuti confrontando i progetti sottomessi negli anni 2021, 2020, 2019 con tutti gli altri.}
+    \caption[Risultati ottenuti confrontando i progetti sottomessi negli ultimi tre anni accademici]{Risultati ottenuti confrontando i progetti sottomessi negli ultimi tre anni accademici. Nell'ultima colonna vi è riportato l'esito dell'ispezione manuale eseguita a seguito di quella automatica; per semplicità si sono catalogate le corrispondenze in: corrispondenza \textit{totale}, \textit{elevata}, \textit{parziale} o \textit{falso positivo}.}
     \label{table:results}
 \end{table}
+
+Come si può osservare, lo strumento è in grado di rilevare molto bene copiature evidenti, ovvero casi in cui sono stati copiate intere classi di sorgenti: è il caso dei primi tre risultati in cui la percentuale di similarità stimata non è inferiore al 90\%.
+
+Come naturale che sia, invece, laddove la copiatura è effettuata in modo più scaltro, attingendo in modo parziale, la similarità cala, mantenendosi tuttavia al di sopra del 60\%.
+
+\section{Tempi d'esecuzione}
+Di seguito sono presentati l'incremento di prestazioni ottenuti dalla parallelizzazione e dal salvataggio dei sorgenti in locale.
 
 
 
