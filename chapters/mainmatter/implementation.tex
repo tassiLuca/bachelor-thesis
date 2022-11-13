@@ -295,18 +295,18 @@ Questi vengono eseguiti automaticamente grazie all'utilizzo delle \textit{GitHub
 %
 Tramite un file di configurazione \textit{Yaml} è possibile definire uno o più \textit{workflow} che effettuino i controlli desiderati al verificarsi di alcuni eventi come, ad esempio, una \textit{pull request} o il \textit{push} di un nuovo commit.
 %
-In particolare, il progetto è configurato per eseguire i \textit{test} ad ogni \textit{commit} che viene \textit{pushato} su tutti e tre i sistemi operativi più diffusi, \textit{Linux}, \textit{MacOS}, \textit{Windows}, e per effettuare,ad ogni \textit{pull request}, ulteriori controlli come la copertura del codice in termini di test\footnote{\url{https://about.codecov.io/}} e la qualità del codice\footnote{\href{shorturl.at/enwzD}{\texttt{Sonatype Lift}}} al fine di identificare problemi di sicurezza, prestazioni, affidabilità e stile.
+In particolare, il progetto è configurato per eseguire i \textit{test} ad ogni \textit{commit} che viene \textit{pushato} su tutti e tre i sistemi operativi più diffusi, \textit{Linux}, \textit{MacOS}, \textit{Windows}, e per effettuare, ad ogni \textit{pull request}, ulteriori controlli come la copertura del codice in termini di test\footnote{\url{https://about.codecov.io/}} e la qualità del codice\footnote{\href{shorturl.at/enwzD}{\texttt{Sonatype Lift}}} al fine di identificare problemi di sicurezza, prestazioni, affidabilità e stile.
 %
 Questo metodo di operare è alla base della filosofia \textit{DevOps} e prevede di verificare, ad ogni cambiamento, che la \textit{build} rimanga intatta, al fine di individuare eventuali problemi appena questi si verificano e non dopo settimane, al termine dell'integrazione.
 
 \subsection*{Note di sviluppo}
 \begin{itemize}
-	\item La parallelizzazione dell'analisi dei sorgenti è stata sviluppata per mezzo di \textit{ParallelStream} i quali, a loro volta, fanno uso di un \textit{framework} di tipo \textit{fork-join}, che hanno l'onere di creare e dividere la computazione tra i vari \textit{thread} e gestire le relative \textit{join}.
+	\item La parallelizzazione dell'analisi dei sorgenti è stata sviluppata per mezzo di \textit{ParallelStream} i quali, a loro volta, fanno uso di un \textit{framework} di tipo \textit{fork-join}, che hanno l'onere di creare e dividere la computazione tra i vari \textit{thread} e gestire le relative \textit{join} in maniera trasparente allo sviluppatore.
 	\item Per lo sviluppo complessivo del progetto sono state impiegate le seguenti librerie:
 	\begin{itemize}
 		\item \textbf{JavaParser}\footnote{\url{https://javaparser.org}} per effettuare l'analisi dei sorgenti sviluppati in linguaggio Java;
 		\item \textbf{Github API for Java}\footnote{\url{https://github-api.kohsuke.org}} per interagire con l'API di GitHub e recuperare le \textit{repository}. Per recuperare i progetti caricati su \textit{Bitbucket}, non essendoci di una libreria pronta all'uso, si è utilizzata \textbf{Unirest} per effettuare le richieste HTTP;
-		\item \textbf{JGit}\footnote{\url{https://www.eclipse.org/jgit/}} per lo scaricaramento (\textit{clone}) dei progetti da \textit{GitHub} e \textit{Bitbucket}.
+		\item \textbf{JGit}\footnote{\url{https://www.eclipse.org/jgit/}} per lo scaricamento (\textit{clone}) dei progetti da \textit{GitHub} e \textit{Bitbucket}.
 		\item \textbf{Clikt}\footnote{\url{https://ajalt.github.io/clikt/}} per la scrittura dell'interfaccia da riga di comando;
 		\item \textbf{Kaml}\footnote{\url{https://github.com/charleskorn/kaml}} per la (de)serializzazione di file di configurazione \textit{Yaml}.
 		\item \textbf{Kotest}\footnote{\url{https://kotest.io}} e \textbf{Mockk}\footnote{\url{https://mockk.io}} per effettuare e agevolare la scrittura di \textit{test}.
