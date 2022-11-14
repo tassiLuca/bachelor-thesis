@@ -242,30 +242,65 @@ In generale, questa stima di similarità è inferita a partire da quelle tra sor
 
 \begin{equation}
 	\begin{split}
-		sim_P(A, B) &= max \biggl\{ \frac{|\textit{sorgenti segnalati di A}|}{|\textit{sorgenti di A}|}, \frac{|\textit{sorgenti segnalati di B}|}{|\textit{sorgenti di B}|} \biggr\} \\
-		&  \cdot P_{75}(\textit{similarità sorgenti segnalati})
-	\end{split}	
+		sim_P(A, B) &= \underbrace{max \biggl\{ \frac{|\textit{sorgenti segnalati di A}|}{|\textit{sorgenti di A}|}, \frac{|\textit{sorgenti segnalati di B}|}{|\textit{sorgenti di B}|} \biggr\}}_\text{I} \\
+		&  \cdot \underbrace{P_{75}(\textit{similarità sorgenti segnalati})}_\text{II}
+	\end{split}
+	\label{eq:project-similarity}
 \end{equation}
 
 dove $A$ e $B$ sono due progetti e $P_{75}$ il settantacinquesimo percentile (o terzo quartile) delle similarità dei sorgenti segnalati.
 
-In questo modo, la seconda parte dell'equazione fornisce una stima aggregata delle similarità dei sorgenti, considerando il valore di similarità che "lascia alla sua sinistra" il 75\% della distribuzione.
+In questo modo, la seconda parte dell'equazione (II) fornisce una stima aggregata delle similarità dei sorgenti, considerando il valore di similarità che "lascia alla sua sinistra" il 75\% della distribuzione.
 %
 L'utilizzo di questa statistica è migliore della semplice media o mediana, in quanto queste darebbero stessa importanza a tutte le stime di similarità, fornendo risultati troppo bassi anche nei casi effettivi di copiatura, visto che, generalmente, anche in questi, vengono rintracciate sezioni con una bassa stima di similarità.
 
 Tuttavia, applicare solo una statistica di aggregazione dei valori di similarità dei sorgenti segnalati può fornire misure fuorvianti nel caso in cui questi siano pochi (nell'ordine di alcune unità) ma con valori di similarità elevati.
 %
-Per questo motivo, la misura di similarità aggregata sopra descritta viene "pesata" sulla base del massimo rapporto tra il numero di sorgenti segnalati di $A$ e $B$ e quelli del progetto in esame.
+Per questo motivo, la misura di similarità aggregata sopra descritta viene "pesata" sulla base del massimo rapporto tra $A$ e $B$ del numero di sorgenti segnalati e quelli del progetto in esame.
 %
 Così facendo, si andrà a diminuire il peso complessivo della similarità per quei progetti i cui sorgenti segnalati sono esegui rispetto alla loro totalità.
 %
-Questo tuttavia, ha un effetto negativo: consideriamo ad esempio che \dots
-
-Questo chiaramente determina che una singola copiatura, ad esempio, di una classe non verrà rilevata dal sistema.
+Questo determina tuttavia che copiature di circa il 50\% del progetto possano avere al più similarità 50\% nel caso limite in cui II sia uguale a 1.
 %
-D'altro canto, l'obiettivo non è determinare tutte le similarità tra tutti i sorgenti, bensì avere un'indicazione dei progetti più simili e, perciò, presumibilmente copiati.
+Questo però è raro che accada perché significherebbe che le copiature sono frutto di un copia e incolla letterale; nella realtà tale valore sarà strettamente minore di 1 e ciò comporterebbe una diminuzione significativa del valore di similarità per la coppia di progetti che in definitiva verrebbe classificata come non copiata nonostante la copiatura di metà progetto.
+%
+Per questo motivo, un possibile miglioramento all'\Cref{eq:project-similarity} consiste nell'applicare alla I parte dell'equazione una funzione di peso, come quella descritta in \Cref{eq:weight-function} il cui grafico è mostrato in \Cref{graph:weight-function}.
 
-\newpage
+\begin{equation}
+	w(x) = 
+		\begin{cases}
+			\frac{1}{2} sin\bigl( 4,5 \cdot x - \frac{\pi}{2} \bigr) + \frac{1}{2} & \text{se $0 \leq x < 0,7$} \\
+			1 & \text{se $x >= 0,7$}
+		\end{cases}	
+	\label{eq:weight-function}	
+\end{equation}
+
+\begin{figure}[h!]
+	\centering
+	\begin{tikzpicture}[
+		declare function={
+			func(\x) = (\x >= 0.7) * (1) +
+				and(\x < 0.7, \x >= 0) * (1/2 * sin(4.5 * deg(\x) - deg(pi)/2) + 1/2);
+		}
+	]
+		\begin{axis}[
+			xlabel=$x$, ylabel=$w(x)$,
+			domain=0:1,
+			grid = both,
+			major grid style = {lightgray},
+			minor grid style = {lightgray!25},
+		]
+			\addplot [blue,thick] {func(x)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Grafico dell'\Cref{eq:weight-function}}
+	\label{graph:weight-function}
+\end{figure}
+
+Come si può osservare, applicare questa semplice funziona alla parte I dell'\Cref{eq:project-similarity} garantisce di attenuare il contributo dove il rapporto tra sorgenti riportati e sorgenti totali è esiguo ed enfatizzare i rapporti più elevati. 
+
+% D'altro canto, l'obiettivo non è determinare tutte le similarità tra tutti i sorgenti, bensì avere un'indicazione dei progetti più simili e, perciò, presumibilmente copiati.
+
 \section{Strumenti di sviluppo}
 
 \subsection*{\textit{Kotlin}}
