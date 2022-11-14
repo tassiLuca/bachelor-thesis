@@ -30,29 +30,41 @@ I risultati complessivi sono presentati in \Cref{table:results}; per semplicità
         \hline\hline
         gym-man & gym-man & 100\% & corrispondenza totale \\
         \hline
-        spacewar & space-invaders & 90\% & corrispondenza totale \\
+        spacewar & Space-Invaders & 90\% & corrispondenza totale \\
         \hline
-        boxhead & zombiegame & 90\% & elevata \\
+        boxhead & zombiegame & 81\% & corrispondenza elevata \\
         \hline
-        alone-in-the-space & space-run & 64\% & parziale \\
+        b.b.evo & paranoid & 70\% & corrispondenza medio-alta \\
         \hline
-        b.b.evo & paranoid & 59\% & parziale \\
+        alone-in-the-space & space-run & 62\% & corrispondenza medio-alta \\
         \hline
-        harbor-mgr & Teatro & 48\% & parziale \\
+        SMR & Flappy Bird & 55\% & corrispondenza parziale \\
         \hline
-        ALA & traffic-sim & 48\% & falso positivo \\
+        harbor-mgr & Teatro & 49\% & corrispondenza parziale \\
+        \hline
+        ALA & traffic-sim & 48\% & nessuna corrispondenza - "falso positivo" \\
         \hline
     \end{tabular}
     \caption[Risultati ottenuti confrontando i progetti sottomessi negli ultimi tre anni accademici]{Risultati ottenuti confrontando i progetti sottomessi negli ultimi tre anni accademici. Nell'ultima colonna vi è riportato l'esito dell'ispezione manuale eseguita a seguito di quella automatica; per semplicità si sono catalogate le corrispondenze in: corrispondenza \textit{totale}, \textit{elevata}, \textit{parziale} o \textit{falso positivo}.}
     \label{table:results}
 \end{table}
 
-Come si può osservare, lo strumento è in grado di rilevare molto bene copiature evidenti, ovvero casi in cui sono stati copiate intere classi di sorgenti: è il caso dei primi tre risultati in cui la percentuale di similarità stimata non è inferiore al 90\%.
+Come si può osservare, lo strumento è in grado di rilevare molto bene copiature evidenti, ovvero casi in cui sono state copiate intere classi di sorgenti: è il caso dei primi due risultati in cui i progetti sono pressoché identici e la percentuale di similarità stimata non è inferiore al 90\%.
+%
+Nel secondo caso la similarità al 90\% è spiegabile dal fatto che alcune interfacce sono molto piccole e non hanno una lunghezza (in numero di \textit{token}) sufficiente per essere rilevate (cioè sono minori della minima lunghezza $s$ imposta nell'algoritmo \textit{Running Karp Rabin Greedy String Tiling}).
 
-Come naturale che sia, invece, laddove la copiatura è effettuata in modo più scaltro, attingendo in modo parziale, la similarità cala, mantenendosi tuttavia al di sopra del 60\%.
+Come naturale che sia, invece, laddove la copiatura è effettuata in modo più scaltro, attingendo in modo parziale da altri progetti, la similarità cala, mantenendosi tuttavia al di sopra del 60\%.
+
+Sotto il 60\% si è in presenza di codice piuttosto simile, ma in maniera molto limitata rispetto alla totalità dei sorgenti.
+%
+\`E il caso, ad esempio, dei progetti \texttt{SMR} e \texttt{Flappy Bird} in cui è intuibile, guardando i risultati generati dal rilevatore che gli sviluppatori del secondo abbiano preso spunto dal primo.
+%
+Tuttavia non è ravvisabile una copiatura evidente come nei precedenti casi.
+
+Un solo caso, tra tutti i progetti analizzati, riporta similarità maggiore del 45\% senza essere realmente copiato.
+%
+Ciononostante, la similarità riportata non è superiore al 50\% e il fatto che i progetti non siano copiati né simili è facilmente verificabile in pochi minuti guardando il \textit{report} stesso.
 
 \section{Tempi d'esecuzione}
-Di seguito sono presentati l'incremento di prestazioni ottenuti dalla parallelizzazione e dal salvataggio dei sorgenti in locale.
-
-
+Per quanto concerne i tempi d'esecuzione, attualmente lo strumento impiega, per fare il confronto di un progetto con i 354 progetti disponibili, grazie alla parallelizzazione e al salvataggio in locale dei sorgenti da analizzare, mediamente un terzo del tempo che avrebbe impiegato senza effettuare il \textit{caching}.
 
