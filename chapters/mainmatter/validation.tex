@@ -65,6 +65,14 @@ Un solo caso, tra tutti i progetti analizzati, riporta similarità maggiore del 
 %
 Ciononostante, la similarità riportata non è superiore al 50\% e il fatto che i progetti non siano copiati né simili è facilmente verificabile in pochi minuti guardando il \textit{report} stesso.
 
+In conclusione, i parametri che si ritengono più efficaci sono: 
+
+\begin{itemize}
+    \item $s$ (ovvero la minima lunghezza dei \textit{token} rilevabile dall'algoritmo di \textit{detection} (RKR-GST)) pari a 15;
+    \item la soglia percentuale sotto la quale le similarità non viene considerata è fissata al 30\%;
+    \item la metrica utilizzata tra sorgenti è l'\Cref{eq:avg-norm-sim}.
+\end{itemize}
+
 \section{Tempi d'esecuzione}
 Per quanto concerne i tempi d'esecuzione, attualmente lo strumento impiega, per fare il confronto di un progetto con i 354 progetti disponibili, grazie alla parallelizzazione e al salvataggio in locale dei sorgenti da analizzare, mediamente un terzo del tempo che avrebbe impiegato senza effettuare il \textit{caching}.
 

@@ -208,14 +208,14 @@ La misura della similarità di due sorgenti dovrebbe intuitivamente riflettere l
 Seguendo questo principio ci sono due possibili scelte che possono essere intraprese e che determinano la formula di stima di similarità: se si vuole che la similarità del 100\% significhi che le due sequenze sono identiche dobbiamo considerare entrambe le stringhe nel computo, come segue:
 %
 \begin{equation}
-\label{eq:max-norm-sim}
+\label{eq:avg-norm-sim}
 	sim_S(A, B) = \frac{2 \cdot \sum_{match \in tiles} length}{|A|+|B|}
 \end{equation}
 %
 Se, invece, preferiamo che ogni programma che è stato copiato completamente (e poi magari esteso) produca una similarità del 100\%, dobbiamo considerare solo la sottosequenza più corta:
 %
 \begin{equation}
-\label{eq:avg-norm-sim}
+\label{eq:max-norm-sim}
 	sim_S(A, B) = \frac{\sum_{match \in tiles} length}{min(|A|, |B|)}
 \end{equation} 
 

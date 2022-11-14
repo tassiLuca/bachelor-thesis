@@ -6,4 +6,4 @@
 \contentsline {lstlisting}{\numberline {3.4}Pseudocodice della \textit {routine} \texttt {scanpattern} dell'algoritmo \textit {RKR-GST}}{40}{lstlisting.3.4}%
 \contentsline {lstlisting}{\numberline {3.5}Pseudocodice \textit {routine} \texttt {markarrays} dell'algoritmo \textit {RKR-GST}}{41}{lstlisting.3.5}%
 \contentsline {lstlisting}{\numberline {3.6}\textit {Entry-point} dell'algoritmo \textit {RKR-GST}}{41}{lstlisting.3.6}%
-\contentsline {lstlisting}{resources/code/app\textendash report\textendash example.txt}{59}{lstlisting.Alph1.-1}%
+\contentsline {lstlisting}{resources/code/app\textendash report\textendash example.txt}{55}{lstlisting.Alph1.-1}%
