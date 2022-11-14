@@ -1,0 +1,68 @@
+******************************************************************
+Report from plagiarism detector tool generated at 2022-11-13T17...
+******************************************************************
+
+Submitted Project: boxhead     
+
++++++++++++++++++++++++++++++ SUMMARY ++++++++++++++++++++++++++++
+Compared with 354 repositories.
+------------------------------------------------------------------
+|compared with                                        |similarity|
+------------------------------------------------------------------
+|zombiegame                                           |      0.81|
+|bullet-ballet                                        |      0.10|
+|RestaurantManager                                    |      0.08|
+|                             ...                                |
+------------------------------------------------------------------
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+> Matches found with zombiegame
+                              ...
+>> With similarity: 0.8655737704918033
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+[src/main/java/boxhead/model/entities/gun/ShotManagerImpl.java]
+        this.zombieModel.getZombies().stream()
+            .filter(z -> Collision.isColliding(s.getBoundingBox(), z.getBoundingBox()))
+            .forEach(z -> {
+                this.zombieModel.hitZombie(z, s.getDamage());
+                delete.add(s);
+            });
+        if(!delete.contains(s) && this.walls.stream().anyMatch(w -> Collision.isColliding(w, s.getBoundingBox()))) {
+            delete.add(s);
+        }
+    });
+    this.ended.addAll(delete);
+    delete.forEach(s -> this.shotsActive.remove(s));
+}
+
+/**
+    * {@inheritDoc}
+    */
+@Override
+public final Set<Shot> getShotsEnded() {
+    final Set<Shot> tmp = new HashSet<>(this.ended);
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[/Users/lucatassi/.code-plagiarism-detector/OOP19 - De Bonis Gianluca, De Crescenzo Andrea, Pagliazzi Lorenzo, Poni Sofia - zombiegame/src/main/java/zombieversity/model/entities/weapon/AttackManagerImpl.java]
+            this.zombieModel.getZombies().stream()
+                .filter(z -> CollisionsUtils.isColliding(z.getBBox(), a.getBBox()))
+                .forEach(z -> {
+                    this.zombieModel.hitZombie(z, a.getDamage());
+                    toDelete.add(a);
+                });
+            if (!toDelete.contains(a) && this.obstacles.stream().anyMatch(e -> CollisionsUtils.isColliding(e, a.getBBox()))) {
+                toDelete.add(a);
+            }
+        }
+    });
+
+    this.deleted.addAll(toDelete);
+    toDelete.forEach(a -> this.attacksActive.remove(a));
+}
+
+/**
+ * {@inheritDoc}
+ */
+@Override
+public final Set<Attack> getAttacksEnded() {
+    final Set<Attack> tmp = new HashSet<>(deleted);
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
