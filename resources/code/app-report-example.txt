@@ -20,7 +20,7 @@ Compared with 354 repositories.
                               ...
 >> With similarity: 0.8655737704918033
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-[src/main/java/boxhead/model/entities/gun/ShotManagerImpl.java]
+[boxhead/src/main/java/boxhead/model/entities/gun/ShotManagerImpl.java]
         this.zombieModel.getZombies().stream()
             .filter(z -> Collision.isColliding(s.getBoundingBox(), z.getBoundingBox()))
             .forEach(z -> {
@@ -42,7 +42,7 @@ Compared with 354 repositories.
 public final Set<Shot> getShotsEnded() {
     final Set<Shot> tmp = new HashSet<>(this.ended);
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-[/Users/lucatassi/.code-plagiarism-detector/OOP19 - De Bonis Gianluca, De Crescenzo Andrea, Pagliazzi Lorenzo, Poni Sofia - zombiegame/src/main/java/zombieversity/model/entities/weapon/AttackManagerImpl.java]
+[zombiegame/src/main/java/zombieversity/model/entities/weapon/AttackManagerImpl.java]
             this.zombieModel.getZombies().stream()
                 .filter(z -> CollisionsUtils.isColliding(z.getBBox(), a.getBBox()))
                 .forEach(z -> {
