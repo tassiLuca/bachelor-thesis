@@ -67,7 +67,10 @@ Il risultato dell'applicazione del processo sopra descritto al \Cref{lst:test-an
 
 % vengono anche tolti i duplicati :)
 
+%-----------------------------------------------------------------------------
 \section{Filtraggio}
+\label{03:filtering-phase}
+%-----------------------------------------------------------------------------
 A seguito dell'analisi del codice sorgente e della generazione della sequenza di \textit{token} i sorgenti del \textit{corpus} possono essere filtrati, al fine di limitare il numero di progetti da dover confrontare.
 %
 Questo \textit{step} rappresenta uno snodo critico nella \textit{pipeline} di azioni da eseguire in quanto scambia una frazione dell'efficacia del sistema in favore dell'efficienza: una stima fuorviante della similarità di una coppia di progetti può comportare l'esclusione dalla comparazione degli stessi, con la conseguente perdita di sensibilità nel caso in cui rappresentassero dei veri casi di copiatura.
@@ -78,7 +81,7 @@ Come già presentato nella \Cref{01-tokenization}, il processo di filtraggio è 
 
 Nel sistema è attualmente implementato un indice equivalente a quello presentato in \Cref{table:token-indexing} a partire dal quale la similarità tra progetti è stata calcolata mediante la \textbf{similarità coseno}.
 %
-Essa è una metrica euristica ampiamente utilizzata nel contesto dell'analisi testuale che misura la similutidine di due vettori calcolando il coseno del loro angolo: 
+Essa è una metrica euristica ampiamente utilizzata nel contesto dell'analisi testuale che misura la similitudine di due vettori calcolando il coseno del loro angolo: 
 \begin{equation}
 	cosine\_similarity(A,B) = \frac{A \cdot B}{||A|| ||B||} 
 		= \frac{\sum_{k=1}^{n} A(k) B(k)}{\sqrt{\sum_{k=1}^{n}A(k)^2 \cdot \sum_{k=1}^{n} B(k)^2}}

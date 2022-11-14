@@ -1,14 +1,10 @@
 % ! TeX root = ../../thesis.tex
-\chapter{Validazione dei risultati}
+\chapter{Validazione, conclusioni e lavori futuri}
 \label{chapter:validation}
 In questo capitolo vengono riportati e analizzati i risultati ottenuti nell'ambito di applicazione dello strumento sviluppato.
 
-\vspace*{0.5cm}
-
-Le prestazioni del sistema sono misurate sulla base di due aspetti fondamentali e indipendenti tra loro: le \textit{performance}, in termini di tempo d'esecuzione ma, soprattutto, l'accuratezza, ovvero la capacità di rilevare copiature e plagi.
-
-\section{Accuratezza}
-L'accuratezza è l'obiettivo più importante da tenere in considerazione e in relazione alla quale misurare le prestazioni.
+\section{Valutazione qualitativa}
+Le prestazioni del sistema sono misurate sulla base di due aspetti fondamentali e indipendenti tra loro: le \textit{performance}, in termini di tempo d'esecuzione, ma soprattutto l'accuratezza.
 %
 Infatti, lo scopo primario è rilevare con precisione casi probabili di plagio e presentarli all'utente il più in alto possibile nei \textit{report} generati dallo strumento.
 %
@@ -18,8 +14,16 @@ Dunque, per testarne l'accuratezza sono stati considerati 130 diversi progetti d
 %
 Questi sono sviluppati in Java, generalmente in \textit{team} di quattro componenti, e rappresentano artefatti di medio-alta complessità, costituiti in media da più di un centinaio di sorgenti ciascuno.
 
+\subsection{Analisi di sensitività}
+Dapprima si è testato il sistema eseguendo una scansione senza applicare alcun filtraggio intermedio delle rappresentazioni come descritto nella \Cref{03:filtering-phase}, scegliendo come parametri di riferimento i seguenti:
+\begin{itemize}
+    \item $s$, minima lunghezza della sequenza di \textit{token} rilevabile dall'algoritmo di \textit{detection} (\textit{RKR-GST}) pari a 15;
+    \item valore di soglia percentuale sotto la quale la similarità di una coppia di sorgenti non viene segnalata pari al 30\%;
+    \item metrica espressa dall'\Cref{eq:avg-norm-sim}.
+\end{itemize}
+
 A seguito dell'analisi si è effettuata un'ispezione manuale dei sorgenti in modo tale da verificare che le stime effettuate dallo strumento non fossero fuorvianti o prive di fondamento.
-%
+
 I risultati complessivi sono presentati in \Cref{table:results}; per semplicità sono riportati solo le corrispondenze con similarità maggiore del 40\%.
 
 \begin{table}[h!]
@@ -45,7 +49,7 @@ I risultati complessivi sono presentati in \Cref{table:results}; per semplicità
         ALA & traffic-sim & 48\% & nessuna corrispondenza - "falso positivo" \\
         \hline
     \end{tabular}
-    \caption[Risultati ottenuti confrontando i progetti sottomessi negli ultimi tre anni accademici]{Risultati ottenuti confrontando i progetti sottomessi negli ultimi tre anni accademici. Nell'ultima colonna vi è riportato l'esito dell'ispezione manuale eseguita a seguito di quella automatica; per semplicità si sono catalogate le corrispondenze in: corrispondenza \textit{totale}, \textit{elevata}, \textit{parziale} o \textit{falso positivo}.}
+    \caption[Risultati ottenuti confrontando i progetti sottomessi negli ultimi tre anni accademici]{Risultati ottenuti confrontando i progetti consegnati negli ultimi tre anni accademici. Nell'ultima colonna vi è riportato l'esito dell'ispezione manuale eseguita a seguito di quella automatica; per semplicità si sono catalogate le corrispondenze in: corrispondenza \textit{totale}, \textit{elevata}, \textit{parziale} o \textit{falso positivo}.}
     \label{table:results}
 \end{table}
 
@@ -57,22 +61,81 @@ Come naturale che sia, invece, laddove la copiatura è effettuata in modo più s
 
 Sotto il 60\% si è in presenza di codice piuttosto simile, ma in maniera molto limitata rispetto alla totalità dei sorgenti.
 %
-\`E il caso, ad esempio, dei progetti \texttt{SMR} e \texttt{Flappy Bird} in cui è intuibile, guardando i risultati generati dal rilevatore che gli sviluppatori del secondo abbiano preso spunto dal primo.
+\`E il caso, ad esempio, dei progetti \texttt{SMR} e \texttt{Flappy Bird} in cui è intuibile, guardando i risultati generati dal rilevatore, che gli sviluppatori del secondo abbiano preso spunto dal primo.
 %
 Tuttavia non è ravvisabile una copiatura evidente come nei precedenti casi.
 
 Un solo caso, tra tutti i progetti analizzati, riporta similarità maggiore del 45\% senza essere realmente copiato.
 %
-Ciononostante, la similarità riportata non è superiore al 50\% e il fatto che i progetti non siano copiati né simili è facilmente verificabile in pochi minuti guardando il \textit{report} stesso.
+Ciononostante, la similarità riportata non è superiore al 50\% e il fatto che i progetti non siano copiati né simili è facilmente verificabile in pochi minuti guardando il \textit{report} stesso che comprende solo costanti e \textit{getter/setter}.
+
+Nonostante i buoni risultati ottenuti, al fine di verificare la combinazione ottimale di parametri da utilizzare, sono state rieffettuate le scansioni dei soli progetti somiglianti presentati in \Cref{table:results}, facendoli opportunamente variare.
+
+\begin{landscape}
+    \begin{table}[h!]
+        \centering
+        \begin{tabular}{ c|c|c|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm} }
+            \multicolumn{3}{c|}{} & gym-man / gym-man & spacewar / space-invaders & zombiegame / boxhead & paranoid / b.b.evo & Space-run / alone-in-the-space & flappy-bird / SMR & Teatro / harbor-mgr & ALA / traffic-sim \\ [0.5ex]
+            \hline\hline
+            \multirow{6}{*}{$\text{min-dup}=0.3$} & \multirow{2}{*}{$s=15$} & Max & 100\% & 95\% & 72\% & 72\% & 75\% & 80\% & 56\% & 74\% \\
+            & & Avg & 100\% & 90\% & 81\% & 70\% & 62\% & 55\% & 49\% & 48\% \\
+            & \multirow{2}{*}{$s=20$} & Max & 100\% & 99\% & 72\% & 75\% & 63\% & 83\% & 50\% & 57\% \\
+            & & Avg & 100\% & 91\% & 58\% & 71\% & 48\% & 61\% & 51\% & 31\% \\
+            & \multirow{2}{*}{$s=25$} & Max & 100\% & 98\% & 54\% & 66\% & 49\% & 79\% & 46\% & 26\% \\
+            & & Avg & 100\% & 92\% & 42\% & 58\% & 41\% & 51\% & 40\% & 12\% \\
+            \hline
+
+            \multirow{6}{*}{$\text{min-dup}=0.4$} & \multirow{2}{*}{$s=15$} & Max & 100\% & 96\% & 81\% & 76\% & 70\% & 79\% & 61\% & 75\% \\
+            & & Avg & 100\% & 92\% & 73\% & 79\% & 57\% & 62\% & 55\% & 22\% \\
+            & \multirow{2}{*}{$s=20$} & Max & 100\% & 99\% & 65\% & 85\% & 63\% & 80\% & 57\% & 47\% \\
+            & & Avg & 100\% & 97\% & 49\% & 69\% & 44\% & 54\% & 39\% & 10\% \\
+            & \multirow{2}{*}{$s=25$} & Max & 100\% & 99\% & 49\% & 64\% & 42\% & 80\% & 46\% & 64\% \\
+            & & Avg & 100\% & 99\% & 36\% & 62\% & 34\% & 52\% & 20\% & 6\% \\
+            \hline
+
+            \multirow{6}{*}{$\text{min-dup}=0.5$} & \multirow{2}{*}{$s=15$} & Max & 100\% & 99\% & 80\% & 84\% & 64\% & 76\% & 67\% & 27\% \\
+            & & Avg & 100\% & 99\% & 51\% & 73\% & 33\% & 52\% & 33\% & 14\% \\
+            & \multirow{2}{*}{$s=20$} & Max & 100\% & 99\% & 56\% & 82\% & 59\% & 56\% & 45\% & 35\% \\
+            & & Avg & 100\% & 99\% & 30\% & 67\% & 30\% & 47\% & 23\% & 4\% \\
+            & \multirow{2}{*}{$s=25$} & Max & 100\% & 99\% & 44\% & 63\% & 38\% & 56\% & 27\% & 15\% \\
+            & & Avg & 100\% & 98\% & 21\% & 55\% & 27\% & 47\% & 11\% & 3\% \\
+            \hline
+        \end{tabular}
+        \caption[]{}
+        \label{table:grid-search}
+    \end{table}
+\end{landscape}
+
+\begin{table}[ht]
+    \caption{Multi-row table}
+    \begin{center}
+    \begin{tabular}{cc}
+        \hline
+        \multirow{2}{*}{Multirow}&X\\
+        &X\\
+        \hline
+    \end{tabular}
+    \end{center}
+    \label{tab:multicol}
+    \end{table}
+
+
+
+
 
 In conclusione, i parametri che si ritengono più efficaci sono: 
 
 \begin{itemize}
     \item $s$ (ovvero la minima lunghezza dei \textit{token} rilevabile dall'algoritmo di \textit{detection} (RKR-GST)) pari a 15;
     \item la soglia percentuale sotto la quale le similarità non viene considerata è fissata al 30\%;
-    \item la metrica utilizzata tra sorgenti è l'\Cref{eq:avg-norm-sim}.
+    \item la metrica utilizzata tra sorgenti è espressa dall'\Cref{eq:avg-norm-sim}.
 \end{itemize}
 
 \section{Tempi d'esecuzione}
-Per quanto concerne i tempi d'esecuzione, attualmente lo strumento impiega, per fare il confronto di un progetto con i 354 progetti disponibili, grazie alla parallelizzazione e al salvataggio in locale dei sorgenti da analizzare, mediamente un terzo del tempo che avrebbe impiegato senza effettuare il \textit{caching}.
+Per quanto concerne i tempi d'esecuzione, attualmente lo strumento impiega, per fare il confronto di un progetto con i 354 progetti disponibili, grazie alla parallelizzazione e al salvataggio in locale dei sorgenti da analizzare, mediamente un terzo del tempo che avrebbe impiegato senza effettuare il \textit{caching}, stimabile all'incirca in al più 20 minuti.
+%
+Questo dipende anche in maniera incontrollabile dal calcolatore su cui viene eseguito.
 
+\section{Conclusioni}
+
+\section{Sviluppi futuri}
