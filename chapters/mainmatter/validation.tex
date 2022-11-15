@@ -20,7 +20,7 @@ Questi sono sviluppati in Java, generalmente in \textit{team} di quattro compone
 Dapprima si è testato il sistema eseguendo una scansione senza applicare alcun filtraggio intermedio delle rappresentazioni come descritto nella \Cref{03:filtering-phase}, scegliendo come parametri di riferimento i seguenti:
 \begin{itemize}
     \item $s$, minima lunghezza della sequenza di \textit{token} rilevabile dall'algoritmo di \textit{detection} (\textit{RKR-GST}), pari a 15;
-    \item valore di soglia percentuale sotto la quale la similarità di una coppia di sorgenti non viene segnalata pari al 30\%;
+    \item $min\_duplication$, valore di soglia percentuale sotto la quale la similarità di una coppia di sorgenti non viene segnalata, pari al 30\%;
     \item metrica di similarià sorgente-sorgente espressa dall'\Cref{eq:avg-norm-sim}.
 \end{itemize}
 
@@ -34,24 +34,24 @@ I risultati complessivi sono presentati in \Cref{table:results}; per semplicità
         \hline
         \textbf{Progetto originale} & \textbf{Progetto copiato} & \textbf{Similarità} & \textbf{Ispezione manuale} \\ [0.5ex] 
         \hline\hline
-        gym-man & gym-man & 100\% & corrispondenza totale \\
+        \texttt{9b7266} & \texttt{80fd2e} & 100\% & corrispondenza totale \\
         \hline
-        spacewar & Space-Invaders & 90\% & corrispondenza totale \\
+        \texttt{f0caf3} & \texttt{c1e451} & 90\% & corrispondenza totale \\
         \hline
-        zombiegame & boxhead & 81\% & corrispondenza elevata \\
+        \texttt{ac8a48} & \texttt{7d79ff} & 81\% & corrispondenza elevata \\
         \hline
-        paranoid & b.b.evo & 70\% & corrispondenza medio-alta \\
+        \texttt{7bc0ee} & \texttt{2308d9} & 70\% & corrispondenza medio-alta \\
         \hline
-        space-run & alone-in-the-space & 62\% & corrispondenza medio-alta \\
+        \texttt{a5c39e} & \texttt{2ed153} & 62\% & corrispondenza medio-alta \\
         \hline
-        Flappy Bird & SMR & 55\% & corrispondenza parziale \\
+        \texttt{005bc2} & \texttt{f67c20} & 55\% & corrispondenza parziale \\
         \hline
-        Teatro & harbor-mgr & 49\% & corrispondenza parziale \\
+        \texttt{501b0f} & \texttt{c01302} & 49\% & corrispondenza parziale \\
         \hline
-        ALA & traffic-sim & 48\% & nessuna corrispondenza - "falso positivo" \\
+        \texttt{8f5d5a} & \texttt{afcd72} & 48\% & falso positivo \\
         \hline
     \end{tabular}
-    \caption[Risultati ottenuti confrontando i progetti sottomessi negli ultimi tre anni accademici]{Risultati ottenuti confrontando i progetti consegnati negli ultimi tre anni accademici. Nell'ultima colonna vi è riportato l'esito dell'ispezione manuale eseguita a seguito di quella automatica; per semplicità si sono catalogate le corrispondenze in: corrispondenza \textit{totale}, \textit{elevata}, \textit{parziale} o \textit{falso positivo}.}
+    \caption[Risultati ottenuti confrontando i progetti sottomessi negli ultimi tre anni accademici]{Risultati ottenuti confrontando i progetti consegnati negli ultimi tre anni accademici. Per ragioni di \textit{privacy} i nomi sono offuscati. Nell'ultima colonna vi è riportato l'esito dell'ispezione manuale eseguita a seguito di quella automatica; per semplicità si sono catalogate le corrispondenze in: corrispondenza \textit{totale}, \textit{elevata}, \textit{parziale} o \textit{falso positivo}.}
     \label{table:results}
 \end{table}
 
@@ -63,7 +63,7 @@ Come naturale che sia, invece, laddove la copiatura è effettuata in modo più s
 
 Sotto il 60\% si è in presenza di codice piuttosto simile, ma in maniera molto limitata rispetto alla totalità dei sorgenti.
 %
-\`E il caso, ad esempio, dei progetti \texttt{SMR} e \texttt{Flappy Bird} in cui è intuibile, guardando i risultati generati dal rilevatore, che gli sviluppatori del secondo abbiano preso spunto dal primo.
+\`E il caso, ad esempio, dei progetti \texttt{f67c20} e \texttt{005bc2} in cui è intuibile, guardando i risultati generati dal rilevatore, che gli sviluppatori del secondo abbiano preso spunto dal primo.
 %
 Tuttavia non è ravvisabile una copiatura evidente come nei precedenti casi.
 
@@ -73,67 +73,65 @@ Ciononostante, la similarità riportata non è superiore al 50\% e il fatto che 
 
 Successivamente, sono state rieffettuate le scansioni dei soli progetti somiglianti presentati in \Cref{table:results}, variando in modo opportuno i parametri scelti al fine d'identificare la loro combinazione ottimale da utilizzare.
 
-Come si può notare dalla \Cref{table:grid-search} le misurazioni di similarità più accurate in relazione all'ispezione manuale riportata in \Cref{table:results} sono in corrispondenza di una lunghezza $s$ variabile tra 15 e 20 e un valore di soglia di duplicazione minima compreso tra il 30 e il 40\%.
+Come si può notare dalla \Cref{table:grid-search}, le misurazioni di similarità più accurate in relazione all'ispezione manuale riportata in \Cref{table:results} sono in corrispondenza di una lunghezza $s$ variabile tra 15 e 20 e un valore di soglia di duplicazione minima compreso tra il 30 e il 40\%.
 %
-Infatti, scegliere una lunghezza $s$ e un valore di duplicazione al di sopra di questi limiti, seppur mantenga inalterate, se non migliori, le prestazioni per i casi di copiature evidenti (è questo il caso della coppia di progetti \texttt{Spacewar} e \texttt{space-invaders}), diminuisce l'accuratezza nei casi in cui la copiatura è meno evidente.
+Infatti, scegliere una lunghezza $s$ e un valore di duplicazione al di sopra di questi limiti, seppur mantenga inalterate, se non migliori, le prestazioni per i casi di copiature evidenti (è questo il caso della coppia di progetti \texttt{f0caf3} e \texttt{c1e451}), diminuisce l'accuratezza nei casi in cui la copiatura è meno evidente.
 
-Inoltre, si noti che la misurazione della similarità mediante la normalizzazione massima, così come descritta nell'\Cref{eq:max-norm-sim}, in concomitanza con quella dei progetti (\Cref{eq:project-similarity}) genera risultati fuorvianti in corrispondenza di piccoli progetti e/o sorgenti di piccola dimensione.
+Inoltre, si noti che la misurazione della similarità mediante la normalizzazione massima, così come descritta nell'\Cref{eq:max-norm-sim}, in concomitanza con quella dei progetti (\Cref{eq:project-similarity}) genera risultati fuorvianti in corrispondenza di sorgenti e/o progetti di piccola dimensione.
 %
-Questo fenomeno è facilmente osservabile dalle stime di similarità tra i progetti \texttt{Flappy-bird} e \texttt{SMR}. 
-%
-Questo ci spinge a preferire l'utilizzo della metrica di normalizzazione media descritta nell'\Cref{eq:max-norm-sim} che fornisce risultati più stabili, derivanti dal fatto che considera la media della lunghezza dei sorgenti e non il sorgente più corto per il calcolo della similarità.
+Questo fenomeno è facilmente osservabile dalle stime di similarità tra i progetti \texttt{005bc2} e \texttt{f67c20} e ci spinge a preferire l'utilizzo della metrica di normalizzazione media descritta nell'\Cref{eq:max-norm-sim} che fornisce risultati più stabili, derivanti dal fatto che considera la media della lunghezza dei sorgenti e non il sorgente più corto per il calcolo della similarità.
 
 Dunque, la combinazioni di parametri che forniscono risultati migliori secondo i \textit{test} effettuati sono le seguenti:
 
 \begin{multicols}{2}
     \begin{itemize}
         \item $s = 15$;
-        \item $min-dup=0.3$
-        \item $metrica=avg$
+        \item $min\_duplication=0.3$
+        \item metrica descritta nell'\Cref{eq:avg-norm-sim}
     \end{itemize}
     
     \begin{itemize}
         \item $s = 15$;
-        \item $min-dup=0.4$
-        \item $metrica=avg$
+        \item $min\_duplication=0.4$
+        \item metrica descritta nell'\Cref{eq:avg-norm-sim}
     \end{itemize}
 \end{multicols}
 
-Entrambi sono due scelte ragionevoli: la seconda offre il vantaggio di annullare il falso positivo, portando la sua stima di similarità ad essere inferore del 25\%, ma, d'altro canto, mette in maggior risalto (in maniera ingiustificata) le corrispondenze tra \texttt{Flappy-bird/SMR} e \texttt{Teatro/harbor-mgr} che, presumibilmente, ci si aspetterebbe sotto il 60\%, mentre la prima fornisce una stima più accurata della similarità di questi ultimi casi, ma presenta lo svantaggio di riportare un falso positivo all'attenzione dell'utente.
+Entrambi sono due scelte ragionevoli: la seconda offre il vantaggio di annullare il falso positivo, portando la sua stima di similarità ad essere inferore del 25\%, ma, d'altro canto, mette in maggior risalto (in maniera ingiustificata) le corrispondenze tra la coppia \texttt{f67c20 $-$ 005bc2} e \texttt{501b0f $-$ c01302} che, presumibilmente, ci si aspetterebbe sotto il 60\%, mentre la prima fornisce una stima più accurata della similarità di questi ultimi casi, ma presenta lo svantaggio di riportare un falso positivo all'attenzione dell'utente.
 
 \begin{landscape}
     \begin{table}[h!]
         \centering
-        \begin{tabular}{ p{0.5cm}|c|c|c||p{1cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.2cm}|p{1.2cm}|p{1.2cm} }
+        \begin{tabular}{ p{0.5cm}|c|c|c||p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm} }
             \multicolumn{4}{c}{} & \multicolumn{8}{c}{\textbf{Coppie di progetti simili}} \\ [1ex]
-            \multicolumn{4}{c|}{} & gym-man $-$ gym-man & spacewar $-$ space-invaders & zombie-game $-$ boxhead & paranoid $-$ b.b.evo & Space-run $-$ alone-in-the-space & flappy-bird $-$ SMR & Teatro $-$ harbor-mgr & ALA $-$ traffic-sim \\ [1ex]
+            \multicolumn{4}{c|}{} & \texttt{9b7267} $-$ \texttt{80fd2e} & \texttt{f0caf3} $-$ \texttt{c1e451} & \texttt{ac8a48} $-$ \texttt{7d79ff} & \texttt{7bc0ee} $-$ \texttt{2308d9} & \texttt{a5c39e} $-$ \texttt{2ed153} & \texttt{005bc2} $-$ \texttt{f67c20} & \texttt{501b0f} $-$ \texttt{c01302} & \texttt{8f5d5a} $-$ \texttt{afcd72} \\ [1ex]
             \hline\hline
 
-            \multirow{18}{*}{\begin{turn}{90}\textbf{parametri}\end{turn}} & \multirow{6}{*}{$\text{min-dup}=0.3$} & \multirow{2}{*}{$s=15$} & Max & 100\% & 95\% & 72\% & 72\% & 75\% & 80\% & 56\% & 74\% \\
-            & & & Avg & 100\% & 90\% & 81\% & 70\% & 62\% & 55\% & 49\% & 48\% \\
-            & & \multirow{2}{*}{$s=20$} & Max & 100\% & 99\% & 72\% & 75\% & 63\% & 83\% & 50\% & 57\% \\
-            & & & Avg & 100\% & 91\% & 58\% & 71\% & 48\% & 61\% & 51\% & 31\% \\
-            & & \multirow{2}{*}{$s=25$} & Max & 100\% & 98\% & 54\% & 66\% & 49\% & 79\% & 46\% & 26\% \\
-            & & & Avg & 100\% & 92\% & 42\% & 58\% & 41\% & 51\% & 40\% & 12\% \\
+            \multirow{18}{*}{\begin{turn}{90}\textbf{parametri}\end{turn}} & \multirow{6}{*}{$min\_dup=0.3$} & \multirow{2}{*}{$s=15$} & $Max$ & 100\% & 95\% & 72\% & 72\% & 75\% & 80\% & 56\% & 74\% \\
+            & & & $Avg$ & 100\% & 90\% & 81\% & 70\% & 62\% & 55\% & 49\% & 48\% \\
+            & & \multirow{2}{*}{$s=20$} & $Max$ & 100\% & 99\% & 72\% & 75\% & 63\% & 83\% & 50\% & 57\% \\
+            & & & $Avg$ & 100\% & 91\% & 58\% & 71\% & 48\% & 61\% & 51\% & 31\% \\
+            & & \multirow{2}{*}{$s=25$} & $Max$ & 100\% & 98\% & 54\% & 66\% & 49\% & 79\% & 46\% & 26\% \\
+            & & & $Avg$ & 100\% & 92\% & 42\% & 58\% & 41\% & 51\% & 40\% & 12\% \\
             \cline{2-12}
 
-            & \multirow{6}{*}{$\text{min-dup}=0.4$} & \multirow{2}{*}{$s=15$} & Max & 100\% & 96\% & 81\% & 76\% & 70\% & 79\% & 61\% & 75\% \\
-            & & & Avg & 100\% & 92\% & 73\% & 79\% & 57\% & 62\% & 55\% & 22\% \\
-            & & \multirow{2}{*}{$s=20$} & Max & 100\% & 99\% & 65\% & 85\% & 63\% & 80\% & 57\% & 47\% \\
-            & & & Avg & 100\% & 97\% & 49\% & 69\% & 44\% & 54\% & 39\% & 10\% \\
-            & & \multirow{2}{*}{$s=25$} & Max & 100\% & 99\% & 49\% & 64\% & 42\% & 80\% & 46\% & 64\% \\
-            & & & Avg & 100\% & 99\% & 36\% & 62\% & 34\% & 52\% & 20\% & 6\% \\
+            & \multirow{6}{*}{$min\_dup=0.4$} & \multirow{2}{*}{$s=15$} & $Max$ & 100\% & 96\% & 81\% & 76\% & 70\% & 79\% & 61\% & 75\% \\
+            & & & $Avg$ & 100\% & 92\% & 73\% & 79\% & 57\% & 62\% & 55\% & 22\% \\
+            & & \multirow{2}{*}{$s=20$} & $Max$ & 100\% & 99\% & 65\% & 85\% & 63\% & 80\% & 57\% & 47\% \\
+            & & & $Avg$ & 100\% & 97\% & 49\% & 69\% & 44\% & 54\% & 39\% & 10\% \\
+            & & \multirow{2}{*}{$s=25$} & $Max$ & 100\% & 99\% & 49\% & 64\% & 42\% & 80\% & 46\% & 64\% \\
+            & & & $Avg$ & 100\% & 99\% & 36\% & 62\% & 34\% & 52\% & 20\% & 6\% \\
             \cline{2-12}
 
-            & \multirow{6}{*}{$\text{min-dup}=0.5$} & \multirow{2}{*}{$s=15$} & Max & 100\% & 99\% & 80\% & 84\% & 64\% & 76\% & 67\% & 27\% \\
-            & & & Avg & 100\% & 99\% & 51\% & 73\% & 33\% & 52\% & 33\% & 14\% \\
-            & & \multirow{2}{*}{$s=20$} & Max & 100\% & 99\% & 56\% & 82\% & 59\% & 56\% & 45\% & 35\% \\
-            & & & Avg & 100\% & 99\% & 30\% & 67\% & 30\% & 47\% & 23\% & 4\% \\
-            & & \multirow{2}{*}{$s=25$} & Max & 100\% & 99\% & 44\% & 63\% & 38\% & 56\% & 27\% & 15\% \\
-            & & & Avg & 100\% & 98\% & 21\% & 55\% & 27\% & 47\% & 11\% & 3\% \\
+            & \multirow{6}{*}{$min\_dup=0.5$} & \multirow{2}{*}{$s=15$} & $Max$ & 100\% & 99\% & 80\% & 84\% & 64\% & 76\% & 67\% & 27\% \\
+            & & & $Avg$ & 100\% & 99\% & 51\% & 73\% & 33\% & 52\% & 33\% & 14\% \\
+            & & \multirow{2}{*}{$s=20$} & $Max$ & 100\% & 99\% & 56\% & 82\% & 59\% & 56\% & 45\% & 35\% \\
+            & & & $Avg$ & 100\% & 99\% & 30\% & 67\% & 30\% & 47\% & 23\% & 4\% \\
+            & & \multirow{2}{*}{$s=25$} & $Max$ & 100\% & 99\% & 44\% & 63\% & 38\% & 56\% & 27\% & 15\% \\
+            & & & $Avg$ & 100\% & 98\% & 21\% & 55\% & 27\% & 47\% & 11\% & 3\% \\
             \hline
         \end{tabular}
-        \caption[]{}
+        \caption[Analisi della similarità dei progetti rilevati come "sospetti" al variare dei parametri]{Analisi della similarità dei progetti rilevati come "sospetti" al variare dei tre parametri principali: $s$, minima lunghezza della sequenza di \textit{token} rilevabile dagli algoritmi; $min\_dup$, valore di soglia percentuale al di sotto della quale la similarità di una coppia di sorgenti non viene segnalata; metrica di normalizzazione media ($Avg$) e massima ($Max$) per la stima della similarità.}
         \label{table:grid-search}
     \end{table}
 \end{landscape}
@@ -163,7 +161,7 @@ Si è infine testato il risultato dell'analisi eseguendo il filtraggio delle rap
         ALA - traffic-sim & 48\% & 48\% & 48\% & 46\% \\
         \hline
     \end{tabular}
-    \caption{}
+    \caption{Analisi della similarità tra progetti al variare del valore di taglio con cui le rappresentazioni sono filtrate.}
     \label{table:filter-results}
 \end{table}
 
@@ -176,13 +174,15 @@ In definitiva, dai risultati sopra riportati, una \textbf{buona soglia di "sospe
 \subsection{Analisi di sensibilità}
 Dedichiamo ora qualche osservazione sulla sensibilità dello strumento.
 
-Come sappiamo, il processo di \textit{tokenizzazione} ci permette di convertire codice sorgente in una sequenza di \textit{token} che, da un lato, astragga il più possibile dalla sintassi del linguaggio, e dall'altra che lo descriva a livello semantico, cosicché possano essere riconosciute sequenze simili corrispondenti a porzioni simili di codice a livello semantico.
+Come sappiamo, il processo di \textit{tokenizzazione} permette di convertire il codice sorgente in una sequenza di \textit{token} che, da un lato, astragga il più possibile dalla sintassi del linguaggio, e dall'altra lo descriva a livello semantico, cosicché possano essere riconosciute porzioni semanticamente simili di codice.
 
-Quando, tuttavia, si opera un'azione di astrazione di questo tipo si va incontro al rischio che strutture simili di sorgenti, e tuttavia diverse semanticamente, vengano convertite in sequenze di \textit{token} simili, generando similarità fuorvianti.
-
-Questo caso si verifica, ad esempio, con interfacce o classi molto semplici dove sono presenti solo \textit{getter} e \textit{setter} o con una sequenza di costanti.
+Quando, tuttavia, si opera un'azione di astrazione di questo tipo si va incontro al rischio che strutture simili di sorgenti, e tuttavia diverse semanticamente, vengano convertite in sequenze di \textit{token} che generano stime di similarità fuorvianti.
 %
-A riprova di questo, vengono riportate di seguito (\Cref{code:04-false-positive-enum} e \Cref{04-false-positive-simple-class}) alcune sezioni che il rilevatore ha determinato essere simili nella coppia di progetti riconosciuta come un caso di falso positivo, del paragrafo precedente. 
+\`E questo il caso di interfacce o classi molto semplici dove sono presenti solo \textit{getter}/\textit{setter} e/o una sequenza di costanti.
+%
+A riprova di questo, vengono riportati, nel \Cref{code:04-false-positive-enum} e \Cref{04-false-positive-simple-class}, alcune sezioni che il rilevatore ha determinato essere simili nella coppia di progetti riconosciuta come un caso di falso positivo del paragrafo precedente. 
+
+\newpage
 
 \lstinputlisting[
     caption={Esempio di falso positivo dovuto alla presenza di molteplici costanti},
@@ -204,13 +204,45 @@ Laddove, invece, il numero di queste errate classificazioni cresce in modo corpo
 
 Si evidenzia, tuttavia, che questi casi di errata classificazione \textit{non} si verificano in presenza di sorgenti con un grado di logica rilevante, dove la sequenza di \textit{token} corrispondono se effettivamente la logica è molto simile.
 %
-Perdipiù, questi casi sono facilmente individuabili mediante un'ispezione manuale e non rappresentano un elevato rischio in termini di accuratezza.
+Perdipiù, questi casi sono facilmente individuabili mediante un'ispezione manuale e non rappresentano un elevato rischio in termini di riduzione di accuratezza.
 
 \section{Tempi d'esecuzione}
 Per quanto concerne i tempi d'esecuzione, attualmente lo strumento impiega, per fare il confronto di un progetto con i 354 progetti disponibili, grazie alla parallelizzazione e al salvataggio in locale dei sorgenti da analizzare, mediamente un terzo del tempo che avrebbe impiegato senza effettuare il \textit{caching}, stimabile all'incirca in al più 20 minuti.
 %
-Questo dipende anche in maniera incontrollabile dal calcolatore su cui viene eseguito.
+Questo dipende anche, in maniera incontrollabile, dal calcolatore su cui viene eseguito.
+
+Sebbene possa sembrare un tempo elevato, nell'ambito di applicazione dello strumento questo è considerato un tempo ragionevole.
+
+Infine, un'ultima considerazione sulla fase di filtraggio: nonostante il suo obiettivo fosse quello di diminuire il numero di comparazioni e, quindi, il tempo d'esecuzione dell'algoritmo, non si riescono ad osservare miglioramenti tangibili sotto questo aspetto.
+%
+Questo induce a non consigliare l'utilizzo di questa fase intermedia che, nel peggiore dei casi, influenza la stima di similarità senza apportare alcun vantaggio sotto il profilo computazionale.
 
 \section{Conclusioni}
+Lo scopo della tesi, realizzare un sistema automatico per la scansione di progetti \textit{software} alla ricerca di possibili segni di plagio, è stato raggiunto.
+
+Dopo aver passato in rassegna le tecniche più usate e documentate in letteratura, nonché i relativi algoritmi da utilizzare per il confronto delle rappresentazioni, e aver soppesato \textit{pro} e \textit{contro} di ciascuna, si è deciso d'implementare una tecnica \textit{structure-based} basata sulla visita dell'albero sintattico dei sorgenti e la \textit{tokenizzazione} degli stessi.
+
+Si è proceduto, quindi, con la progettazione architetturale e di dettaglio dello strumento, cercando sempre di prediligere e favorire la configurabilità e la possibilità di estensione dello stesso, in pieno accordo con uno dei principi cardine dell'ingegneria del \textit{software}, l'anticipazione dei cambiamenti.
+
+Ampio spazio è stato dedicato per la scelta di metriche congrue per la stima della similarità tra sorgenti ed è stato dato il proprio contributo nel definire una stima aggregata tra progetti.
+
+Al termine dell'implementazione di una prima versione dello strumento, consci dell'elevato tempo d'esecuzione dello stesso, è stata introdotta la parallelizzazione e il salvataggio locali dei sorgenti.
+
+Infine, si è validato lo strumento confrontando i progetti consegnati negli ultimi tre anni del corso di Programmazione ad Oggetti, analizzando gli aspetti positivi e le criticità. 
+%
+Dall'analisi è emerso che lo strumento realizzato è in grado di rilevare, con un alto livello di accuratezza e in tempi accettabili, evidenti copiature e parti molti simili tra loro.
+%
+Riesce altresì a fornire una stima di similarità che degrada mano a mano le copiature sono effettuate in modo parziale e/o con oculate tecniche di rifattorizzazione.
+%
+Inoltre, l'elevato grado di configurabilità con cui è stato concepito permette di tararlo opportunamente in base alle proprie esigenze.
+
+Sebbene, quindi, il sistema sia migliorabile, soprattutto sotto il punto di vista del tempo di calcolo, ora si ha uno strumento con un'architettura flessibile ed estendibile che permette di poter implementare nuove tecniche e/o metriche più efficienti e performanti partendo da una solida base.
 
 \section{Sviluppi futuri}
+Per concludere, vengono di seguito elencati, per punti, alcune estensioni che si potrebbero implementare per rendere lo strumento più completo:
+\begin{itemize}
+    \item Sviluppare tecniche di filtraggio delle rappresentazioni più evolute della semplice similarità coseno, qui implementata, al fine di determinare un incremento di prestazioni senza penalizzare l'accuratezza;
+    \item Aggiungere tecniche di \textit{clustering} a seguito della comparazione dei sorgenti, come descritto in \cite{pdectet}, al fine d'individuare con maggior precisione addensamenti di sorgenti duplicati e, quindi, incrementare l'accuratezza del sistema;
+    \item Aggiungere un'interfaccia grafica allo strumento per renderlo più \textit{user-friendly};
+    \item Aggiungere metodi di esportazione dei risultati come, ad esempio, pagine HTML in cui visualizzare comparativamente le sezioni di codice simili, con una formattazione migliorata tipica di un ambiente di sviluppo.
+\end{itemize}
