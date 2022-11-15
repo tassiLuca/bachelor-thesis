@@ -1,0 +1,38 @@
+>> With similarity: 0.676923076923077
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+[traffic-sim/src/main/java/view/utils/ViewConstraints.java]
+    public static final String IMAGE_PATH = "/images";
+
+    /**
+     * The title of the main stage that will be shown.
+     */
+    public static final String TITLE = "TrafficSimulator";
+
+    /**
+     *
+     */
+    public static final String MAIN_SCENE_PATH = "layouts/base.fxml";
+
+    /**
+     *
+     */
+    public static final long MS_BETWEEN_FRAMES = 200;
+
+    /**
+     *
+     */
+    public static final double MAX_UPDATE_BOUND = 0.06;
+
+    /**
+     * Used to convert from milliseconds to seconds.
+     */
+    public static final double MSEC_TO_SEC = 0.001;
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[ALA/src/main/java/ala/models/PurgatoryWalkingMiniBossModel.java]
+    private static final double HEALTH = 20;
+    private static final double DAMAGE_ON_CONTACT = 2;
+    private static final double R = 0;
+    private static final double DX = 2;
+    private static final double DY = 0;
+    private static final double DR = 0;
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

@@ -2,6 +2,8 @@
 \chapter{Validazione, conclusioni e lavori futuri}
 \label{chapter:validation}
 In questo capitolo vengono riportati e analizzati i risultati ottenuti nell'ambito di applicazione dello strumento sviluppato.
+%
+Per ultimo, si traggono le conclusioni del progetto, elencando brevemente i possibili sviluppi futuri.
 
 \section{Valutazione qualitativa}
 Le prestazioni del sistema sono misurate sulla base di due aspetti fondamentali e indipendenti tra loro: le \textit{performance}, in termini di tempo d'esecuzione, ma soprattutto l'accuratezza.
@@ -174,7 +176,35 @@ In definitiva, dai risultati sopra riportati, una \textbf{buona soglia di "sospe
 \subsection{Analisi di sensibilità}
 Dedichiamo ora qualche osservazione sulla sensibilità dello strumento.
 
+Come sappiamo, il processo di \textit{tokenizzazione} ci permette di convertire codice sorgente in una sequenza di \textit{token} che, da un lato, astragga il più possibile dalla sintassi del linguaggio, e dall'altra che lo descriva a livello semantico, cosicché possano essere riconosciute sequenze simili corrispondenti a porzioni simili di codice a livello semantico.
 
+Quando, tuttavia, si opera un'azione di astrazione di questo tipo si va incontro al rischio che strutture simili di sorgenti, e tuttavia diverse semanticamente, vengano convertite in sequenze di \textit{token} simili, generando similarità fuorvianti.
+
+Questo caso si verifica, ad esempio, con interfacce o classi molto semplici dove sono presenti solo \textit{getter} e \textit{setter} o con una sequenza di costanti.
+%
+A riprova di questo, vengono riportate di seguito (\Cref{code:04-false-positive-enum} e \Cref{04-false-positive-simple-class}) alcune sezioni che il rilevatore ha determinato essere simili nella coppia di progetti riconosciuta come un caso di falso positivo, del paragrafo precedente. 
+
+\lstinputlisting[
+    caption={Esempio di falso positivo dovuto alla presenza di molteplici costanti},
+    label={code:04-false-positive-enum}
+]{resources/code/04-false-positive-enum}
+
+\newpage
+
+\lstinputlisting[
+    caption={Esempio di falso positivo dovuto alla presenza di una sequenza molto simile di \textit{getter/setter}},
+    label={04-false-positive-simple-class}
+]{resources/code/04-false-positive-simple-class}
+
+Come si può osservare entrambi i sorgenti sono erroneamente classificati come somiglianti con un'elevata percentuale, superiore al 60\%.
+%
+Quando questo fenomeno è limitato a qualche istanza, ciò non comporta un particolare problema in quanto viene assorbito e bilanciato dalle diverse metriche che computano una stima media delle similarità.
+%
+Laddove, invece, il numero di queste errate classificazioni cresce in modo corposo,  si possono verificare casi di falsi negativi come quello presentato nel paragrafo precedente.
+
+Si evidenzia, tuttavia, che questi casi di errata classificazione \textit{non} si verificano in presenza di sorgenti con un grado di logica rilevante, dove la sequenza di \textit{token} corrispondono se effettivamente la logica è molto simile.
+%
+Perdipiù, questi casi sono facilmente individuabili mediante un'ispezione manuale e non rappresentano un elevato rischio in termini di accuratezza.
 
 \section{Tempi d'esecuzione}
 Per quanto concerne i tempi d'esecuzione, attualmente lo strumento impiega, per fare il confronto di un progetto con i 354 progetti disponibili, grazie alla parallelizzazione e al salvataggio in locale dei sorgenti da analizzare, mediamente un terzo del tempo che avrebbe impiegato senza effettuare il \textit{caching}, stimabile all'incirca in al più 20 minuti.
