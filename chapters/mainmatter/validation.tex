@@ -17,9 +17,9 @@ Questi sono sviluppati in Java, generalmente in \textit{team} di quattro compone
 \subsection{Analisi di sensitività}
 Dapprima si è testato il sistema eseguendo una scansione senza applicare alcun filtraggio intermedio delle rappresentazioni come descritto nella \Cref{03:filtering-phase}, scegliendo come parametri di riferimento i seguenti:
 \begin{itemize}
-    \item $s$, minima lunghezza della sequenza di \textit{token} rilevabile dall'algoritmo di \textit{detection} (\textit{RKR-GST}) pari a 15;
+    \item $s$, minima lunghezza della sequenza di \textit{token} rilevabile dall'algoritmo di \textit{detection} (\textit{RKR-GST}), pari a 15;
     \item valore di soglia percentuale sotto la quale la similarità di una coppia di sorgenti non viene segnalata pari al 30\%;
-    \item metrica espressa dall'\Cref{eq:avg-norm-sim}.
+    \item metrica di similarià sorgente-sorgente espressa dall'\Cref{eq:avg-norm-sim}.
 \end{itemize}
 
 A seguito dell'analisi si è effettuata un'ispezione manuale dei sorgenti in modo tale da verificare che le stime effettuate dallo strumento non fossero fuorvianti o prive di fondamento.
@@ -55,7 +55,7 @@ I risultati complessivi sono presentati in \Cref{table:results}; per semplicità
 
 Come si può osservare, lo strumento è in grado di rilevare molto bene copiature evidenti, ovvero casi in cui sono state copiate intere classi di sorgenti: è il caso dei primi due risultati in cui i progetti sono pressoché identici e la percentuale di similarità stimata non è inferiore al 90\%.
 %
-Nel secondo caso la similarità al 90\% è spiegabile dal fatto che alcune interfacce sono molto piccole e non hanno una lunghezza (in numero di \textit{token}) sufficiente per essere rilevate (cioè sono minori della minima lunghezza $s$ imposta nell'algoritmo \textit{Running Karp Rabin Greedy String Tiling}).
+%Nel secondo caso la similarità al 90\% è spiegabile dal fatto che alcune interfacce sono molto piccole e non hanno una lunghezza (in numero di \textit{token}) sufficiente per essere rilevate (cioè sono minori della minima lunghezza $s$ imposta nell'algoritmo \textit{Running Karp Rabin Greedy String Tiling}).
 
 Come naturale che sia, invece, laddove la copiatura è effettuata in modo più scaltro, attingendo in modo parziale da altri progetti, la similarità cala, mantenendosi tuttavia al di sopra del 60\%.
 
@@ -67,46 +67,68 @@ Tuttavia non è ravvisabile una copiatura evidente come nei precedenti casi.
 
 Un solo caso, tra tutti i progetti analizzati, riporta similarità maggiore del 45\% senza essere realmente copiato.
 %
-Ciononostante, la similarità riportata non è superiore al 50\% e il fatto che i progetti non siano copiati né simili è facilmente verificabile in pochi minuti guardando il \textit{report} stesso che comprende solo costanti e \textit{getter/setter}.
+Ciononostante, la similarità riportata non è superiore al 50\% e il fatto che i progetti non siano copiati né simili è facilmente verificabile in pochi minuti guardando il \textit{report} stesso, che comprende solo costanti e \textit{getter/setter}.
 
-Successivamente, al fine di verificare la combinazione ottimale di parametri da utilizzare, sono state rieffettuate le scansioni dei soli progetti somiglianti presentati in \Cref{table:results}, facendoli opportunamente variare.
+Successivamente, sono state rieffettuate le scansioni dei soli progetti somiglianti presentati in \Cref{table:results}, variando in modo opportuno i parametri scelti al fine d'identificare la loro combinazione ottimale da utilizzare.
+
+Come si può notare dalla \Cref{table:grid-search} le misurazioni di similarità più accurate in relazione all'ispezione manuale riportata in \Cref{table:results} sono in corrispondenza di una lunghezza $s$ variabile tra 15 e 20 e un valore di soglia di duplicazione minima compreso tra il 30 e il 40\%.
 %
-Come si può notare dalla \Cref{table:grid-search} le misurazioni di similarità più accurate in relazione all'ispezione manuale riportata in \Cref{table:results} sono in corrispondenza di una lunghezza\dots
+Infatti, scegliere una lunghezza $s$ e un valore di duplicazione al di sopra di questi limiti, seppur mantenga inalterate, se non migliori, le prestazioni per i casi di copiature evidenti (è questo il caso della coppia di progetti \texttt{Spacewar} e \texttt{space-invaders}), diminuisce l'accuratezza nei casi in cui la copiatura è meno evidente.
 
-Si noti che la misurazione della similarità mediante l'\Cref{eq:max-norm-sim} in concomitanza con quella dei progetti (\Cref{eq:project-similarity}) genera risultati fuorvianti in corrispondenza di piccoli progetti e/o sorgenti di piccola dimensione.
+Inoltre, si noti che la misurazione della similarità mediante la normalizzazione massima, così come descritta nell'\Cref{eq:max-norm-sim}, in concomitanza con quella dei progetti (\Cref{eq:project-similarity}) genera risultati fuorvianti in corrispondenza di piccoli progetti e/o sorgenti di piccola dimensione.
 %
 Questo fenomeno è facilmente osservabile dalle stime di similarità tra i progetti \texttt{Flappy-bird} e \texttt{SMR}. 
 %
-Questo ci spinge a preferire l'utilizzo della metrica descritta nell'\Cref{eq:max-norm-sim} piuttosto che...
+Questo ci spinge a preferire l'utilizzo della metrica di normalizzazione media descritta nell'\Cref{eq:max-norm-sim} che fornisce risultati più stabili, derivanti dal fatto che considera la media della lunghezza dei sorgenti e non il sorgente più corto per il calcolo della similarità.
+
+Dunque, la combinazioni di parametri che forniscono risultati migliori secondo i \textit{test} effettuati sono le seguenti:
+
+\begin{multicols}{2}
+    \begin{itemize}
+        \item $s = 15$;
+        \item $min-dup=0.3$
+        \item $metrica=avg$
+    \end{itemize}
+    
+    \begin{itemize}
+        \item $s = 15$;
+        \item $min-dup=0.4$
+        \item $metrica=avg$
+    \end{itemize}
+\end{multicols}
+
+Entrambi sono due scelte ragionevoli: la seconda offre il vantaggio di annullare il falso positivo, portando la sua stima di similarità ad essere inferore del 25\%, ma, d'altro canto, mette in maggior risalto (in maniera ingiustificata) le corrispondenze tra \texttt{Flappy-bird/SMR} e \texttt{Teatro/harbor-mgr} che, presumibilmente, ci si aspetterebbe sotto il 60\%, mentre la prima fornisce una stima più accurata della similarità di questi ultimi casi, ma presenta lo svantaggio di riportare un falso positivo all'attenzione dell'utente.
 
 \begin{landscape}
     \begin{table}[h!]
         \centering
-        \begin{tabular}{ c|c|c|p{1cm}|p{1.5cm}|p{2cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.2cm} }
-            \multicolumn{3}{c|}{} & gym-man / gym-man & spacewar / space-invaders & zombiegame / boxhead & paranoid / b.b.evo & Space-run / alone-in-the-space & flappy-bird / SMR & Teatro / harbor-mgr & ALA / traffic-sim \\ [0.5ex]
+        \begin{tabular}{ p{0.5cm}|c|c|c||p{1cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.2cm}|p{1.2cm}|p{1.2cm} }
+            \multicolumn{4}{c}{} & \multicolumn{8}{c}{\textbf{Coppie di progetti simili}} \\ [1ex]
+            \multicolumn{4}{c|}{} & gym-man $-$ gym-man & spacewar $-$ space-invaders & zombie-game $-$ boxhead & paranoid $-$ b.b.evo & Space-run $-$ alone-in-the-space & flappy-bird $-$ SMR & Teatro $-$ harbor-mgr & ALA $-$ traffic-sim \\ [1ex]
             \hline\hline
-            \multirow{6}{*}{$\text{min-dup}=0.3$} & \multirow{2}{*}{$s=15$} & Max & 100\% & 95\% & 72\% & 72\% & 75\% & 80\% & 56\% & 74\% \\
-            & & Avg & 100\% & 90\% & 81\% & 70\% & 62\% & 55\% & 49\% & 48\% \\
-            & \multirow{2}{*}{$s=20$} & Max & 100\% & 99\% & 72\% & 75\% & 63\% & 83\% & 50\% & 57\% \\
-            & & Avg & 100\% & 91\% & 58\% & 71\% & 48\% & 61\% & 51\% & 31\% \\
-            & \multirow{2}{*}{$s=25$} & Max & 100\% & 98\% & 54\% & 66\% & 49\% & 79\% & 46\% & 26\% \\
-            & & Avg & 100\% & 92\% & 42\% & 58\% & 41\% & 51\% & 40\% & 12\% \\
-            \hline
 
-            \multirow{6}{*}{$\text{min-dup}=0.4$} & \multirow{2}{*}{$s=15$} & Max & 100\% & 96\% & 81\% & 76\% & 70\% & 79\% & 61\% & 75\% \\
-            & & Avg & 100\% & 92\% & 73\% & 79\% & 57\% & 62\% & 55\% & 22\% \\
-            & \multirow{2}{*}{$s=20$} & Max & 100\% & 99\% & 65\% & 85\% & 63\% & 80\% & 57\% & 47\% \\
-            & & Avg & 100\% & 97\% & 49\% & 69\% & 44\% & 54\% & 39\% & 10\% \\
-            & \multirow{2}{*}{$s=25$} & Max & 100\% & 99\% & 49\% & 64\% & 42\% & 80\% & 46\% & 64\% \\
-            & & Avg & 100\% & 99\% & 36\% & 62\% & 34\% & 52\% & 20\% & 6\% \\
-            \hline
+            \multirow{18}{*}{\begin{turn}{90}\textbf{parametri}\end{turn}} & \multirow{6}{*}{$\text{min-dup}=0.3$} & \multirow{2}{*}{$s=15$} & Max & 100\% & 95\% & 72\% & 72\% & 75\% & 80\% & 56\% & 74\% \\
+            & & & Avg & 100\% & 90\% & 81\% & 70\% & 62\% & 55\% & 49\% & 48\% \\
+            & & \multirow{2}{*}{$s=20$} & Max & 100\% & 99\% & 72\% & 75\% & 63\% & 83\% & 50\% & 57\% \\
+            & & & Avg & 100\% & 91\% & 58\% & 71\% & 48\% & 61\% & 51\% & 31\% \\
+            & & \multirow{2}{*}{$s=25$} & Max & 100\% & 98\% & 54\% & 66\% & 49\% & 79\% & 46\% & 26\% \\
+            & & & Avg & 100\% & 92\% & 42\% & 58\% & 41\% & 51\% & 40\% & 12\% \\
+            \cline{2-12}
 
-            \multirow{6}{*}{$\text{min-dup}=0.5$} & \multirow{2}{*}{$s=15$} & Max & 100\% & 99\% & 80\% & 84\% & 64\% & 76\% & 67\% & 27\% \\
-            & & Avg & 100\% & 99\% & 51\% & 73\% & 33\% & 52\% & 33\% & 14\% \\
-            & \multirow{2}{*}{$s=20$} & Max & 100\% & 99\% & 56\% & 82\% & 59\% & 56\% & 45\% & 35\% \\
-            & & Avg & 100\% & 99\% & 30\% & 67\% & 30\% & 47\% & 23\% & 4\% \\
-            & \multirow{2}{*}{$s=25$} & Max & 100\% & 99\% & 44\% & 63\% & 38\% & 56\% & 27\% & 15\% \\
-            & & Avg & 100\% & 98\% & 21\% & 55\% & 27\% & 47\% & 11\% & 3\% \\
+            & \multirow{6}{*}{$\text{min-dup}=0.4$} & \multirow{2}{*}{$s=15$} & Max & 100\% & 96\% & 81\% & 76\% & 70\% & 79\% & 61\% & 75\% \\
+            & & & Avg & 100\% & 92\% & 73\% & 79\% & 57\% & 62\% & 55\% & 22\% \\
+            & & \multirow{2}{*}{$s=20$} & Max & 100\% & 99\% & 65\% & 85\% & 63\% & 80\% & 57\% & 47\% \\
+            & & & Avg & 100\% & 97\% & 49\% & 69\% & 44\% & 54\% & 39\% & 10\% \\
+            & & \multirow{2}{*}{$s=25$} & Max & 100\% & 99\% & 49\% & 64\% & 42\% & 80\% & 46\% & 64\% \\
+            & & & Avg & 100\% & 99\% & 36\% & 62\% & 34\% & 52\% & 20\% & 6\% \\
+            \cline{2-12}
+
+            & \multirow{6}{*}{$\text{min-dup}=0.5$} & \multirow{2}{*}{$s=15$} & Max & 100\% & 99\% & 80\% & 84\% & 64\% & 76\% & 67\% & 27\% \\
+            & & & Avg & 100\% & 99\% & 51\% & 73\% & 33\% & 52\% & 33\% & 14\% \\
+            & & \multirow{2}{*}{$s=20$} & Max & 100\% & 99\% & 56\% & 82\% & 59\% & 56\% & 45\% & 35\% \\
+            & & & Avg & 100\% & 99\% & 30\% & 67\% & 30\% & 47\% & 23\% & 4\% \\
+            & & \multirow{2}{*}{$s=25$} & Max & 100\% & 99\% & 44\% & 63\% & 38\% & 56\% & 27\% & 15\% \\
+            & & & Avg & 100\% & 98\% & 21\% & 55\% & 27\% & 47\% & 11\% & 3\% \\
             \hline
         \end{tabular}
         \caption[]{}
@@ -143,7 +165,16 @@ Si è infine testato il risultato dell'analisi eseguendo il filtraggio delle rap
     \label{table:filter-results}
 \end{table}
 
+Osservando i risultati, si conviene che l'utilizzo di una fase intermedia di filtraggio di rappresentazioni non inficia le stime similarità dei casi presentati se il valore di taglio è mantenuto al di sotto del 50\%.
+
+\vspace*{0.3cm}
+
+In definitiva, dai risultati sopra riportati, una \textbf{buona soglia di "sospetto"} sopra la quale l'utente dovrebbe concentrare la sua attenzione è stimabile sul \textbf{45\%}, sapendo che valori più alti di similarità implicano maggiore evidenza nella copiatura.
+
 \subsection{Analisi di sensibilità}
+Dedichiamo ora qualche osservazione sulla sensibilità dello strumento.
+
+
 
 \section{Tempi d'esecuzione}
 Per quanto concerne i tempi d'esecuzione, attualmente lo strumento impiega, per fare il confronto di un progetto con i 354 progetti disponibili, grazie alla parallelizzazione e al salvataggio in locale dei sorgenti da analizzare, mediamente un terzo del tempo che avrebbe impiegato senza effettuare il \textit{caching}, stimabile all'incirca in al più 20 minuti.
