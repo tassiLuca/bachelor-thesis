@@ -10,7 +10,7 @@ Le prestazioni del sistema sono misurate sulla base di due aspetti fondamentali 
 %
 Infatti, lo scopo primario è rilevare con precisione casi probabili di plagio e presentarli all'utente il più in alto possibile nei \textit{report} generati dallo strumento.
 %
-\`E solo in seguito ad aver raggiunto un grado di precisione soddisfacibile che possono essere adottate ottimizzazioni che permettano di ridurre il tempo di calcolo.
+\`E solo in seguito ad aver raggiunto un grado di precisione soddisfacente che possono essere adottate ottimizzazioni che permettano di ridurre il tempo di calcolo.
 
 Dunque, per testarne l'accuratezza sono stati considerati 130 diversi progetti del corso di Programmazione ad Oggetti presentati nell'arco degli ultimi tre anni accademici e per ciascuno di questi si è effettuato il confronto con tutti i progetti a disposizione dal 2015 in poi che, complessivamente, ammontano a 354 progetti.
 %
@@ -21,12 +21,12 @@ Dapprima si è testato il sistema eseguendo una scansione senza applicare alcun 
 \begin{itemize}
     \item $s$, minima lunghezza della sequenza di \textit{token} rilevabile dall'algoritmo di \textit{detection} (\textit{RKR-GST}), pari a 15;
     \item $min\_duplication$, valore di soglia percentuale sotto la quale la similarità di una coppia di sorgenti non viene segnalata, pari al 30\%;
-    \item metrica di similarià sorgente-sorgente espressa dall'\Cref{eq:avg-norm-sim}.
+    \item metrica di similarià media sorgente-sorgente espressa dall'\Cref{eq:avg-norm-sim}.
 \end{itemize}
 
 A seguito dell'analisi si è effettuata un'ispezione manuale dei sorgenti in modo tale da verificare che le stime effettuate dallo strumento non fossero fuorvianti o prive di fondamento.
 
-I risultati complessivi sono presentati in \Cref{table:results}; per semplicità sono riportati solo le corrispondenze con similarità maggiore del 40\%.
+I risultati complessivi sono presentati in \Cref{table:results}.
 
 \begin{table}[h!]
     \centering
@@ -51,7 +51,7 @@ I risultati complessivi sono presentati in \Cref{table:results}; per semplicità
         \texttt{8f5d5a} & \texttt{afcd72} & 48\% & falso positivo \\
         \hline
     \end{tabular}
-    \caption[Risultati ottenuti confrontando i progetti sottomessi negli ultimi tre anni accademici]{Risultati ottenuti confrontando i progetti consegnati negli ultimi tre anni accademici. Per ragioni di \textit{privacy} i nomi sono offuscati. Nell'ultima colonna vi è riportato l'esito dell'ispezione manuale eseguita a seguito di quella automatica; per semplicità si sono catalogate le corrispondenze in: corrispondenza \textit{totale}, \textit{elevata}, \textit{parziale} o \textit{falso positivo}.}
+    \caption[Risultati ottenuti confrontando i progetti sottomessi negli ultimi tre anni accademici]{Risultati ottenuti confrontando i progetti consegnati negli ultimi tre anni accademici. Sono riportati, per semplicità, solo le corrispondenze con indice di similarità superiore al 40\%; i nomi dei progetti sono offuscati per rispetto della \textit{privacy}. Nell'ultima colonna è riportato l'esito dell'ispezione manuale effettuata a seguito di quella automatica; le corrispondenze sono catalogate in: corrispondenza \textit{totale}, \textit{elevata}, \textit{parziale} o \textit{falso positivo}.}
     \label{table:results}
 \end{table}
 
@@ -169,7 +169,7 @@ Osservando i risultati, si conviene che l'utilizzo di una fase intermedia di fil
 
 \vspace*{0.3cm}
 
-In definitiva, dai risultati sopra riportati, una \textbf{buona soglia di "sospetto"} sopra la quale l'utente dovrebbe concentrare la sua attenzione è stimabile sul \textbf{45\%}, sapendo che valori più alti di similarità implicano maggiore evidenza nella copiatura.
+In definitiva, dai risultati sopra riportati, una \textbf{buona soglia di "sospetto"} sopra la quale l'utente dovrebbe concentrare la sua attenzione è stimabile sul \textbf{45\%}, sapendo che valori più alti di similarità implicano maggiore evidenza di copiatura.
 
 \subsection{Analisi di sensibilità}
 Dedichiamo ora qualche osservazione sulla sensibilità dello strumento.
@@ -244,5 +244,5 @@ Per concludere, vengono di seguito elencati, per punti, alcune estensioni che si
     \item Sviluppare tecniche di filtraggio delle rappresentazioni più evolute della semplice similarità coseno, qui implementata, al fine di determinare un incremento di prestazioni senza penalizzare l'accuratezza;
     \item Aggiungere tecniche di \textit{clustering} a seguito della comparazione dei sorgenti, come descritto in \cite{pdectet}, al fine d'individuare con maggior precisione addensamenti di sorgenti duplicati e, quindi, incrementare l'accuratezza del sistema;
     \item Aggiungere un'interfaccia grafica allo strumento per renderlo più \textit{user-friendly};
-    \item Aggiungere metodi di esportazione dei risultati come, ad esempio, pagine HTML in cui visualizzare comparativamente le sezioni di codice simili, con una formattazione migliorata tipica di un ambiente di sviluppo.
+    \item Aggiungere metodi di esportazione dei risultati come, ad esempio, pagine HTML in cui visualizzare comparativamente le sezioni di codice simili con una formattazione migliorata tipica di un ambiente di sviluppo.
 \end{itemize}

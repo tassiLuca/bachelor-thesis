@@ -1,6 +1,6 @@
 >> With similarity: 0.676923076923077
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-[traffic-sim/src/main/java/view/utils/ViewConstraints.java]
+[afcd72/src/main/java/*.java]
     public static final String IMAGE_PATH = "/images";
 
     /**
@@ -28,7 +28,7 @@
      */
     public static final double MSEC_TO_SEC = 0.001;
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-[ALA/src/main/java/ala/models/PurgatoryWalkingMiniBossModel.java]
+[8f5d5a/src/main/java/*.java]
     private static final double HEALTH = 20;
     private static final double DAMAGE_ON_CONTACT = 2;
     private static final double R = 0;

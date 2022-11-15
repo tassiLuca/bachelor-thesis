@@ -2,25 +2,25 @@
 Report from plagiarism detector tool generated at 2022-11-13T17...
 ******************************************************************
 
-Submitted Project: boxhead     
+Submitted Project: 7d79ff     
 
 +++++++++++++++++++++++++++++ SUMMARY ++++++++++++++++++++++++++++
 Compared with 354 repositories.
 ------------------------------------------------------------------
 |compared with                                        |similarity|
 ------------------------------------------------------------------
-|zombiegame                                           |      0.81|
-|bullet-ballet                                        |      0.10|
-|RestaurantManager                                    |      0.08|
+|ac8a48                                               |      0.81|
+|929c18                                               |      0.10|
+|2b58aa                                               |      0.08|
 |                             ...                                |
 ------------------------------------------------------------------
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-> Matches found with zombiegame
+> Matches found with ac8a48
                               ...
 >> With similarity: 0.8655737704918033
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-[boxhead/src/main/java/boxhead/model/entities/gun/ShotManagerImpl.java]
+[7d79ff/src/main/java/*/ShotManagerImpl.java]
         this.zombieModel.getZombies().stream()
             .filter(z -> Collision.isColliding(s.getBoundingBox(), z.getBoundingBox()))
             .forEach(z -> {
@@ -42,7 +42,7 @@ Compared with 354 repositories.
 public final Set<Shot> getShotsEnded() {
     final Set<Shot> tmp = new HashSet<>(this.ended);
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-[zombiegame/src/main/java/zombieversity/model/entities/weapon/AttackManagerImpl.java]
+[ac8a48/src/main/java/*/AttackManagerImpl.java]
             this.zombieModel.getZombies().stream()
                 .filter(z -> CollisionsUtils.isColliding(z.getBBox(), a.getBBox()))
                 .forEach(z -> {

@@ -1,6 +1,6 @@
 >> With similarity: 0.6119402985074627
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-[ALA/src/main/.../models/NormalPurgatoryLevelGeneratorModel.java]
+[8f5d5a/src/main/java/*.java]
         this.deathAnimationCounter = STANDARD_DEATH_ANIMATION_COUNTER_VALUE;
         this.animationTimerStopped = STANDARD_ANIMATION_TIMER_STOPPED_VALUE;
     }
@@ -29,7 +29,7 @@
     public final void setAnimationTimerStopped(final boolean animationTimerStopped) {
         this.animationTimerStopped = animationTimerStopped;
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-[raffic-sim/src/main/java/controller/data/VehicleGroupData.java]
+[afcd72/src/main/java/*.java]
         this.number = number;
         this.maxVel = maxVel;
     }
