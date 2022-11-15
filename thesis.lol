@@ -6,4 +6,6 @@
 \contentsline {lstlisting}{\numberline {3.4}Pseudocodice della \textit {routine} \texttt {scanpattern} dell'algoritmo \textit {RKR-GST}}{40}{lstlisting.3.4}%
 \contentsline {lstlisting}{\numberline {3.5}Pseudocodice \textit {routine} \texttt {markarrays} dell'algoritmo \textit {RKR-GST}}{41}{lstlisting.3.5}%
 \contentsline {lstlisting}{\numberline {3.6}\textit {Entry-point} dell'algoritmo \textit {RKR-GST}}{41}{lstlisting.3.6}%
-\contentsline {lstlisting}{resources/code/app\textendash report\textendash example.txt}{57}{lstlisting.Alph1.-1}%
+\contentsline {lstlisting}{\numberline {4.1}Esempio di falso positivo dovuto alla presenza di molteplici costanti}{52}{lstlisting.4.1}%
+\contentsline {lstlisting}{\numberline {4.2}Esempio di falso positivo dovuto alla presenza di una sequenza molto simile di \textit {getter/setter}}{53}{lstlisting.4.2}%
+\contentsline {lstlisting}{resources/code/app\textendash report\textendash example.txt}{61}{lstlisting.Alph1.-1}%
