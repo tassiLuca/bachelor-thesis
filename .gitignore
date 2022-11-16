@@ -33,3 +33,6 @@ thesis.pdf
 # drawio file
 *.dtmp
 *.bkp
+
+# thanks chapter
+thanks.tex
