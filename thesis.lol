@@ -1,5 +1,5 @@
 \contentsline {lstlisting}{\numberline {1.1}Una semplice classe che stampa su \textit {console} gli argomenti passati in \textit {input}, se presenti, o un saluto, per mostrare il processo di \textit {tokenizzazione}.}{8}{lstlisting.1.1}%
-\contentsline {lstlisting}{\numberline {1.2}Due semplici funzioni, in C, che effettuanao la somma di un \textit {array}, utilizzate per mostrare il corrispondente \textit {PDG}.}{14}{lstlisting.1.2}%
+\contentsline {lstlisting}{\numberline {1.2}Due semplici funzioni, in C, che effettuano la somma di un \textit {array}, utilizzate per mostrare il corrispondente \textit {PDG}.}{14}{lstlisting.1.2}%
 \contentsline {lstlisting}{\numberline {3.1}Porzione del file di configurazione con la definizione dei tipi di \textit {token}}{35}{lstlisting.3.1}%
 \contentsline {lstlisting}{\numberline {3.2}Risultato dell'analisi del \Cref {lst:test-analysis}}{36}{lstlisting.3.2}%
 \contentsline {lstlisting}{\numberline {3.3}Pseudocodice dell'algoritmo \textit {Greedy String Tiling (GST)}. In accordo con la terminologia del \textit {paper} $P$ rappresenta il \textit {pattern} ovvero la sequenza da confrontare più corta, mentre $T$ il \textit {text} ovvero la sequenza tra le due più lunga.}{39}{lstlisting.3.3}%
