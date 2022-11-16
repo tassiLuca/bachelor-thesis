@@ -8,8 +8,6 @@ Nei primi due paragrafi vengono elencati i requisiti ed è descritto il dominio 
 Il terzo paragrafo è dedicato alla progettazione dello strumento: si parte da una visione architetturale e a seguire si dettagliano le parti di \textit{design} più rilevanti al fine di chiarificare la logica con cui è stato implementato il sistema.
 
 \section{Requisiti}
-Come già anticipato, lo scopo della tesi è realizzare un sistema antiplagio automatico in grado d'individuare eventuali porzioni di codice copiato nei progetti \textit{software} del corso di Programmazione ad Oggetti dell'Università di Bologna.
-
 Di seguito vengono descritti, per punti, i requisiti del sistema, suddivisi tra requisiti \textit{funzionali} e \textit{non funzionali}.
 
 \subsection*{Requisiti funzionali}
@@ -57,6 +55,8 @@ Inoltre, il requisito non funzionale sulle \textit{performance} richiederà un'a
     \caption{Schema UML delle classi dell'analisi del problema, con rappresentate le entità principali ed i rapporti fra loro.}
     \label{img:02-domain}
 \end{figure}
+
+\newpage
 
 \section{\textit{Design}}
 
@@ -227,6 +227,8 @@ A partire da queste la classe concreta \texttt{TokenBasedPlagiarismDetector} dem
     \caption{Schema UML del \textit{detector}.}
     \label{img:02-detector}
 \end{sidewaysfigure}
+
+\newpage
 
 Tutti e tre i componenti, \texttt{Analyzer}, \texttt{Filter} e \texttt{PlagiarismDetector}, sono incapsulati all'interno di un concreto \texttt{TechniqueFacade} \cite{gof}.
 %
