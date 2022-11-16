@@ -8,7 +8,7 @@ Tuttavia, l'uso improprio di tali risorse e il loro appropriamento senza attribu
 
 Tra tutte, le due tipologie di plagio più comuni sono i plagi testuali, ovvero quelli commessi in documenti scritti in linguaggio naturale, e quelli del codice sorgente, che riguardano progetti \textit{software}, su cui verte la trattazione di questa tesi.
 
-\section{Il problema del plagio nel software}
+\section{Il problema del plagio nel \textit{software}}
 Anche nel mondo dell'informatica il problema del plagio è un fenomeno in crescita, incoraggiato per lo più dalla sempre maggiore quantità di progetti \textit{software} \textit{open source}, che induce gli sviluppatori a copia incollare frammenti di codice, talvolta neppure conoscendo le relative condizioni e termini di licenza.
 
 Prima di addentrarci nell'analisi dei metodi e delle tecnologie utilizzate per l'identificazione di plagi nel contesto dei progetti informatici, è di fondamentale importanza fornire una visione d'insieme sulle strategie che vengono impiegate da parte degli sviluppatori per cercare di offuscare la copiatura quando questa è un atto deliberato.
@@ -71,7 +71,7 @@ Questo aspetto è, insieme alle prestazioni, la sfida principale da affrontare d
 
 Gli strumenti d'identificazione di plagi devono infatti cercare di annullare gli effetti di queste rifattorizzazioni.
 %
-Maggiore sarà il livello di rifattorizazzione a cui il sistema sarà insensibile, migliore sarà l'efficacia e la robustezza del sistema stesso.
+Maggiore sarà il livello di rifattorizzazione a cui il sistema sarà insensibile, migliore sarà l'efficacia e la robustezza del sistema stesso.
 %
 A questo scopo le tecniche di analisi si compongono di più fasi nelle quali trasformano i sorgenti in rappresentazioni intermedie che astraggono il più possibile dai dettagli implementativi, che possono essere facilmente cambiati, quindi applicano su di esse tecniche di confronto.
 
@@ -93,14 +93,14 @@ Per questa ragione vengono sfruttate tecniche di parallelizzazione e devono esse
 %
 Per farlo, si utilizzano tecniche euristiche che permettono di determinare il grado di somiglianza dei sorgenti senza dover effettivamente eseguire il confronto.
 
-Va da sé che l'utilizzo di tali tecniche impatta inevitabilmente la sensibilità del sistema: una stima errata, a monte, della somiglianza di due sorgenti può portare a non effettuare alcun confronto tra questi e quindi a non individuare possibili plagi. 
+Va da sé che l'utilizzo di tali tecniche impatta inevitabilmente la sensibilità del sistema: una stima errata, a monte, della somiglianza di due sorgenti può portare a non effettuare alcun confronto tra questi e, quindi, a non individuare possibili plagi. 
 %
 Questo si verifica soprattutto nei casi in cui l'ottimizzazione è molto marcata e si riduce in modo eccessivo l'insieme dei sorgenti su cui effettuare il confronto, rendendo di fatto svantaggioso l'impiego di tali tecniche.
 
 Il bilanciamento tra le prestazioni e l'efficacia del sistema è, dunque, di fondamentale importanza.
 
 \section{Stato dell'arte}
-Il codice sorgente non è nient'altro che un file di testo scritto da sviluppatori, che deve essere compilato o interpretato e che, pertanto, si basa su regole sintattiche e grammaticali proprie del linguaggio di programmazione con cui è scritto che permettono a entrambi gli attori, il programmatore e il calcolatore, di "capirlo" ed elaborarlo.
+Il codice sorgente non è nient'altro che un file di testo scritto da sviluppatori che deve essere compilato o interpretato e che, pertanto, si basa su regole sintattiche e grammaticali proprie del linguaggio di programmazione con cui è scritto che permettono a entrambi gli attori, il programmatore e il calcolatore, di "capirlo" ed elaborarlo.
 %
 Per questo motivo, se processare la struttura di un sorgente non presenta grandi difficoltà, processare il significato, ovvero l'idea e la logica sottesa al codice, costituisce una sfida più grande, se non altro perché entra in gioco la competenza dello sviluppatore e la sua esperienza nella scrittura di codice "pulito".
 
@@ -120,7 +120,7 @@ Il primo sistema automatico di rilevazione di codice copiato che sia stato docum
 
 Coppie di sorgenti con valori identici per ciascuna di queste metriche si presumeva fossero simili e meritevoli di un esame più approfondito.
 
-Nel corso degli anni, sono state proposte altre metriche per ottenere stime sempre più accurate di somiglianza e per riflettere sempre più la struttura del flusso di controllo del programma, come il numero d'istruzioni di \textit{loop} e di espressioni condizionali, il numero di procedure e di istruzioni di \textit{input}, il numero medio di caratteri per linea e altre ancora \cite{pdectet}.
+Nel corso degli anni, sono state proposte altre metriche per ottenere stime sempre più accurate di somiglianza e per riflettere sempre più la struttura del flusso di controllo del programma, come il numero d'istruzioni di \textit{loop} e di espressioni condizionali, il numero di procedure e d'istruzioni di \textit{input}, il numero medio di caratteri per linea e altre ancora \cite{pdectet}.
 
 Collettivamente, questi sistemi sono stati definiti \textit{attribute counting metric systems} in quanto fondano il confronto sull'analisi di metriche basate su attributi intrinseci del codice sorgente.
 
@@ -165,7 +165,7 @@ Alcuni possibili esempi di \textit{token} comuni con i relativi \textit{pattern}
 
 L'analisi lessicale rappresenta il primo stadio della struttura di un compilatore ed è eseguita da programmi denominati \textbf{\textit{lexer}}. 
 %
-Questi sono generati in maniera dichiarativa a partire da generatori di \textit{lexer} (\textbf{\textit{lexer generator}}) che, presi in input più automi a stati finiti, espressi per mezzo di espressioni regolari che definiscono in maniera formale la grammatica del linguaggio, generano il codice che implementa l'algoritmo di analisi lessicale. 
+Questi sono generati in maniera dichiarativa a partire da generatori di \textit{lexer} (\textbf{\textit{lexer generator}}) che, presi in \textit{input} più automi a stati finiti, espressi per mezzo di espressioni regolari che definiscono in maniera formale la grammatica del linguaggio, generano il codice che implementa l'algoritmo di analisi lessicale. 
 %
 In \Cref{img:01-id-finite-automa} è mostrato un esempio di automa a stati finiti che riconosce un identificatore.
 %
@@ -182,12 +182,12 @@ Attraverso questo approccio, quindi, ogni programma viene trasformato in una seq
 
 In \Cref{table:token-associations} è mostrata una possibile sequenza di \textit{token} generata a partire dalla classe presentata nel \Cref{lst:test-analysis}.
 %
-Il risultato che si ottiene è una versione condensata e semplificata del sorgente, con un vocabolario ristretto, in cui le dichiarazioni superflue, come quelle di \texttt{import}, \texttt{package} e il blocco di documentazioni, sono ignorati.
+Il risultato che si ottiene è una versione condensata e semplificata del sorgente, con un vocabolario ristretto, in cui le dichiarazioni superflue, come quelle di \texttt{import}, \texttt{package} e i blocchi di documentazione, sono ignorati.
 
 \lstinputlisting[
     float,
  	language=Java,
- 	caption={Una semplice classe che stampa su \textit{console} gli argomenti passati in \textit{input}, se presenti, o un saluto, per mostrare il processo di \textit{tokenizzazione}},
+ 	caption={Una semplice classe che stampa su \textit{console} gli argomenti passati in \textit{input}, se presenti, o un saluto, per mostrare il processo di \textit{tokenizzazione}.},
  	label={lst:test-analysis},
 ]{resources/code/01-TestAnalysis.java}
 
@@ -227,7 +227,7 @@ Il risultato che si ottiene è una versione condensata e semplificata del sorgen
         13  & \texttt{"Hello world ... Java!"}    & \texttt{StringLiteralExpr}            \\ \hline
         14-16  & \texttt{\}}                         & \texttt{-}                            \\ \hline
     \end{tabular}
-    \caption{Associazioni costrutti-\textit{token} del \Cref{lst:test-analysis}}
+    \caption{Associazioni costrutti-\textit{token} del \Cref{lst:test-analysis}.}
     \label{table:token-associations}
 \end{table}
 
@@ -245,11 +245,11 @@ D'altro canto, un set di \textit{token} "lasco" potrebbe rappresentare tutti e q
 %
 Pertanto un insieme di \textit{token} "lasco" aiuta il sistema a riconoscere e catalogare come equivalenti tipi di dato diversi e fornire quindi una maggiore resilienza alle tecniche di rifattorizzazione.
 
-Spesso, la fase di analisi lessicale è seguita da una fase di filtraggio, che consente di ridurre il numero di rappresentazioni da dover confrontare e, quindi, il numero stesso dei confronti, portando a una riduzione dei tempi di esecuzione.
+Spesso la fase di analisi lessicale è seguita da una fase di filtraggio che consente di ridurre il numero di rappresentazioni da dover confrontare e, quindi, il numero stesso dei confronti, portando a una riduzione dei tempi di esecuzione.
 %
-Questo stadio è preceduto da una fase d'indicizzazione in cui, a partire dalla sequenza di \textit{token}, vengono generati alcuni indici, ovvero strutture che raggruppano i dati e che permettono di inferire una stima euristica della similarità, senza dover effettuare il confronto \textit{token} per \textit{token}.
+Questo stadio è preceduto da una fase d'indicizzazione in cui, a partire dalla sequenza di \textit{token}, vengono generati alcuni indici, ovvero strutture che raggruppano i dati e che permettono d'inferire una stima euristica della similarità senza dover effettuare il confronto \textit{token} per \textit{token}.
 %
-Una tra gli indici più comuni è costituito da coppie chiave$-$valore in cui nelle chiavi sono memorizzati i tipi di \textit{token} e nei valori la loro frequenza, in termini di numero di occorrenze all'interno del sorgente.
+Uno tra gli indici più comuni è costituito da coppie chiave$-$valore in cui, nelle chiavi, sono memorizzati i tipi di \textit{token} e, nei valori, la loro frequenza, in termini di numero di occorrenze all'interno del sorgente.
 %
 Un esempio di indice costruito a partire dalla sequenza di \textit{token} elencata in \Cref{table:token-associations} è mostrato in \Cref{table:token-indexing}.
 %
@@ -273,7 +273,7 @@ Un esempio di indice costruito a partire dalla sequenza di \textit{token} elenca
         \texttt{elseStmt}                   & 1 \\ \hline
         \texttt{StringLiteralExpr}          & 2 \\ \hline
     \end{tabular}
-    \caption{Indice con coppie (tipo di \textit{token}$-$frequenza) generate a partire dalla \Cref{table:token-associations}}
+    \caption{Indice con coppie (tipo di \textit{token}$-$frequenza) generate a partire dalla \Cref{table:token-associations}.}
     \label{table:token-indexing}
 \end{table}
 %
@@ -291,7 +291,7 @@ Tra questi, i due più conosciuti sono \textbf{\textit{Winnowing}} \cite{winnowi
     
     \item la sequenza numerica è trasformata in una sequenza di "finestre" di valori di \textit{hash}, in cui la grandezza di ciascuna, detta $w$, è data da: $w = t - n + 1$ dove $t$ rappresenta la lunghezza minima delle stringhe che è garantito siano trovate e $n$ rappresenta la lunghezza massima delle stringhe che è garantito \textit{non} siano trovate;
     
-    \item sono selezionati un sottoinsieme dei valori di \textit{hash}, da usare come impronta digitale del documento, considerando il valore minimo di ogni finestra di valori.
+    \item sono selezionati un sottoinsieme dei valori di \textit{hash}, da usare come impronta digitale del documento, considerando il valore minimo di ogni "finestra".
 \end{itemize}
 
 La comparazione avviene successivamente sulla base di queste "impronte digitali", che sono dimostrate essere rappresentative della struttura del documento \cite{winnowing}.
@@ -322,7 +322,7 @@ I dettagli e lo pseudocodice dell'algoritmo sono descritti nella \Cref{03-matchi
 \subsubsection{Analisi basata su un modello}
 Anziché utilizzare la sequenza di \textit{token} generata dal \textit{lexer} possono essere generate delle strutture e dei modelli più complessi, che permettano di astrarre ulteriormente dalla sintassi del linguaggio.
 
-Una tra le rappresentazioni più note e naturali in questo ambito, derivata dalla stessa analisi lessicale, è l'\textbf{albero sintattico} (o \textit{abstract syntax tree} in inglese, abbreviato \textit{AST}).
+Una tra le rappresentazioni più note e naturali in questo ambito, derivata dalla stessa analisi lessicale, è l'\textbf{albero sintattico} (o \textit{Abstract Syntax Tree} in inglese, abbreviato \textit{AST}).
 %
 Questo è generato a partire dalla sequenza di \textit{token} descritta nel paragrafo precedente e rappresenta il risultato ottenuto a seguito dell'applicazione del secondo stadio di un compilatore: il \textbf{\textit{Parser}} (\Cref{img:01-compiler-arch}).
 %
@@ -347,7 +347,7 @@ In \Cref{img:01-ast} viene mostrata la struttura parziale dell'\textit{AST} del 
     \makebox[\textwidth][c]{
         \includegraphics[width=1.1\textwidth]{resources/img/01-ast-summarized.pdf}
     }
-    \caption{Rappresentazione di una porzione dell'\textit{AST} del metodo \texttt{main} del \Cref{lst:test-analysis}}
+    \caption{Rappresentazione di una porzione dell'\textit{AST} del metodo \texttt{main} del \Cref{lst:test-analysis}.}
     \label{img:01-ast}
 \end{sidewaysfigure}
 
@@ -371,7 +371,7 @@ La comparazione tra questi avviene sfruttando l'isomorfismo di grafi\footnote{Ne
 
 \lstinputlisting[
     language=c,
-    caption={Due semplici funzioni, in C, che effettuanao la somma di un \textit{array} utilizzate per mostrare il corrispondente \textit{PDG}},
+    caption={Due semplici funzioni, in C, che effettuanao la somma di un \textit{array}, utilizzate per mostrare il corrispondente \textit{PDG}.},
     label={lst:pdg}
 ]{resources/code/01-pdg.c}
 
@@ -396,11 +396,12 @@ La seconda utilizza una rappresentazione a grafo in cui i vertici rappresentano 
 
 Altri metodi, qui non approfonditi, sono in via di sviluppo e impiegano algoritmi di \textit{machine learning} come \textit{Random Forest} e \textit{Gradient Boosting} applicati agli alberi di regressione.
 
+\newpage
 \subsection{Quale tecnica scegliere?}
 In conclusione, bisogna rendersi conto che, a prescindere dal grado di sofisticatezza della tecnica che si utilizza, è sempre possibile che si verifichi un plagio non rilevabile \cite{joy-99}.
 %
-Il bilancimento tra le risorse investite nell'individuazione dei plagi e i rendimenti decrescenti di trovare i pochi, se non nessuno, casi difficili da rilevare è un fattore critico che necessita un'analisi approfondita, tenuto conto delle specifiche esigenze del dominio applicativo.
+Il bilanciamento tra le risorse investite nell'individuazione dei plagi e i rendimenti decrescenti di trovare i pochi, se non nessuno, casi difficili da rilevare è un fattore critico che necessita un'analisi approfondita, tenuto conto delle specifiche esigenze del dominio applicativo.
 
 Stabilire quale tecnica scegliere è complesso, perché difficili da confrontare tra loro: la maggior parte di queste viene valutata utilizzando il proprio \textit{set} di dati, che raramente sono resi pubblicamente accessibili e che potrebbero non rappresentare veri casi di plagio \cite{karnalim-budi-toba-joy-2019}.
 
-Ciononostante, le tecniche più utilizzate in questo ambito e più efficaci sulla base delle considerazioni suffatte, sono quelle \textit{structure-based}, che verranno impiegate anche nello strumento sviluppato nell'ambito di questa tesi. 
+Ciononostante, le tecniche più utilizzate in questo ambito e più efficaci sulla base delle considerazioni discusse, sono quelle \textit{structure-based}, che verranno impiegate anche nello strumento sviluppato nell'ambito di questa tesi. 
