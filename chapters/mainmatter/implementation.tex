@@ -24,7 +24,7 @@ Di seguito ciascuna delle tre viene approfondita.
 \section{Tecnica di analisi}
 Il primo passo consiste nell'effettuare il \textit{parsing} dei sorgenti, affidato alla libreria JavaParser\footnote{\url{https://javaparser.org/}}.
 %
-JavaParser è una libreria \textit{open source} che permette di effettuare il \textit{parsing} di codice sorgente scritto in linguaggio Java, fornendo comodi meccanismi per l'analisi e la manipolazione dello stesso.
+JavaParser è una libreria \textit{open source} che permette di effettuare il \textit{parsing} di sorgenti scritti in linguaggio Java, fornendo comodi meccanismi per l'analisi e la manipolazione degli stessi.
 
 Il risultato del \textit{parsing} è un albero sintattico equivalente a quello mostrato in \Cref{img:01-ast} che rappresenta la struttura dei sorgenti.
 
@@ -137,7 +137,7 @@ Lo pseudocodice dell'algoritmo è presentato nel \Cref{lst:gst}.
 
 \lstinputlisting[
 	language=pseudocode,
- 	caption={Pseudocodice dell'algoritmo \textit{Greedy String Tiling (GST)}. In accordo con la terminologia del \textit{paper} $P$ rappresenta il \textit{pattern} ovvero la sequenza da confrontare più corta, mentre $T$ il \textit{text} ovvero la sequenza tra le due più lunga.},
+ 	caption={Pseudocodice dell'algoritmo \textit{Greedy String Tiling (GST)}. In accordo con la terminologia del \textit{paper}, $P$ rappresenta il \textit{pattern}, ovvero la sequenza da confrontare più corta, mentre $T$ il \textit{text}, ovvero la sequenza tra le due più lunga.},
  	label={lst:gst},
 ]{resources/code/03-gst}
 
@@ -165,7 +165,7 @@ Si noti che nei casi in cui la corrispondenza sia effettiva e non sia causata da
 
 \lstinputlisting[
  	language=pseudocode,
- 	caption={Pseudocodice della \textit{routine} \texttt{scanpattern} dell'algoritmo \textit{RKR-GST}},
+ 	caption={Pseudocodice della \textit{routine} \texttt{scanpattern} dell'algoritmo \textit{RKR-GST}.},
  	label={lst:rkr-scanpattern},
 ]{resources/code/03-rkr-gst-scanpattern}
 
@@ -175,11 +175,11 @@ Il \Cref{lst:rkr-markarrays} presenta lo pseudocodice della \textit{routine} che
 %
 La principale differenza con la precedente versione risiede nel fatto che la marcatura viene effettuata per ogni \textit{match} e non solo per quelli di lunghezza massima.
 %
-Inoltre, se il \textit{match} risulta parzialmente occluso, ma la rimanente parte non occlusa è  di lunghezza $m > s$, questa viene salvata nella lista di code, in modo tale da essere valutata nella successiva iterazione in cui vengono valutati tutti i \textit{match} di lunghezza $m$ (righe 11-13).
+Inoltre, se il \textit{match} risulta parzialmente occluso, ma la rimanente parte non occlusa è  di lunghezza $m \ge s$, questa viene salvata nella lista di code, in modo tale da essere valutata nella successiva iterazione in cui vengono valutati tutti i \textit{match} di lunghezza $m$ (righe 11-13).
 
 \lstinputlisting[
  	language=pseudocode,
- 	caption={Pseudocodice \textit{routine} \texttt{markarrays} dell'algoritmo \textit{RKR-GST}},
+ 	caption={Pseudocodice \textit{routine} \texttt{markarrays} dell'algoritmo \textit{RKR-GST}.},
  	label={lst:rkr-markarrays},
 ]{resources/code/03-rkr-gst-markarrays}
 
@@ -191,7 +191,7 @@ Questo garantisce che, nelle successive iterazioni, l'algoritmo termini.
 
 \lstinputlisting[
  	language=pseudocode,
- 	caption={\textit{Entry-point} dell'algoritmo \textit{RKR-GST}},
+ 	caption={\textit{Entry-point} dell'algoritmo \textit{RKR-GST}.},
  	label={lst:rkr-top-level},
 ]{resources/code/03-rkr-gst-top-algorithm}
 
@@ -263,7 +263,7 @@ Per questo motivo, la misura di similarità aggregata sopra descritta viene "pes
 %
 Così facendo, si andrà a diminuire il peso complessivo della similarità per quei progetti i cui sorgenti segnalati sono esegui rispetto alla loro totalità.
 %
-Questo determina tuttavia che copiature di circa il 50\% del progetto possano avere al più similarità 50\% nel caso limite in cui II sia uguale a 1.
+Questo determina tuttavia che copiature di circa il 50\% del progetto possano avere al più similarità 50\% nel caso limite in cui la II parte dell'\Cref{eq:project-similarity} sia uguale a 1.
 %
 Questo però è raro che accada perché significherebbe che le copiature sono frutto di un copia e incolla letterale; nella realtà tale valore sarà strettamente minore di 1 e ciò comporterebbe una diminuzione significativa del valore di similarità per la coppia di progetti che in definitiva verrebbe classificata come non copiata nonostante la copiatura di metà progetto.
 %
@@ -296,7 +296,7 @@ Per questo motivo, un possibile miglioramento all'\Cref{eq:project-similarity} c
 			\addplot [blue,thick] {func(x)};
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Grafico della funzione di pesatura della I parte dell'\Cref{eq:weight-function}}
+	\caption{Grafico della funzione di pesatura della I parte dell'\Cref{eq:weight-function}.}
 	\label{graph:weight-function}
 \end{figure}
 
@@ -328,7 +328,7 @@ I tratti distintivi di \textit{Kotlin} sono certamente la sua espressività e co
 
 \subsection*{Git e \textit{CI/CD}}
 \label{03-git-ci}
-Per lo sviluppo del progetto, si è utilizzato Git, uno \textit{standard de facto} nell'ambito dei sistemi di controllo di versione decentralizzato, che permettere di tenere traccia dello storico delle modifiche e lo sviluppo simultaneo da parte di più sviluppatori, senza che questi debbano sobbarcarsi la gestione dell'intero progetto a mano, con tutti i conseguenti problemi.
+Per lo sviluppo del progetto si è utilizzato Git, uno \textit{standard de facto} nell'ambito dei sistemi di controllo di versione decentralizzato, che permettere di tenere traccia dello storico delle modifiche e lo sviluppo simultaneo da parte di più sviluppatori, senza che questi debbano sobbarcarsi la gestione dell'intero progetto a mano, con tutti i conseguenti problemi.
 
 In particolare, il \textit{workflow} adottato è il seguente: il progetto è mantenuto in una \textit{repository} pubblica centrale\footnote{\url{https://github.com/DanySK/code-plagiarism-detector}} e ciascun sviluppatore lavora su una \textit{working copy} (\textit{fork}).
 %
@@ -344,11 +344,11 @@ Questo metodo di operare è alla base della filosofia \textit{DevOps} e prevede 
 
 \subsection*{Note di sviluppo}
 \begin{itemize}
-	\item La parallelizzazione dell'analisi dei sorgenti è stata sviluppata per mezzo di \textit{ParallelStream} i quali, a loro volta, fanno uso di un \textit{framework} di tipo \textit{fork-join}, che hanno l'onere di creare e dividere la computazione tra i vari \textit{thread} e gestire le relative \textit{join} in maniera trasparente allo sviluppatore. Per far ciò si è dovuto, tuttavia, prestare attenzione affinché gli algoritmi di \textit{detection} fossero \textit{thread-safe}.
+	\item La parallelizzazione dell'analisi dei sorgenti è stata sviluppata per mezzo di \textit{ParallelStream} il quale, a loro volta, fa uso di un \textit{framework} di tipo \textit{fork-join}, che ha l'onere di creare e dividere la computazione tra i vari \textit{thread} e gestire le relative \textit{join} in maniera trasparente allo sviluppatore. Per far ciò si è dovuto, tuttavia, prestare attenzione affinché gli algoritmi di \textit{detection} fossero \textit{thread-safe}.
 	\item Per lo sviluppo complessivo del progetto sono state impiegate le seguenti librerie:
 	\begin{itemize}
 		\item \textbf{JavaParser}\footnote{\url{https://javaparser.org}} per effettuare l'analisi dei sorgenti sviluppati in linguaggio Java;
-		\item \textbf{Github API for Java}\footnote{\url{https://github-api.kohsuke.org}} per interagire con l'API di GitHub e recuperare le \textit{repository}. Per recuperare i progetti caricati su \textit{Bitbucket}, non essendoci di una libreria pronta all'uso, si è utilizzata \textbf{Unirest} per effettuare le richieste HTTP;
+		\item \textbf{Github API for Java}\footnote{\url{https://github-api.kohsuke.org}} per interagire con l'API di GitHub e recuperare le \textit{repository}. Per recuperare i progetti caricati su \textit{Bitbucket}, non essendoci una libreria pronta all'uso, si è utilizzato \textbf{Unirest} per effettuare le richieste HTTP;
 		\item \textbf{JGit}\footnote{\url{https://www.eclipse.org/jgit/}} per lo scaricamento (\textit{clone}) dei progetti da \textit{GitHub} e \textit{Bitbucket}.
 		\item \textbf{Clikt}\footnote{\url{https://ajalt.github.io/clikt/}} per la scrittura dell'interfaccia da riga di comando;
 		\item \textbf{Kaml}\footnote{\url{https://github.com/charleskorn/kaml}} per la (de)serializzazione di file di configurazione \textit{Yaml}.

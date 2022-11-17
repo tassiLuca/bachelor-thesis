@@ -1,12 +1,12 @@
-Starting at the first unmarked token of $T_i$ foreach unmrked $T_t$ do
+Starting at the first unmarked token of $T$, foreach unmrked $T_t$ do
     if distance to next tile $\leq s$ then advance $t$ to first unmarked token after next tile
     else create the KR hash-value for substring $T_t$ to $T_{t+s-1}$ and add to hashtable
-Starting at the first unmarked token of $P$ for each unmarked token after next tile do
+Starting at the first unmarked token of $P$, for each unmarked $P_p$ do
     if distance to next tile $\leq s$ then advance $p$ to first unmarked token after next tile
     else
         create the KR hash-value for substrng $P_p$ to $P_{p+s-1}$
         check hashtable for hash of KR hash-value
-        for each hash-table entry with equal hashed KR hash-value
+        for each hash-table entry with equal hashed KR hash-value do
             if for all $j$ from $0$ to $s-1$, $P_{p+j} = T_{t+j}$ then
                 /* i.e. match is not hash artifact */ 
                 $k := s$
