@@ -51,7 +51,7 @@ Un qualunque sistema di rilevamento di plagi, perché possa essere considerato r
 
 \section{Sistemi antiplagio automatici}
 \label{01:automatic-plagiarism-detector}
-A causa dell'elevato volume di dati e informazioni disponibili che oggigiorno si hanno a disposizione, l'approccio tradizionale al rilevamento di codice copiato attraverso un'ispezione manuale, oltre che essere tedioso, è nei fatti impraticabile e, nel corso degli anni, è stato necessario porsi il problema di sviluppare strumenti di rilevamento automatici di plagi che siano efficienti ed efficaci.
+A causa dell'elevato volume di dati e informazioni disponibili che oggigiorno si hanno a disposizione, l'approccio tradizionale al rilevamento di codice copiato attraverso un'ispezione manuale, oltre che essere tedioso, è nei fatti impraticabile e, nel corso degli anni, è stato necessario porsi il problema di sviluppare strumenti di rilevamento automatici di plagi che fossero efficienti ed efficaci.
 %
 Ciononostante, un'ispezione manuale a seguito di quella automatica è tuttora ancora necessaria per stabilire con ragionevole certezza se le porzioni di codice individuate dal sistema sono effettivamente copiature o, più ingenuamente, blocchi simili di codice.
 
@@ -63,7 +63,7 @@ In questo contesto è da porre in evidenza la differenza tra l'individuazione di
 %
 Quando ci si riferisce a un clone, infatti, lo si fa con riferimento a un frammento di codice che è stato copiato e marginalmente modificato. 
 %
-Quando invece ci si riferisce ad un plagio si intende una sezione che è stata copiata e la cui opera di copiatura si è cercato di dissimulare, mediante opportune azioni di rifattorizzazione del codice \cite{cpdp}, descritte nel paragrafo precedente.
+Quando invece ci si riferisce ad un plagio si intende una sezione che è stata copiata e la cui opera di copiatura si è cercato di dissimulare mediante opportune azioni di rifattorizzazione del codice \cite{cpdp}, descritte nel paragrafo precedente.
 %
 Dunque, l'ambito di applicazione delle due ricerche è nettamente diverso: se nel primo l'obiettivo è quello di evidenziare il codice duplicato al fine di migliorare la qualità del codice e la manutenibilità del sistema, nel secondo lo scopo primario è identificare possibili condotte illecite.
 
@@ -233,7 +233,7 @@ Il risultato che si ottiene è una versione condensata e semplificata del sorgen
 
 Questo approccio rende il sistema sufficientemente robusto contro semplici tecniche di \textit{refactoring}, come la modifica degli identificatori, corrispondente al secondo livello della tassonomia di Faidhi \& Robinson (\Cref{img:01-levels-of-plagiarism}).
 
-Tuttavia, bisogna evidenziare come l'efficacia della \textit{tokenizzazione} dipende dall'insieme di \textit{token} che si decide di usare.
+Tuttavia, bisogna evidenziare come l'efficacia della \textit{tokenizzazione} dipenda dall'insieme di tipi di \textit{token} usato.
 %
 Consideriamo, a puro scopo esemplificativo, il caso delle \textit{keyword} dedicate a rappresentare un intero in Java.
 %
@@ -277,7 +277,7 @@ Un esempio di indice costruito a partire dalla sequenza di \textit{token} elenca
     \label{table:token-indexing}
 \end{table}
 %
-Tali indici sono successivamente impiegati nella vera e propria fase di filtraggio in cui viene applicata una particolare metrica, ad esempio la similarità coseno, per escludere le coppie di sorgenti con similarità inferiore ad un valore di soglia, scelto coerentemente alla metrica.
+Tali indici sono successivamente impiegati nella vera e propria fase di filtraggio in cui viene applicata una particolare metrica, ad esempio la similarità coseno, per escludere le coppie di sorgenti con similarità inferiore ad un valore di soglia, scelto coerentemente alla metrica utilizzata.
 
 A seguire i sorgenti vengono confrontati con algoritmi di \textit{string matching}.
 %
@@ -311,7 +311,7 @@ Esso incorpora, di fatto, due algoritmi.
 %
 \textit{Greedy String Tiling (GST)} è l'algoritmo che trova la massima sottosequenza comune in due stringhe.
 %
-\textit{Running-Karp-Rabin (RKR)} è l'algoritmo per la ricerca rapida di sottosequenze comuni e trova tutte le occorrenze di una stringa $P$ all'interno di una stringa più lunga $T$ effettuando l'\textit{hashing} di tutte le sottostringhe di lunghezza $|P|$ e confrontandole con gli \textit{hash} di $P$.
+\textit{Running-Karp-Rabin (RKR)} è l'algoritmo per la ricerca rapida di sottosequenze comuni e trova tutte le occorrenze di una stringa $P$ all'interno di una stringa più lunga $T$ effettuando l'\textit{hashing} di tutte le sottostringhe di lunghezza $|P|$ e confrontando tutti i valori \textit{hash} di $T$ con quelli di $P$.
 %
 I due algoritmi cooperano in questo modo: \textit{RKR} è eseguito su due programmi.
 %
