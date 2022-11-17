@@ -169,7 +169,7 @@ Si noti che nei casi in cui la corrispondenza sia effettiva e non sia causata da
  	label={lst:rkr-scanpattern},
 ]{resources/code/03-rkr-gst-scanpattern}
 
-Nella versione originale dell'algoritmo la struttura dati utilizzata per memorizzare i \textit{match} è una lista di code in cui ogni coda memorizza i \textit{match} della stessa lunghezza, mantenuta ordinata per valori descrenti.
+Nella versione originale dell'algoritmo la struttura dati utilizzata per memorizzare i \textit{match} è una lista di code in cui ogni coda memorizza i \textit{match} della stessa lunghezza, mantenuta ordinata per valori decrescenti.
 
 Il \Cref{lst:rkr-markarrays} presenta lo pseudocodice della \textit{routine} che effettua la marcatura dei \textit{match} individuati nella \textit{routine} \texttt{scanpattern}, corrispondente alla seconda fase dell'algoritmo precedente.
 %
@@ -222,7 +222,7 @@ Se, invece, preferiamo che ogni programma che è stato copiato completamente (e 
 	sim_S(A, B) = \frac{\sum_{match \in tiles} length}{min(|A|, |B|)}
 \end{equation} 
 
-Per mitigare il problema dell'insensibilità al riordino delle sottosequenze di cui è intrinsicamente affetta la tecnica di analisi impiegata, in \cite{es-plag} viene proposto di modificare la formula di stima della similarità introducendo un meccanismo di penalità ispirato dal principio che, solitamente, un numero elevato di sottosequenze comuni si verifica proprio a causa del riordino delle stesse. 
+Per mitigare il problema dell'insensibilità al riordino delle sottosequenze di cui è intrinsecamente affetta la tecnica di analisi impiegata, in \cite{es-plag} viene proposto di modificare la formula di stima della similarità introducendo un meccanismo di penalità ispirato dal principio che, solitamente, un numero elevato di sottosequenze comuni si verifica proprio a causa del riordino delle stesse. 
 %
 Applicando pertanto una penalità proporzionata al numero di sottosequenze comuni, maggiore sarà il numero di sottosequenze individuate, minore sarà il grado di similarità determinato.
 %
@@ -265,7 +265,7 @@ Così facendo, si andrà a diminuire il peso complessivo della similarità per q
 %
 Questo determina tuttavia che copiature di circa il 50\% del progetto possano avere al più similarità 50\% nel caso limite in cui la II parte dell'\Cref{eq:project-similarity} sia uguale a 1.
 %
-Questo però è raro che accada perché significherebbe che le copiature sono frutto di un copia e incolla letterale; nella realtà tale valore sarà strettamente minore di 1 e ciò comporterebbe una diminuzione significativa del valore di similarità per la coppia di progetti che in definitiva verrebbe classificata come non copiata nonostante la copiatura di metà progetto.
+Questo però è raro che accada perché significherebbe che le copiature sono frutto di un copia e incolla letterale; nella realtà tale valore sarà strettamente minore di uno e ciò comporterebbe una diminuzione significativa del valore di similarità per la coppia di progetti che in definitiva verrebbe classificata come non copiata nonostante la copiatura di metà progetto.
 %
 Per questo motivo, un possibile miglioramento all'\Cref{eq:project-similarity} consiste nell'applicare alla I parte dell'equazione una funzione di peso, come quella descritta in \Cref{eq:weight-function} il cui grafico è mostrato in \Cref{graph:weight-function}.
 
@@ -338,9 +338,9 @@ Questi vengono eseguiti automaticamente grazie all'utilizzo delle \textit{GitHub
 %
 Tramite un file di configurazione \textit{Yaml} è possibile definire uno o più \textit{workflow} che effettuino i controlli desiderati al verificarsi di alcuni eventi come, ad esempio, una \textit{pull request} o il \textit{push} di un nuovo commit.
 %
-In particolare, il progetto è configurato per eseguire i \textit{test} ad ogni \textit{commit} che viene \textit{pushato} su tutti e tre i sistemi operativi più diffusi, \textit{Linux}, \textit{MacOS}, \textit{Windows}, e per effettuare, ad ogni \textit{pull request}, ulteriori controlli come la copertura del codice in termini di test\footnote{\url{https://about.codecov.io/}} e la qualità del codice\footnote{\href{https://lift.sonatype.com/getting-started}{\texttt{Sonatype Lift}}} al fine di identificare problemi di sicurezza, prestazioni, affidabilità e stile.
+In particolare, il progetto è configurato per eseguire i \textit{test} ad ogni \textit{commit} che viene \textit{pushato} su tutti e tre i sistemi operativi più diffusi, \textit{Linux}, \textit{MacOS}, \textit{Windows}, e per effettuare, ad ogni \textit{pull request}, ulteriori controlli come la copertura del codice in termini di test\footnote{\url{https://about.codecov.io/}} e la qualità del codice\footnote{\href{https://lift.sonatype.com/getting-started}{\texttt{Sonatype Lift}}} al fine d'identificare problemi di sicurezza, prestazioni, affidabilità e stile.
 %
-Questo metodo di operare è alla base della filosofia \textit{DevOps} e prevede di verificare, ad ogni cambiamento, che la \textit{build} rimanga intatta, al fine di individuare eventuali problemi appena questi si verificano e non dopo settimane, al termine dell'integrazione.
+Questo metodo di operare è alla base della filosofia \textit{DevOps} e prevede di verificare, ad ogni cambiamento, che la \textit{build} rimanga intatta, al fine d'individuare eventuali problemi appena questi si verificano e non dopo settimane, al termine dell'integrazione.
 
 \subsection*{Note di sviluppo}
 \begin{itemize}
