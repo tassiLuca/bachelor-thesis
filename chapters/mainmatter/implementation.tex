@@ -54,11 +54,11 @@ Si noti che questo approccio è molto flessibile e può essere "aggiustato" a pi
 
 \lstinputlisting[
  	language=yaml,
- 	caption={Porzione del file di configurazione con la definizione dei tipi di \textit{token}},
+ 	caption={Porzione del file di configurazione con la definizione dei tipi di \textit{token}.},
  	label={lst:token-config-file},
 ]{resources/code/03-token-types.yml}
 
-Il risultato dell'applicazione del processo sopra descritto al \Cref{lst:test-analysis} viene presentato nel \Cref{lst:result-tokenization}
+Il risultato dell'applicazione del processo sopra descritto al \Cref{lst:test-analysis} viene presentato nel \Cref{lst:result-tokenization}.
 
 \lstinputlisting[
  	caption={Risultato dell'analisi del \Cref{lst:test-analysis}},
@@ -334,9 +334,9 @@ In particolare, il \textit{workflow} adottato è il seguente: il progetto è man
 %
 Non appena una \textit{feature} è completata o si arriva a un buon grado di sviluppo si aprono delle \textit{pull request}, nelle quali i contributi sono revisionati per accertarsi passino i controlli di qualità.
 %
-Questi vengono eseguiti automaticamente grazie all'utilizzo delle \textit{GitHub Actions}, una piattaforma di \textit{Continuous Integration and Delivery} (\textit{CI/CD}) che permette di automattizare il processo di \textit{testing}, \textit{building} e \textit{deployment}.
+Questi vengono eseguiti automaticamente grazie all'utilizzo delle \textit{GitHub Actions}, una piattaforma di \textit{Continuous Integration and Delivery} (\textit{CI/CD}) che permette di automatizzare il processo di \textit{testing}, \textit{building} e \textit{deployment}.
 %
-Tramite un file di configurazione \textit{Yaml} è possibile definire uno o più \textit{workflow} che effettuino i controlli desiderati al verificarsi di alcuni eventi come, ad esempio, una \textit{pull request} o il \textit{push} di un nuovo commit.
+Tramite un file di configurazione \textit{Yaml} è possibile definire uno o più \textit{workflow} che effettuino i controlli desiderati al verificarsi di alcuni eventi come, ad esempio, una \textit{pull request} o il \textit{push} di un nuovo \textit{commit}.
 %
 In particolare, il progetto è configurato per eseguire i \textit{test} ad ogni \textit{commit} che viene \textit{pushato} su tutti e tre i sistemi operativi più diffusi, \textit{Linux}, \textit{MacOS}, \textit{Windows}, e per effettuare, ad ogni \textit{pull request}, ulteriori controlli come la copertura del codice in termini di test\footnote{\url{https://about.codecov.io/}} e la qualità del codice\footnote{\href{https://lift.sonatype.com/getting-started}{\texttt{Sonatype Lift}}} al fine d'identificare problemi di sicurezza, prestazioni, affidabilità e stile.
 %

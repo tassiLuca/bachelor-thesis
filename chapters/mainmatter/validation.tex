@@ -63,7 +63,7 @@ Come naturale che sia, invece, laddove la copiatura è effettuata in modo più s
 
 Sotto il 60\% si è in presenza di codice piuttosto simile, ma in maniera molto limitata rispetto alla totalità dei sorgenti.
 %
-\`E il caso, ad esempio, dei progetti \texttt{f67c20} e \texttt{005bc2} in cui è intuibile, guardando i risultati generati dal rilevatore, che gli sviluppatori del secondo abbiano preso spunto dal primo.
+\`E il caso, ad esempio, dei progetti \texttt{005bc2} e \texttt{f67c20} in cui è intuibile, guardando i risultati generati dal rilevatore, che gli sviluppatori del secondo abbiano preso spunto dal primo.
 %
 Tuttavia non è ravvisabile una copiatura evidente come nei precedenti casi.
 
@@ -77,7 +77,7 @@ Come si può notare dalla \Cref{table:grid-search}, le misurazioni di similarit�
 %
 Infatti, scegliere una lunghezza $s$ e un valore di duplicazione al di sopra di questi limiti, seppur mantenga inalterate, se non migliori, le prestazioni per i casi di copiature evidenti (è questo il caso della coppia di progetti \texttt{f0caf3} e \texttt{c1e451}), diminuisce l'accuratezza nei casi in cui la copiatura è meno evidente.
 
-Inoltre, si noti che la misurazione della similarità mediante la normalizzazione massima, così come descritta nell'\Cref{eq:max-norm-sim}, in concomitanza con quella dei progetti (\Cref{eq:project-similarity}) genera risultati fuorvianti in corrispondenza di sorgenti e/o progetti di piccola dimensione.
+Inoltre, si noti che la misurazione della similarità mediante la normalizzazione massima, così come descritta nell'\Cref{eq:max-norm-sim}, in concomitanza con quella dei progetti (\Cref{eq:project-similarity}), genera risultati fuorvianti in corrispondenza di sorgenti e/o progetti di piccola dimensione.
 %
 Questo fenomeno è facilmente osservabile dalle stime di similarità tra i progetti \texttt{005bc2} e \texttt{f67c20} e ci spinge a preferire l'utilizzo della metrica di normalizzazione media descritta nell'\Cref{eq:max-norm-sim} che fornisce risultati più stabili, derivanti dal fatto che considera la media della lunghezza dei sorgenti e non il sorgente più corto per il calcolo della similarità.
 
@@ -104,7 +104,7 @@ Entrambi sono due scelte ragionevoli: la seconda offre il vantaggio di annullare
         \centering
         \begin{tabular}{ p{0.5cm}|c|c|c||p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{1.2cm} }
             \multicolumn{4}{c}{} & \multicolumn{8}{c}{\textbf{Coppie di progetti simili}} \\ [1ex]
-            \multicolumn{4}{c|}{} & \texttt{9b7267} $-$ \texttt{80fd2e} & \texttt{f0caf3} $-$ \texttt{c1e451} & \texttt{ac8a48} $-$ \texttt{7d79ff} & \texttt{7bc0ee} $-$ \texttt{2308d9} & \texttt{a5c39e} $-$ \texttt{2ed153} & \texttt{005bc2} $-$ \texttt{f67c20} & \texttt{501b0f} $-$ \texttt{c01302} & \texttt{8f5d5a} $-$ \texttt{afcd72} \\ [1ex]
+            \multicolumn{4}{c|}{} & \texttt{9b7266} $-$ \texttt{80fd2e} & \texttt{f0caf3} $-$ \texttt{c1e451} & \texttt{ac8a48} $-$ \texttt{7d79ff} & \texttt{7bc0ee} $-$ \texttt{2308d9} & \texttt{a5c39e} $-$ \texttt{2ed153} & \texttt{005bc2} $-$ \texttt{f67c20} & \texttt{501b0f} $-$ \texttt{c01302} & \texttt{8f5d5a} $-$ \texttt{afcd72} \\ [1ex]
             \hline\hline
 
             \multirow{18}{*}{\begin{turn}{90}\textbf{parametri}\end{turn}} & \multirow{6}{*}{$min\_dup=0.3$} & \multirow{2}{*}{$s=15$} & $Max$ & 100\% & 95\% & 72\% & 72\% & 75\% & 80\% & 56\% & 74\% \\
@@ -169,7 +169,7 @@ Osservando i risultati, si conviene che l'utilizzo di una fase intermedia di fil
 
 \vspace*{0.3cm}
 
-In definitiva, dai risultati sopra riportati, una \textbf{buona soglia di "sospetto"} sopra la quale l'utente dovrebbe concentrare la sua attenzione è stimabile sul \textbf{40\%}, sapendo che valori più alti di similarità implicano maggiore evidenza di copiatura.
+In definitiva, dai risultati sopra riportati, una \textbf{buona soglia di "sospetto"} sopra la quale l'utente dovrebbe concentrare la sua attenzione è stimabile sul \textbf{45\%}, sapendo che valori più alti di similarità implicano maggiore evidenza di copiatura.
 
 \subsection{Analisi di sensibilità}
 Dedichiamo ora qualche osservazione sulla sensibilità dello strumento.
@@ -185,14 +185,14 @@ A riprova di questo, vengono riportati, nel \Cref{code:04-false-positive-enum} e
 \newpage
 
 \lstinputlisting[
-    caption={Esempio di falso positivo dovuto alla presenza di molteplici costanti},
+    caption={Esempio di falso positivo dovuto alla presenza di molteplici costanti.},
     label={code:04-false-positive-enum}
 ]{resources/code/04-false-positive-enum}
 
 \newpage
 
 \lstinputlisting[
-    caption={Esempio di falso positivo dovuto alla presenza di una sequenza molto simile di \textit{getter/setter}},
+    caption={Esempio di falso positivo dovuto alla presenza di una sequenza molto simile di \textit{getter/setter}.},
     label={04-false-positive-simple-class}
 ]{resources/code/04-false-positive-simple-class}
 
@@ -224,11 +224,11 @@ Dopo aver passato in rassegna le tecniche più usate e documentate in letteratur
 
 Si è proceduto, quindi, con la progettazione architetturale e di dettaglio dello strumento, cercando sempre di prediligere e favorire la configurabilità e la possibilità di estensione dello stesso, in pieno accordo con uno dei principi cardine dell'ingegneria del \textit{software}, l'anticipazione dei cambiamenti.
 
-Ampio spazio è stato dedicato per la scelta di metriche congrue per la stima della similarità tra sorgenti ed è stato dato il proprio contributo nel definire una stima aggregata tra progetti.
+Ampio spazio è stato dedicato alla scelta di metriche congrue per la stima della similarità tra sorgenti ed è stato dato il proprio contributo nel definire una stima aggregata tra progetti.
 
 Al termine dell'implementazione di una prima versione dello strumento, consci dell'elevato tempo d'esecuzione dello stesso, è stata introdotta la parallelizzazione e il salvataggio locale dei sorgenti.
 
-Infine, si è validato lo strumento confrontando i progetti consegnati negli ultimi tre anni del corso di Programmazione ad Oggetti, analizzando gli aspetti positivi e le criticità. 
+Infine, si è validato lo strumento confrontando 130 progetti universitari consegnati negli ultimi tre anni, analizzando gli aspetti positivi e le criticità. 
 %
 Dall'analisi è emerso che lo strumento realizzato è in grado di rilevare, con un alto livello di accuratezza e in tempi accettabili, evidenti copiature e parti molti simili tra loro.
 %
