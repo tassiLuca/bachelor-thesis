@@ -52,7 +52,7 @@ Inoltre, il requisito non funzionale sulle \textit{performance} richiederà un'a
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{resources/img/02-domain.pdf}
-    \caption{Schema UML delle classi dell'analisi del problema, con rappresentate le entità principali ed i rapporti fra loro.}
+    \caption{Schema UML delle classi dell'analisi del problema, con rappresentate le entità principali e i rapporti fra loro.}
     \label{img:02-domain}
 \end{figure}
 
@@ -84,7 +84,7 @@ In \Cref{img:02-architecture} è esemplificato il diagramma UML architetturale.
 
 \begin{figure}[h!]
     \makebox[\textwidth][c]{
-        \includegraphics[width=1.1\textwidth]{resources/img/02-achitecture.pdf}
+        \includegraphics[width=1.15\textwidth]{resources/img/02-achitecture.pdf}
     }
     \caption{Schema UML architetturale del sistema.}
     \label{img:02-architecture}
@@ -97,7 +97,7 @@ Per quanto concerne i \textit{provider} di \textit{repository}, ovvero i compone
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.9\textwidth]{resources/img/02-provider.pdf}
+    \includegraphics[width=0.96\textwidth]{resources/img/02-provider.pdf}
     \caption{Schema UML dei provider.}
     \label{img:02-provider}
 \end{figure}
@@ -122,7 +122,11 @@ Il \textit{design} è presentato in \Cref{img:02-search-criteria}.
 
 \begin{sidewaysfigure}
     \centering
-    \includegraphics[width=\textwidth]{resources/img/02-search-criteria.pdf}
+    \hspace*{1.2cm}
+    \makebox[\textwidth][c]{
+        \includegraphics[width=1.15\textwidth]{resources/img/02-search-criteria.pdf}
+    }
+    \hspace*{1cm}
     \caption{Schema UML dei criteri di ricerca delle \textit{repository}.}
     \label{img:02-search-criteria}
 \end{sidewaysfigure}
@@ -221,9 +225,11 @@ Entrambi generano dei \texttt{TokenMatch}, costituiti da sequenze contigue di \t
 A partire da queste la classe concreta \texttt{TokenBasedPlagiarismDetector} demanda alle concrete implementazioni di \texttt{TokenBasedSimilarityStrategy} il calcolo della similarità.
 
 \begin{sidewaysfigure}
+    \hspace*{-1.2cm}
     \makebox[\textwidth][c]{
         \includegraphics[width=1.22\textwidth]{resources/img/02-detector.pdf}
     }
+    \hspace*{1cm}
     \caption{Schema UML del \textit{detector}.}
     \label{img:02-detector}
 \end{sidewaysfigure}
